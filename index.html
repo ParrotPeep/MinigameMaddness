@@ -754,6 +754,7 @@
     </section>
   </main>
 
+  <script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
   <script>
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
@@ -786,6 +787,22 @@
 
     const keys = new Set();
     const mouse = { x: innerWidth * 0.5, y: innerHeight * 0.5 };
+    const multiplayer = {
+      peer: null,
+      conn: null,
+      role: "solo",
+      room: "",
+      connected: false,
+      localId: "host",
+      remoteInput: { x: 0, y: 0, mouseX: 0.5, mouseY: 0.5, deflectSeq: 0, abilitySeq: 0 },
+      lastRemoteDeflect: 0,
+      lastRemoteAbility: 0,
+      localDeflectSeq: 0,
+      localAbilitySeq: 0,
+      lastInputSent: 0,
+      lastSnapshotSent: 0
+    };
+    const peerOptions = { host: "0.peerjs.com", port: 443, path: "/", secure: true };
     const abilities = [
       { id: "dash", name: "Dash", icon: ">>", text: "Burst away from the ball.", cooldown: 5, price: 0 },
       { id: "freeze", name: "Freeze", icon: "*", text: "Slow the ball for a moment.", cooldown: 8, price: 140 },
@@ -859,7 +876,7 @@
       shake: 0,
       flash: 0
     };
-    const player = { name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
+    const player = { id: "host", name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
     const bots = [];
     const ball = { x: 0, y: 0, vx: 0, vy: 0, r: 15, speed: 210, target: null, trail: [] };
     let lastTime = 0;
@@ -1011,6 +1028,11 @@
     }
 
     function resetGame() {
+      if (multiplayer.role === "guest") {
+        sendPeer({ type: "start" });
+        roomStatus.textContent = "Asked host to start the room.";
+        return;
+      }
       lobby.classList.add("hidden");
       resultScreen.classList.add("hidden");
       bigShop.classList.add("hidden");
@@ -1031,6 +1053,8 @@
       state.targetWarning = 0;
       state.shake = 0;
       state.flash = 0;
+      player.id = "host";
+      player.name = multiplayer.connected ? "HOST" : "YOU";
       player.x = width() * 0.5;
       player.y = height() * 0.72;
       player.vx = 0;
@@ -1038,9 +1062,12 @@
       player.alive = true;
       player.slashTime = 0;
       bots.length = 0;
-      const spots = [
-        [0.18, 0.24], [0.82, 0.24], [0.18, 0.74], [0.82, 0.74], [0.5, 0.2]
-      ];
+      if (multiplayer.connected && multiplayer.role === "host") {
+        bots.push(makeRemoteFighter(width() * 0.82, height() * 0.74));
+      }
+      const spots = multiplayer.connected && multiplayer.role === "host"
+        ? [[0.18, 0.24], [0.82, 0.24], [0.18, 0.74], [0.5, 0.2]]
+        : [[0.18, 0.24], [0.82, 0.24], [0.18, 0.74], [0.82, 0.74], [0.5, 0.2]];
       spots.forEach((spot, index) => bots.push(makeBot(index, width() * spot[0], height() * spot[1])));
       ball.x = width() * 0.5;
       ball.y = height() * 0.48;
@@ -1050,13 +1077,23 @@
       chooseTarget();
       aimBall();
       updateHud();
+      sendHostSnapshot(true);
     }
     function makeBot(index, x, y) {
       const colors = ["#ff4f65", "#ffd45c", "#62e68a", "#a849ff", "#ff8bd1"];
-      return { name: `BOT ${index + 1}`, x, y, vx: rand(-80, 80), vy: rand(-80, 80), r: 20, speed: 250, alive: true, color: colors[index], accent: "#ffffff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false, dodge: rand(0, Math.PI * 2), deflectTimer: rand(0.2, 1.1) };
+      return { id: `bot-${index}`, name: `BOT ${index + 1}`, x, y, vx: rand(-80, 80), vy: rand(-80, 80), r: 20, speed: 250, alive: true, color: colors[index], accent: "#ffffff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false, dodge: rand(0, Math.PI * 2), deflectTimer: rand(0.2, 1.1) };
+    }
+    function makeRemoteFighter(x, y) {
+      return { id: "guest", name: "FRIEND", x, y, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#62e68a", accent: "#d6ffe1", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false, remote: true };
     }
 
     function update(dt) {
+      if (multiplayer.role === "guest") {
+        sendInputState();
+        updateParticles(dt);
+        updateHud();
+        return;
+      }
       if (!state.running) return;
       state.freezeTime = Math.max(0, state.freezeTime - dt);
       state.shieldTime = Math.max(0, state.shieldTime - dt);
@@ -1071,6 +1108,7 @@
       updateBall(dt);
       updateParticles(dt);
       updateHud();
+      sendHostSnapshot();
     }
 
     function movePlayer(dt) {
@@ -1089,6 +1127,10 @@
       bots.forEach(bot => {
         if (!bot.alive) return;
         bot.slashTime = Math.max(0, bot.slashTime - dt);
+        if (bot.remote) {
+          moveRemoteFighter(bot, dt);
+          return;
+        }
         bot.deflectTimer = Math.max(0, bot.deflectTimer - dt);
         const targeted = ball.target === bot;
         bot.dodge += dt * rand(-1.2, 1.5);
@@ -1108,6 +1150,38 @@
           deflectFrom(bot);
         }
       });
+    }
+    function moveRemoteFighter(fighter, dt) {
+      const input = multiplayer.remoteInput;
+      const x = input.x || 0;
+      const y = input.y || 0;
+      const len = Math.hypot(x, y) || 1;
+      fighter.vx += (x / len) * fighter.speed * dt * 5.2;
+      fighter.vy += (y / len) * fighter.speed * dt * 5.2;
+      fighter.vx *= Math.pow(0.0008, dt);
+      fighter.vy *= Math.pow(0.0008, dt);
+      moveCircle(fighter, fighter.vx * dt, fighter.vy * dt);
+      if (Math.hypot(fighter.vx, fighter.vy) > 10) fighter.facing = Math.atan2(fighter.vy, fighter.vx);
+      if (input.deflectSeq !== multiplayer.lastRemoteDeflect) {
+        multiplayer.lastRemoteDeflect = input.deflectSeq;
+        fighter.slashAngle = Math.atan2(input.mouseY * height() - fighter.y, input.mouseX * width() - fighter.x);
+        fighter.facing = fighter.slashAngle;
+        fighter.slashTime = 0.26;
+        fighter.slashHit = false;
+        if (isBallIncomingTo(fighter, 126)) {
+          fighter.slashHit = true;
+          deflectFrom(fighter);
+        }
+      }
+      if (input.abilitySeq !== multiplayer.lastRemoteAbility) {
+        multiplayer.lastRemoteAbility = input.abilitySeq;
+        const awayX = fighter.x - ball.x;
+        const awayY = fighter.y - ball.y;
+        const awayLen = Math.hypot(awayX, awayY) || 1;
+        fighter.vx += (awayX / awayLen) * 720;
+        fighter.vy += (awayY / awayLen) * 720;
+        burst(fighter.x, fighter.y, "#d6ffe1", 18);
+      }
     }
     function moveCircle(circle, dx, dy) {
       circle.x = clamp(circle.x + dx, circle.r, width() - circle.r);
@@ -1253,6 +1327,11 @@
     function distance(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
 
     function deflect() {
+      if (multiplayer.role === "guest") {
+        multiplayer.localDeflectSeq += 1;
+        sendInputState(true);
+        return;
+      }
       if (!state.running || !player.alive || state.deflectCooldown > 0) return;
       state.deflectCooldown = 0.45;
       player.slashAngle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
@@ -1274,6 +1353,11 @@
       state.shake = 0.12;
     }
     function useAbility() {
+      if (multiplayer.role === "guest") {
+        multiplayer.localAbilitySeq += 1;
+        sendInputState(true);
+        return;
+      }
       if (!state.running || state.abilityCooldown > 0 || !player.alive) return;
       const ability = abilities.find(item => item.id === save.ability) || abilities[0];
       state.abilityCooldown = ability.cooldown;
@@ -1321,6 +1405,208 @@
       resultScreen.classList.add("hidden");
       gameShell.classList.add("lobby-open");
       syncLobby();
+    }
+
+    function roomPeerId(room) { return `mgm-${room.toLowerCase()}`; }
+    function cleanupPeer() {
+      if (multiplayer.conn) multiplayer.conn.close();
+      if (multiplayer.peer) multiplayer.peer.destroy();
+      multiplayer.peer = null;
+      multiplayer.conn = null;
+      multiplayer.connected = false;
+    }
+    function createRoom(code) {
+      if (!window.Peer) {
+        roomStatus.textContent = "Online rooms could not load. Refresh and try again.";
+        return;
+      }
+      const room = code.trim().toUpperCase();
+      if (!room) return;
+      cleanupPeer();
+      multiplayer.role = "host";
+      multiplayer.localId = "host";
+      multiplayer.room = room;
+      roomStatus.textContent = `Creating room ${room}...`;
+      multiplayer.peer = new Peer(roomPeerId(room), peerOptions);
+      multiplayer.peer.on("open", () => {
+        roomStatus.textContent = `Room ${room} created. Friend can join with this code.`;
+      });
+      multiplayer.peer.on("connection", conn => setupConnection(conn));
+      multiplayer.peer.on("error", err => {
+        roomStatus.textContent = err.type === "unavailable-id"
+          ? `Room ${room} already exists. Try another code.`
+          : `Room error: ${err.type || "connection failed"}.`;
+      });
+    }
+    function joinRoom(code) {
+      if (!window.Peer) {
+        roomStatus.textContent = "Online rooms could not load. Refresh and try again.";
+        return;
+      }
+      const room = code.trim().toUpperCase();
+      if (!room) {
+        roomStatus.textContent = "Type a room code first.";
+        return;
+      }
+      cleanupPeer();
+      multiplayer.role = "guest";
+      multiplayer.localId = "guest";
+      multiplayer.room = room;
+      roomStatus.textContent = `Joining room ${room}...`;
+      multiplayer.peer = new Peer(undefined, peerOptions);
+      multiplayer.peer.on("open", () => {
+        setupConnection(multiplayer.peer.connect(roomPeerId(room), { reliable: true }));
+      });
+      multiplayer.peer.on("error", err => {
+        roomStatus.textContent = `Join failed: ${err.type || "connection failed"}.`;
+      });
+    }
+    function setupConnection(conn) {
+      if (multiplayer.conn && multiplayer.conn.open) multiplayer.conn.close();
+      multiplayer.conn = conn;
+      conn.on("open", () => {
+        multiplayer.connected = true;
+        if (multiplayer.role === "host") {
+          roomStatus.textContent = `Friend joined room ${multiplayer.room}. Press Play to start together.`;
+          conn.send({ type: "welcome", room: multiplayer.room });
+          if (state.running && !bots.some(bot => bot.remote)) {
+            bots.unshift(makeRemoteFighter(width() * 0.82, height() * 0.74));
+          }
+          sendHostSnapshot(true);
+        } else {
+          roomStatus.textContent = `Joined room ${multiplayer.room}. Host can press Play.`;
+          conn.send({ type: "join" });
+        }
+      });
+      conn.on("data", handlePeerData);
+      conn.on("close", () => {
+        multiplayer.connected = false;
+        roomStatus.textContent = "Friend disconnected.";
+      });
+      conn.on("error", () => {
+        multiplayer.connected = false;
+        roomStatus.textContent = "Room connection failed.";
+      });
+    }
+    function sendPeer(message) {
+      if (multiplayer.conn && multiplayer.conn.open) multiplayer.conn.send(message);
+    }
+    function handlePeerData(message) {
+      if (!message || !message.type) return;
+      if (multiplayer.role === "host") {
+        if (message.type === "input") multiplayer.remoteInput = { ...multiplayer.remoteInput, ...message.input };
+        if (message.type === "start") resetGame();
+        if (message.type === "join") roomStatus.textContent = `Friend joined room ${multiplayer.room}. Press Play to start together.`;
+        return;
+      }
+      if (message.type === "welcome") roomStatus.textContent = `Joined room ${message.room}. Host can press Play.`;
+      if (message.type === "snapshot") applySnapshot(message.snapshot);
+    }
+    function readInputAxis() {
+      return {
+        x: (keys.has("d") || keys.has("arrowright") ? 1 : 0) - (keys.has("a") || keys.has("arrowleft") ? 1 : 0),
+        y: (keys.has("s") || keys.has("arrowdown") ? 1 : 0) - (keys.has("w") || keys.has("arrowup") ? 1 : 0)
+      };
+    }
+    function sendInputState(force = false) {
+      if (multiplayer.role !== "guest" || !multiplayer.connected) return;
+      const now = performance.now();
+      if (!force && now - multiplayer.lastInputSent < 50) return;
+      multiplayer.lastInputSent = now;
+      const axis = readInputAxis();
+      sendPeer({
+        type: "input",
+        input: {
+          ...axis,
+          mouseX: clamp(mouse.x / width(), 0, 1),
+          mouseY: clamp(mouse.y / height(), 0, 1),
+          deflectSeq: multiplayer.localDeflectSeq,
+          abilitySeq: multiplayer.localAbilitySeq
+        }
+      });
+    }
+    function fighterSnapshot(fighter) {
+      return {
+        id: fighter.id,
+        name: fighter.name,
+        x: fighter.x,
+        y: fighter.y,
+        vx: fighter.vx,
+        vy: fighter.vy,
+        r: fighter.r,
+        speed: fighter.speed,
+        alive: fighter.alive,
+        color: fighter.color,
+        accent: fighter.accent,
+        facing: fighter.facing,
+        slashAngle: fighter.slashAngle,
+        slashTime: fighter.slashTime,
+        slashHit: fighter.slashHit
+      };
+    }
+    function makeSnapshot() {
+      return {
+        state: {
+          running: state.running,
+          score: state.score,
+          mapId: state.map ? state.map.id : arenaMaps[0].id,
+          walls: state.walls,
+          freezeTime: state.freezeTime,
+          shieldTime: state.shieldTime,
+          abilityCooldown: state.abilityCooldown,
+          deflectCooldown: state.deflectCooldown,
+          targetWarning: state.targetWarning,
+          shake: state.shake,
+          flash: state.flash
+        },
+        ball: {
+          x: ball.x,
+          y: ball.y,
+          vx: ball.vx,
+          vy: ball.vy,
+          r: ball.r,
+          speed: ball.speed,
+          trail: ball.trail.slice(-18),
+          targetId: ball.target ? ball.target.id : null,
+          lastDeflectorId: ball.lastDeflector ? ball.lastDeflector.id : null
+        },
+        fighters: allFighters().map(fighterSnapshot)
+      };
+    }
+    function sendHostSnapshot(force = false) {
+      if (multiplayer.role !== "host" || !multiplayer.connected) return;
+      const now = performance.now();
+      if (!force && now - multiplayer.lastSnapshotSent < 50) return;
+      multiplayer.lastSnapshotSent = now;
+      sendPeer({ type: "snapshot", snapshot: makeSnapshot() });
+    }
+    function applySnapshot(snapshot) {
+      if (!snapshot) return;
+      const map = arenaMaps.find(item => item.id === snapshot.state.mapId) || arenaMaps[0];
+      state.running = snapshot.state.running;
+      state.score = snapshot.state.score;
+      state.map = map;
+      state.walls = snapshot.state.walls || [];
+      state.freezeTime = snapshot.state.freezeTime || 0;
+      state.shieldTime = snapshot.state.shieldTime || 0;
+      state.abilityCooldown = snapshot.state.abilityCooldown || 0;
+      state.deflectCooldown = snapshot.state.deflectCooldown || 0;
+      state.targetWarning = snapshot.state.targetWarning || 0;
+      state.shake = snapshot.state.shake || 0;
+      state.flash = snapshot.state.flash || 0;
+      const local = snapshot.fighters.find(fighter => fighter.id === multiplayer.localId) || snapshot.fighters[0];
+      Object.assign(player, local, { name: "YOU" });
+      bots.length = 0;
+      snapshot.fighters.filter(fighter => fighter.id !== player.id).forEach(fighter => bots.push({ ...fighter }));
+      Object.assign(ball, snapshot.ball);
+      const byId = new Map(allFighters().map(fighter => [fighter.id, fighter]));
+      ball.target = byId.get(snapshot.ball.targetId) || null;
+      ball.lastDeflector = byId.get(snapshot.ball.lastDeflectorId) || null;
+      if (state.running) {
+        lobby.classList.add("hidden");
+        resultScreen.classList.add("hidden");
+        gameShell.classList.remove("lobby-open");
+      }
     }
 
     function draw() {
@@ -1676,15 +1962,6 @@
       draw();
     }
 
-    function connectRoom(code) {
-      const room = code.trim().toUpperCase();
-      if (!room) {
-        roomStatus.textContent = "Type a room code first.";
-        return;
-      }
-      roomStatus.textContent = `Room ${room} ready. Multiplayer server is optional; solo still works.`;
-    }
-
     window.addEventListener("resize", fitCanvas);
     window.addEventListener("keydown", event => {
       const key = event.key.toLowerCase();
@@ -1700,6 +1977,7 @@
       const rect = canvas.getBoundingClientRect();
       mouse.x = event.clientX - rect.left;
       mouse.y = event.clientY - rect.top;
+      sendInputState();
     });
     canvas.addEventListener("pointerdown", event => {
       if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -1721,10 +1999,10 @@
     document.getElementById("createRoomButton").addEventListener("click", () => {
       const code = Math.random().toString(36).slice(2, 6).toUpperCase();
       roomCodeEl.value = code;
-      connectRoom(code);
+      createRoom(code);
     });
-    document.getElementById("joinRoomButton").addEventListener("click", () => connectRoom(roomCodeEl.value));
-    roomCodeEl.addEventListener("keydown", event => { if (event.key === "Enter") connectRoom(roomCodeEl.value); });
+    document.getElementById("joinRoomButton").addEventListener("click", () => joinRoom(roomCodeEl.value));
+    roomCodeEl.addEventListener("keydown", event => { if (event.key === "Enter") joinRoom(roomCodeEl.value); });
     document.getElementById("miniGamesButton").addEventListener("click", openMinigamesSelector);
     document.getElementById("quickAbilityButton").addEventListener("click", () => {
       const unlocked = abilities.filter(item => save.unlockedAbilities.includes(item.id));
