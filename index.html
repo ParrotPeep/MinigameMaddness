@@ -46,6 +46,23 @@
       background-size: 64px 64px, 64px 64px, 100% 100%;
       mask-image: radial-gradient(circle at 50% 45%, black 0 58%, transparent 88%);
     }
+    .selector-grid-bg::before,
+    .selector-grid-bg::after {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 330px;
+      bottom: 7%;
+      border: 7px solid rgba(7, 17, 31, 0.82);
+      border-radius: 28px 28px 12px 12px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16), transparent 24%),
+        linear-gradient(180deg, #7638c9, #2a1957 72%);
+      box-shadow: 0 14px 0 rgba(3, 8, 16, 0.7), 0 24px 34px rgba(0,0,0,0.38);
+      opacity: 0.55;
+    }
+    .selector-grid-bg::before { left: 7%; transform: rotate(-5deg); }
+    .selector-grid-bg::after { right: 7%; transform: rotate(5deg); background: linear-gradient(180deg, rgba(255,255,255,0.16), transparent 24%), linear-gradient(180deg, #d14d78, #4f1934 72%); }
     .selector-screen::before {
       content: "";
       position: absolute;
@@ -135,6 +152,19 @@
       text-align: left;
       overflow: hidden;
     }
+    .selector-card::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, #fff6ad 0 3px, #ffca3c 4px 6px, transparent 7px) 0 0 / 31px 10px repeat-x;
+      filter: drop-shadow(0 0 8px rgba(255, 217, 90, 0.8));
+      opacity: 0.8;
+    }
     .selector-card.featured {
       min-height: 470px;
       background:
@@ -162,6 +192,25 @@
         #08111f;
       box-shadow: inset 0 0 26px rgba(53,228,255,0.18);
     }
+    .selector-preview::before {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      border: 3px dashed rgba(255,255,255,0.18);
+      border-radius: 50%;
+      box-shadow: 0 0 18px rgba(53,228,255,0.24);
+    }
+    .selector-preview::after {
+      content: "";
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      bottom: 16px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 50% 50%, rgba(53,228,255,0.35), transparent 68%);
+      filter: blur(1px);
+    }
     .featured .selector-preview { height: 245px; }
     .selector-ball {
       position: absolute;
@@ -172,6 +221,7 @@
       border-radius: 50%;
       background: radial-gradient(circle at 30% 25%, #ffffff, #8cfffa 34%, #2fdcff 72%, #0a1825);
       box-shadow: 0 0 30px #35e4ff, 0 0 70px rgba(53,228,255,0.52);
+      animation: selectorBallFloat 1.8s ease-in-out infinite alternate;
     }
     .selector-player,
     .selector-enemy {
@@ -185,6 +235,18 @@
     .selector-player { left: 18%; top: 63%; color: #35e4ff; background: #35e4ff; }
     .selector-enemy.one { right: 18%; top: 22%; color: #ff4f65; background: #ff4f65; }
     .selector-enemy.two { right: 28%; bottom: 16%; color: #ffd45c; background: #ffd45c; }
+    .selector-player { animation: selectorBob 1.9s ease-in-out infinite alternate; }
+    .selector-enemy.one { animation: selectorBob 2.1s ease-in-out infinite alternate-reverse; }
+    .selector-enemy.two { animation: selectorBob 1.7s ease-in-out infinite alternate; }
+    .selector-player::before,
+    .selector-enemy::before {
+      content: "";
+      position: absolute;
+      inset: 6px 8px auto 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.72);
+    }
     .selector-card h2 {
       margin: 16px 0 8px;
       font-size: clamp(28px, 3vw, 44px);
@@ -281,6 +343,33 @@
         radial-gradient(circle at 22% 76%, rgba(255, 213, 73, 0.12), transparent 16rem),
         linear-gradient(180deg, rgba(9, 52, 111, 0.96), rgba(7, 11, 18, 0.98));
     }
+    .overlay::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 28px;
+      height: 20px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle, #fff6ad 0 5px, #ffbd36 6px 9px, transparent 10px) 0 0 / 64px 20px repeat-x;
+      filter: drop-shadow(0 0 12px rgba(255, 207, 84, 0.9));
+      z-index: 1;
+    }
+    .overlay::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 29%;
+      background:
+        radial-gradient(ellipse at 50% 0, rgba(53, 228, 255, 0.18), transparent 46%),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.045) 0 2px, transparent 2px 76px),
+        linear-gradient(180deg, transparent, rgba(3, 6, 14, 0.72));
+      z-index: 1;
+      pointer-events: none;
+    }
     .lobby-bg-grid {
       position: absolute;
       inset: 0;
@@ -305,6 +394,40 @@
     }
     .lobby-v2::before { left: 30%; top: 13%; }
     .lobby-v2::after { right: 10%; top: 34%; transform: scale(0.66); }
+    .lobby-bg-grid::before {
+      content: "";
+      position: absolute;
+      left: 6%;
+      bottom: 17%;
+      width: 260px;
+      height: 108px;
+      border: 7px solid rgba(7, 17, 31, 0.74);
+      border-radius: 38px 38px 16px 16px;
+      background:
+        linear-gradient(90deg, transparent 0 26px, rgba(48, 181, 184, 0.72) 27px 210px, transparent 211px),
+        linear-gradient(180deg, #35c4c9, #126373);
+      box-shadow: 0 42px 0 -17px rgba(4, 9, 17, 0.72), 0 18px 28px rgba(0,0,0,0.32);
+    }
+    .lobby-bg-grid::after {
+      content: "2D";
+      position: absolute;
+      right: 8%;
+      top: 21%;
+      width: 150px;
+      height: 210px;
+      border: 7px solid rgba(7, 17, 31, 0.86);
+      border-radius: 26px 26px 12px 12px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 42%, #ffec6b 0 16%, transparent 17%),
+        linear-gradient(180deg, #ff5f95 0 22%, #6735c9 23% 100%);
+      color: #fff8c8;
+      font-size: 34px;
+      font-weight: 1000;
+      text-shadow: 0 4px 0 #06101d, 0 0 14px #fff;
+      box-shadow: 0 10px 0 rgba(3,8,16,0.8), 0 20px 32px rgba(0,0,0,0.34);
+    }
     .lobby-header {
       position: relative;
       z-index: 3;
@@ -376,6 +499,14 @@
       text-transform: uppercase;
       text-align: left;
       text-shadow: 0 4px 0 rgba(0,0,0,0.42);
+      transition: transform 120ms ease, filter 120ms ease;
+    }
+    .pixel-button:hover,
+    .bottom-button:hover,
+    .small-button:hover,
+    .ability-card:hover {
+      filter: brightness(1.08);
+      transform: translateY(-2px);
     }
     .pixel-button.play { background: linear-gradient(180deg, #ffbf31, #c97809); font-size: clamp(30px, 3.1vw, 48px); }
     .pixel-button.blue { background: linear-gradient(180deg, #1f75dd, #0d3b87); }
@@ -429,6 +560,7 @@
       clip-path: polygon(50% 0, 100% 16%, 70% 100%, 30% 100%, 0 16%); transform: rotate(48deg);
       box-shadow: 0 0 25px #ff3028, 0 0 46px rgba(255,48,40,0.45);
     }
+    .lobby-fighter { animation: lobbyFloat 1.9s ease-in-out infinite alternate; }
     .hero-copy {
       position: absolute;
       left: 50%;
@@ -452,6 +584,11 @@
       gap: 28px;
     }
     .panel { background: linear-gradient(180deg, #0b254a, #051326); padding: 16px; }
+    .panel {
+      background:
+        radial-gradient(circle at 18% 8%, rgba(53,228,255,0.16), transparent 8rem),
+        linear-gradient(180deg, #0b254a, #051326);
+    }
     .panel-heading {
       display: inline-block;
       margin: -34px 0 10px 4px;
@@ -522,6 +659,7 @@
       font-weight: 1000;
       text-align: center;
       text-shadow: 0 4px 0 #06101d;
+      transition: transform 120ms ease, filter 120ms ease;
     }
 
     .result-screen,
@@ -571,6 +709,19 @@
     .skin-card p { margin: 0; color: #b9d8ff; font-weight: 800; }
     .close-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
     .safe-pad { display: grid; gap: 10px; margin-top: 14px; }
+
+    @keyframes selectorBallFloat {
+      from { transform: translate(-3px, 5px) scale(0.98); }
+      to { transform: translate(5px, -8px) scale(1.06); }
+    }
+    @keyframes selectorBob {
+      from { transform: translateY(0); }
+      to { transform: translateY(-8px); }
+    }
+    @keyframes lobbyFloat {
+      from { transform: translateY(0) rotate(-1deg); }
+      to { transform: translateY(-10px) rotate(1deg); }
+    }
 
     @media (max-width: 980px) {
       .selector-screen { padding: 18px; }
@@ -1634,6 +1785,7 @@
     }
     function drawArena(w, h) {
       const map = state.map || arenaMaps[0];
+      const pulse = Math.sin(performance.now() / 650) * 0.5 + 0.5;
       const floor = ctx.createLinearGradient(0, 0, w, h);
       floor.addColorStop(0, map.colors[0]);
       floor.addColorStop(0.48, map.colors[1]);
@@ -1641,16 +1793,36 @@
       ctx.fillStyle = floor;
       ctx.fillRect(0, 0, w, h);
       drawFloorPattern(map, w, h);
+      ctx.save();
+      ctx.translate(w * 0.5, h * 0.52);
+      ctx.strokeStyle = map.line;
+      ctx.lineWidth = 5;
+      ctx.shadowColor = map.line;
+      ctx.shadowBlur = 24 + pulse * 18;
+      for (let i = 0; i < 3; i++) {
+        ctx.globalAlpha = 0.34 - i * 0.08;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, w * (0.18 + i * 0.13), h * (0.1 + i * 0.07), 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
       const glow = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.min(w, h) * 0.55);
       glow.addColorStop(0, map.glow);
       glow.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = glow;
       ctx.fillRect(0, 0, w, h);
+      const vignette = ctx.createRadialGradient(w * 0.5, h * 0.48, Math.min(w, h) * 0.2, w * 0.5, h * 0.5, Math.max(w, h) * 0.68);
+      vignette.addColorStop(0, "rgba(0,0,0,0)");
+      vignette.addColorStop(1, "rgba(0,0,0,0.62)");
+      ctx.fillStyle = vignette;
+      ctx.fillRect(0, 0, w, h);
       if (state.running && map.name) {
         ctx.save();
-        ctx.fillStyle = "rgba(223,248,255,0.36)";
-        ctx.font = "900 18px Arial";
+        ctx.fillStyle = "rgba(223,248,255,0.58)";
+        ctx.font = "900 20px Arial";
         ctx.textAlign = "right";
+        ctx.shadowColor = map.line;
+        ctx.shadowBlur = 12;
         ctx.fillText(map.name, w - 22, h - 24);
         ctx.restore();
       }
@@ -1747,30 +1919,40 @@
       const map = state.map || arenaMaps[0];
       state.walls.forEach(wall => {
         const grd = ctx.createLinearGradient(wall.x, wall.y, wall.x + wall.w, wall.y + wall.h);
-        grd.addColorStop(0, "rgba(255,255,255,0.18)");
+        grd.addColorStop(0, "rgba(255,255,255,0.28)");
         grd.addColorStop(0.35, map.glow);
         grd.addColorStop(1, "rgba(3,8,16,0.82)");
         ctx.save();
         ctx.shadowColor = map.line;
-        ctx.shadowBlur = 18;
+        ctx.shadowBlur = 28;
         ctx.fillStyle = grd;
         ctx.beginPath();
-        ctx.roundRect(wall.x, wall.y, wall.w, wall.h, 8);
+        ctx.roundRect(wall.x, wall.y, wall.w, wall.h, 10);
         ctx.fill();
         ctx.shadowBlur = 0;
         ctx.strokeStyle = map.line;
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.stroke();
+        ctx.strokeStyle = "rgba(255,255,255,0.2)";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(wall.x + 5, wall.y + 5, Math.max(0, wall.w - 10), Math.max(0, wall.h - 10));
         ctx.restore();
       });
     }
     function drawIdleBalls(w, h) {
       const t = performance.now() / 900;
-      for (let i = 0; i < 10; i++) {
-        ctx.fillStyle = i % 2 ? "rgba(255,79,101,0.14)" : "rgba(54,215,255,0.16)";
+      for (let i = 0; i < 16; i++) {
+        const x = (Math.sin(t * (0.75 + i * 0.02) + i) * 0.5 + 0.5) * w;
+        const y = (Math.cos(t * 0.7 + i) * 0.5 + 0.5) * h;
+        const r = 12 + i % 5 * 7;
+        ctx.save();
+        ctx.shadowColor = i % 2 ? "#ff4f65" : "#35e4ff";
+        ctx.shadowBlur = 20;
+        ctx.fillStyle = i % 2 ? "rgba(255,79,101,0.15)" : "rgba(54,215,255,0.18)";
         ctx.beginPath();
-        ctx.arc((Math.sin(t + i) * 0.5 + 0.5) * w, (Math.cos(t * 0.7 + i) * 0.5 + 0.5) * h, 18 + i % 4 * 5, 0, Math.PI * 2);
+        ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
       }
     }
     function drawTargetBeam() {
@@ -1789,17 +1971,29 @@
     function drawFighter(fighter) {
       const isTarget = ball.target === fighter;
       ctx.save();
+      ctx.fillStyle = "rgba(0,0,0,0.32)";
+      ctx.beginPath();
+      ctx.ellipse(fighter.x + 4, fighter.y + fighter.r + 14, fighter.r * 1.35, fighter.r * 0.42, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      ctx.save();
       ctx.translate(fighter.x, fighter.y);
       const drawFacing = fighter.slashTime > 0 ? fighter.slashAngle : fighter.facing;
       ctx.rotate(drawFacing || 0);
       if (isTarget) {
         ctx.shadowColor = fighter === player ? "#ff4f65" : "#ffd45c";
-        ctx.shadowBlur = 22;
+        ctx.shadowBlur = 30;
         ctx.strokeStyle = fighter === player ? "#ff4f65" : "#ffd45c";
-        ctx.lineWidth = fighter === player ? 5 : 3;
+        ctx.lineWidth = fighter === player ? 6 : 4;
         ctx.beginPath();
         ctx.arc(0, 0, fighter.r + 17 + Math.sin(performance.now() / 90) * 3, 0, Math.PI * 2);
         ctx.stroke();
+        ctx.globalAlpha = 0.38;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, fighter.r + 28 + Math.sin(performance.now() / 120) * 4, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
       }
       if (fighter === player && state.shieldTime > 0) {
         ctx.strokeStyle = "rgba(210,252,255,0.95)";
@@ -1821,7 +2015,12 @@
       ctx.fill();
       ctx.shadowBlur = 0;
       ctx.strokeStyle = "rgba(255,255,255,0.8)";
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(0,0,0,0.38)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, fighter.r - 5, 0.15, Math.PI * 0.82);
       ctx.stroke();
       ctx.fillStyle = "rgba(3,9,17,0.58)";
       ctx.beginPath();
@@ -1853,9 +2052,11 @@
       }
       ctx.restore();
       ctx.save();
-      ctx.fillStyle = "rgba(232,242,255,0.88)";
+      ctx.fillStyle = "rgba(232,242,255,0.96)";
       ctx.font = "800 12px Arial";
       ctx.textAlign = "center";
+      ctx.shadowColor = "rgba(0,0,0,0.9)";
+      ctx.shadowBlur = 4;
       ctx.fillText(fighter.name, fighter.x, fighter.y - fighter.r - 18);
       ctx.restore();
     }
@@ -1878,10 +2079,14 @@
     function drawBall() {
       ball.trail.forEach(dot => {
         const hot = clamp((dot.speed - 160) / 620, 0, 1);
-        ctx.fillStyle = hot > 0.55 ? `rgba(255,75,102,${dot.life * 2.2})` : `rgba(255,234,91,${dot.life * 2.5})`;
+        ctx.save();
+        ctx.shadowColor = hot > 0.55 ? "#ff4f65" : "#ffec6b";
+        ctx.shadowBlur = 18;
+        ctx.fillStyle = hot > 0.55 ? `rgba(255,75,102,${dot.life * 1.7})` : `rgba(255,234,91,${dot.life * 1.9})`;
         ctx.beginPath();
-        ctx.arc(dot.x, dot.y, ball.r * dot.life * (4.2 + hot * 2), 0, Math.PI * 2);
+        ctx.arc(dot.x, dot.y, ball.r * dot.life * (3.6 + hot * 2), 0, Math.PI * 2);
         ctx.fill();
+        ctx.restore();
       });
       const danger = ball.target === player;
       const frozen = state.freezeTime > 0;
@@ -1891,7 +2096,12 @@
       orb.addColorStop(1, frozen ? "#69bfff" : danger ? "#ff4f77" : "#2fdcff");
       ctx.save();
       ctx.shadowColor = frozen ? "#9df7ff" : danger ? "#ffec6b" : "#8cfffa";
-      ctx.shadowBlur = 34;
+      ctx.shadowBlur = 44;
+      ctx.strokeStyle = frozen ? "rgba(157,247,255,0.26)" : danger ? "rgba(255,236,107,0.28)" : "rgba(140,255,250,0.28)";
+      ctx.lineWidth = 12;
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r + 16 + Math.sin(performance.now() / 80) * 4, 0, Math.PI * 2);
+      ctx.stroke();
       ctx.fillStyle = orb;
       ctx.beginPath();
       ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
@@ -1902,6 +2112,10 @@
       ctx.beginPath();
       ctx.arc(ball.x, ball.y, ball.r + 5 + state.targetWarning * 4, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.beginPath();
+      ctx.arc(ball.x - ball.r * 0.32, ball.y - ball.r * 0.36, ball.r * 0.23, 0, Math.PI * 2);
+      ctx.fill();
       if (frozen) {
         ctx.strokeStyle = "rgba(210,252,255,0.92)";
         ctx.lineWidth = 3;
@@ -1924,13 +2138,16 @@
       for (let i = 0; i < count; i++) {
         const angle = rand(0, Math.PI * 2);
         const speed = rand(80, 260);
-        state.particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, size: rand(3, 8), life: rand(0.5, 1), color });
+        state.particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, size: rand(3, 8), spin: rand(-5, 5), angle, life: rand(0.5, 1), color });
       }
     }
     function updateParticles(dt) {
       state.particles.forEach(p => {
         p.x += p.vx * dt;
         p.y += p.vy * dt;
+        p.vx *= Math.pow(0.16, dt);
+        p.vy *= Math.pow(0.16, dt);
+        p.angle += p.spin * dt;
         p.life -= dt * 1.9;
       });
       state.particles = state.particles.filter(p => p.life > 0);
@@ -1940,11 +2157,13 @@
         ctx.save();
         ctx.globalAlpha = clamp(p.life, 0, 1);
         ctx.shadowColor = p.color;
-        ctx.shadowBlur = 12;
+        ctx.shadowBlur = 16;
         ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle || 0);
+        ctx.fillRect(-p.size * p.life, -p.size * p.life, p.size * 2 * p.life, p.size * 2 * p.life);
+        ctx.fillStyle = "rgba(255,255,255,0.55)";
+        ctx.fillRect(-p.size * 0.35 * p.life, -p.size * 0.35 * p.life, p.size * 0.7 * p.life, p.size * 0.7 * p.life);
         ctx.restore();
       });
     }
