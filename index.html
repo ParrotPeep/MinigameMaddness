@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2D Ball</title>
+  <title>Minigames</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -22,6 +22,152 @@
     .game-shell { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
     canvas { display: block; width: 100vw; height: 100vh; background: #080c12; cursor: crosshair; touch-action: none; }
     .hidden { display: none !important; }
+
+    .selector-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      overflow: auto;
+      padding: 28px;
+      background:
+        radial-gradient(circle at 24% 24%, rgba(53, 228, 255, 0.22), transparent 22rem),
+        radial-gradient(circle at 78% 20%, rgba(255, 73, 63, 0.18), transparent 24rem),
+        linear-gradient(180deg, #09234a, #07111f 68%, #05080d);
+    }
+    .selector-grid-bg {
+      position: absolute;
+      inset: 0;
+      opacity: 0.35;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: radial-gradient(circle at 50% 45%, black 0 42%, transparent 78%);
+    }
+    .selector-content {
+      position: relative;
+      z-index: 1;
+      min-height: calc(100vh - 56px);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 28px;
+    }
+    .selector-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+    }
+    .selector-title {
+      margin: 0;
+      color: #dff8ff;
+      font-size: clamp(54px, 9vw, 120px);
+      line-height: 0.82;
+      text-transform: uppercase;
+      text-shadow: 6px 6px 0 #06101d, 0 0 24px rgba(53, 228, 255, 0.7);
+      -webkit-text-stroke: 3px #071c3b;
+      transform: skewX(-7deg);
+    }
+    .selector-title span {
+      display: block;
+      color: #ff493f;
+      -webkit-text-stroke-color: #3a0710;
+    }
+    .selector-pill {
+      border: 4px solid #07111f;
+      border-radius: 7px;
+      padding: 12px 16px;
+      background: linear-gradient(180deg, #123d79, #061b38);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.13), 0 5px 0 #06101d;
+      color: #dff8ff;
+      font-size: 18px;
+      font-weight: 1000;
+      text-shadow: 0 3px 0 #06101d;
+    }
+    .game-selector-grid {
+      display: grid;
+      grid-template-columns: minmax(240px, 380px);
+      align-content: center;
+      gap: 18px;
+    }
+    .selector-card {
+      min-height: 360px;
+      border: 4px solid #07111f;
+      border-radius: 7px;
+      padding: 16px;
+      background: linear-gradient(180deg, #123d79, #071d3c);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.13), 0 7px 0 #06101d, 0 18px 30px rgba(0,0,0,0.35);
+      color: white;
+      text-align: left;
+    }
+    .selector-card:hover,
+    .selector-card:focus-visible {
+      outline: none;
+      transform: translateY(-4px);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.16), 0 7px 0 #06101d, 0 0 34px rgba(53, 228, 255, 0.32);
+    }
+    .selector-preview {
+      position: relative;
+      height: 155px;
+      border: 4px solid #07111f;
+      border-radius: 7px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(53, 228, 255, 0.22), transparent 42%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0 1px, transparent 1px 28px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 1px, transparent 1px 28px),
+        #08111f;
+    }
+    .selector-ball {
+      position: absolute;
+      left: 48%;
+      top: 44%;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #ffffff, #8cfffa 34%, #2fdcff 72%, #0a1825);
+      box-shadow: 0 0 28px #35e4ff;
+    }
+    .selector-player,
+    .selector-enemy {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border: 4px solid #06101d;
+      border-radius: 50%;
+      box-shadow: 0 0 18px currentColor;
+    }
+    .selector-player { left: 18%; top: 63%; color: #35e4ff; background: #35e4ff; }
+    .selector-enemy.one { right: 18%; top: 22%; color: #ff4f65; background: #ff4f65; }
+    .selector-enemy.two { right: 28%; bottom: 16%; color: #ffd45c; background: #ffd45c; }
+    .selector-card h2 {
+      margin: 16px 0 8px;
+      font-size: 34px;
+      text-transform: uppercase;
+      text-shadow: 0 4px 0 #06101d;
+    }
+    .selector-card p {
+      margin: 0;
+      color: #b9d8ff;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.4;
+    }
+    .selector-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .selector-tag {
+      border: 2px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,0.08);
+      color: #e8f7ff;
+      font-size: 13px;
+      font-weight: 1000;
+    }
 
     .hud {
       position: fixed;
@@ -369,7 +515,34 @@
   </style>
 </head>
 <body>
-  <main id="gameShell" class="game-shell lobby-open">
+  <section id="gameSelector" class="selector-screen">
+    <div class="selector-grid-bg"></div>
+    <div class="selector-content">
+      <header class="selector-header">
+        <h1 class="selector-title">Mini<span>games</span></h1>
+        <div class="selector-pill">Choose a game</div>
+      </header>
+      <div class="game-selector-grid">
+        <button id="open2DBallButton" class="selector-card">
+          <div class="selector-preview">
+            <span class="selector-player"></span>
+            <span class="selector-ball"></span>
+            <span class="selector-enemy one"></span>
+            <span class="selector-enemy two"></span>
+          </div>
+          <h2>2D Ball</h2>
+          <p>Deflect the target ball, buy abilities, unlock skins, and survive the arena.</p>
+          <div class="selector-tags">
+            <span class="selector-tag">Blade Ball</span>
+            <span class="selector-tag">Abilities</span>
+            <span class="selector-tag">Random Maps</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <main id="gameShell" class="game-shell lobby-open hidden">
     <canvas id="game"></canvas>
 
     <div id="hud" class="hud">
@@ -492,6 +665,7 @@
   <script>
     const canvas = document.getElementById("game");
     const ctx = canvas.getContext("2d");
+    const gameSelector = document.getElementById("gameSelector");
     const gameShell = document.getElementById("gameShell");
     const lobby = document.getElementById("lobby");
     const resultScreen = document.getElementById("resultScreen");
@@ -633,6 +807,14 @@
       renderAbilities();
       renderShop();
       applyEquippedSkin();
+    }
+    function open2DBallMenu() {
+      gameSelector.classList.add("hidden");
+      gameShell.classList.remove("hidden");
+      lobby.classList.remove("hidden");
+      gameShell.classList.add("lobby-open");
+      state.running = false;
+      syncLobby();
     }
     function applyEquippedSkin() {
       const skin = skins.find(item => item.id === save.equipped) || skins[0];
@@ -1425,6 +1607,7 @@
     });
 
     document.getElementById("startButton").addEventListener("click", resetGame);
+    document.getElementById("open2DBallButton").addEventListener("click", open2DBallMenu);
     document.getElementById("playAgainButton").addEventListener("click", resetGame);
     document.getElementById("backToLobbyButton").addEventListener("click", backToLobby);
     document.getElementById("openShopButton").addEventListener("click", () => { renderShop(); bigShop.classList.remove("hidden"); });
