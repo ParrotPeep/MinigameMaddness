@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2D Ball</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(41, 226, 255, 0.18), transparent 30rem),
+        radial-gradient(circle at 86% 16%, rgba(255, 64, 128, 0.16), transparent 28rem),
+        linear-gradient(135deg, #080c12, #121923 48%, #07090d);
+      color: #f7fbff;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .game-shell { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+    canvas { display: block; width: 100vw; height: 100vh; background: #080c12; cursor: crosshair; touch-action: none; }
+    .hidden { display: none !important; }
+
+    .hud {
+      position: fixed;
+      z-index: 4;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      pointer-events: none;
+    }
+    .game-shell.lobby-open .hud { display: none; }
+    .stat {
+      min-height: 58px;
+      border: 2px solid rgba(95, 233, 255, 0.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(53, 228, 255, 0.16), transparent 46%),
+        linear-gradient(145deg, rgba(9, 14, 22, 0.84), rgba(22, 29, 40, 0.62));
+      padding: 9px 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+    }
+    .label { display: block; color: #8eefff; font-size: 11px; text-transform: uppercase; font-weight: 900; }
+    .value { display: block; margin-top: 4px; font-size: clamp(17px, 2vw, 24px); font-weight: 1000; line-height: 1; }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(53, 228, 255, 0.3), transparent 18rem),
+        radial-gradient(circle at 72% 25%, rgba(255, 72, 128, 0.18), transparent 18rem),
+        radial-gradient(circle at 22% 76%, rgba(255, 213, 73, 0.12), transparent 16rem),
+        linear-gradient(180deg, rgba(9, 52, 111, 0.96), rgba(7, 11, 18, 0.98));
+    }
+    .lobby-bg-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.38;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.09) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: radial-gradient(circle at 50% 50%, black 0 35%, transparent 72%);
+    }
+    .lobby-v2 { position: relative; z-index: 2; width: 100%; height: 100%; padding: 24px; }
+    .lobby-v2::before,
+    .lobby-v2::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      width: 18rem;
+      height: 8rem;
+      background: rgba(164, 220, 255, 0.14);
+      clip-path: polygon(8% 60%, 22% 32%, 35% 58%, 48% 18%, 63% 60%, 80% 28%, 94% 62%, 100% 76%, 0 76%);
+      filter: drop-shadow(0 8px 0 rgba(0,0,0,0.12));
+    }
+    .lobby-v2::before { left: 30%; top: 13%; }
+    .lobby-v2::after { right: 10%; top: 34%; transform: scale(0.66); }
+    .lobby-header {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+    }
+    .brand {
+      color: #dff8ff;
+      font-size: clamp(50px, 8vw, 112px);
+      font-weight: 1000;
+      line-height: 0.82;
+      text-transform: uppercase;
+      text-shadow: 6px 6px 0 #06101d, 0 0 24px rgba(53, 228, 255, 0.7);
+      -webkit-text-stroke: 3px #071c3b;
+      transform: skewX(-7deg);
+    }
+    .brand strong { display: block; color: #ff493f; -webkit-text-stroke-color: #3a0710; }
+    .currency-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+    .currency,
+    .pixel-button,
+    .bottom-button,
+    .panel,
+    .panel-heading,
+    .ability-card,
+    .skin-card,
+    .modal-card {
+      border: 4px solid #07111f;
+      border-radius: 7px;
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.13), 0 5px 0 #06101d, 0 10px 18px rgba(0,0,0,0.32);
+    }
+    .currency {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 170px;
+      height: 60px;
+      padding: 0 12px;
+      background: linear-gradient(180deg, #102b54, #08172e);
+      font-size: 23px;
+      font-weight: 1000;
+      text-shadow: 0 3px 0 #03070d;
+    }
+    .coin, .gem {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 3px 0 rgba(0,0,0,0.4));
+    }
+    .coin { border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff294, #ffbd22 45%, #bf6a00 70%); border: 3px solid #ffe66b; }
+    .gem { background: linear-gradient(135deg, #ffd1ff, #a849ff 48%, #51158b); clip-path: polygon(50% 0, 100% 34%, 77% 100%, 23% 100%, 0 34%); }
+
+    .left-menu {
+      position: absolute;
+      z-index: 3;
+      left: 28px;
+      top: 230px;
+      display: grid;
+      gap: 14px;
+      width: min(24vw, 270px);
+    }
+    .pixel-button {
+      min-height: 78px;
+      padding: 0 20px;
+      color: white;
+      font-size: clamp(20px, 2.2vw, 36px);
+      font-weight: 1000;
+      text-transform: uppercase;
+      text-align: left;
+      text-shadow: 0 4px 0 rgba(0,0,0,0.42);
+    }
+    .pixel-button.play { background: linear-gradient(180deg, #ffbf31, #c97809); font-size: clamp(30px, 3.1vw, 48px); }
+    .pixel-button.blue { background: linear-gradient(180deg, #1f75dd, #0d3b87); }
+    .pixel-button.purple { background: linear-gradient(180deg, #7b3ff0, #341071); }
+    .pixel-button.green { background: linear-gradient(180deg, #31c94b, #0f7b21); }
+
+    .hero-stage {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      top: 51%;
+      width: min(56vw, 760px);
+      height: min(56vh, 500px);
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+    .stage-rings {
+      position: absolute;
+      width: min(51vw, 650px);
+      aspect-ratio: 1 / 0.55;
+      border: 7px solid rgba(53, 228, 255, 0.78);
+      border-radius: 50%;
+      box-shadow: 0 0 38px rgba(53, 228, 255, 0.78), inset 0 0 38px rgba(53, 228, 255, 0.27), 0 24px 30px rgba(0,0,0,0.34);
+      background:
+        repeating-conic-gradient(from 0deg, rgba(53,228,255,0.12) 0 7deg, transparent 7deg 18deg),
+        radial-gradient(ellipse at 50% 50%, rgba(53, 228, 255, 0.22), rgba(18, 27, 38, 0.56) 45%, rgba(0, 0, 0, 0.42) 70%);
+    }
+    .lobby-fighter { position: relative; width: 220px; height: 220px; filter: drop-shadow(0 20px 13px rgba(0,0,0,0.46)); }
+    .fighter-aura, .fighter-shadow, .fighter-face, .fighter-gloves, .fighter-body, .fighter-dot, .fighter-blade { position: absolute; }
+    .fighter-aura { inset: 24px; border: 6px solid rgba(255,255,255,0.74); border-radius: 50%; box-shadow: 0 0 38px #35e4ff, inset 0 0 22px rgba(53, 228, 255, 0.42); }
+    .fighter-shadow { left: 46px; bottom: 26px; width: 128px; height: 30px; border-radius: 50%; background: rgba(0,0,0,0.38); filter: blur(2px); }
+    .fighter-body {
+      left: 62px; top: 58px; width: 96px; height: 96px; border: 6px solid #06101d; border-radius: 50%;
+      background: radial-gradient(circle at 28% 23%, #ffffff 0 8%, #b6fbff 9% 20%, transparent 21%), radial-gradient(circle at 50% 55%, #48eeff, #19aee7 46%, #0f5f94 72%, #08131e 100%);
+      box-shadow: 0 0 40px rgba(53, 228, 255, 0.98), inset -13px -15px 0 rgba(0,0,0,0.22);
+    }
+    .fighter-dot { left: 114px; top: 84px; width: 24px; height: 24px; border-radius: 50%; background: rgba(0,0,0,0.38); }
+    .fighter-face { left: 82px; top: 108px; width: 54px; height: 10px; border-radius: 10px; background: rgba(4,11,19,0.48); }
+    .fighter-gloves { left: 49px; top: 118px; width: 122px; height: 26px; }
+    .fighter-gloves::before, .fighter-gloves::after {
+      content: ""; position: absolute; top: 0; width: 28px; height: 28px; border: 5px solid #06101d; border-radius: 50%;
+      background: radial-gradient(circle at 30% 25%, #ffffff, #35e4ff 45%, #0f5f94); box-shadow: 0 0 17px rgba(53,228,255,0.72);
+    }
+    .fighter-gloves::before { left: 0; }
+    .fighter-gloves::after { right: 0; }
+    .fighter-blade {
+      left: 132px; top: 105px; width: 22px; height: 112px; border: 5px solid #06101d;
+      background: linear-gradient(180deg, #ffffff 0 14%, #ff756f 15% 34%, #ff3028 35% 66%, #8c0909 100%);
+      clip-path: polygon(50% 0, 100% 16%, 70% 100%, 30% 100%, 0 16%); transform: rotate(48deg);
+      box-shadow: 0 0 25px #ff3028, 0 0 46px rgba(255,48,40,0.45);
+    }
+    .hero-copy {
+      position: absolute;
+      left: 50%;
+      bottom: 2%;
+      width: min(470px, 80vw);
+      transform: translateX(-50%);
+      text-align: center;
+      text-shadow: 0 4px 0 #06101d;
+      font-size: 18px;
+      font-weight: 900;
+      color: #dff8ff;
+    }
+
+    .right-stack {
+      position: absolute;
+      z-index: 3;
+      right: 24px;
+      top: 150px;
+      width: min(360px, 28vw);
+      display: grid;
+      gap: 28px;
+    }
+    .panel { background: linear-gradient(180deg, #0b254a, #051326); padding: 16px; }
+    .panel-heading {
+      display: inline-block;
+      margin: -34px 0 10px 4px;
+      padding: 8px 14px;
+      background: linear-gradient(180deg, #416cff, #173aa2);
+      color: #dff8ff;
+      font-size: 22px;
+      font-weight: 1000;
+      text-shadow: 0 4px 0 #06101d;
+    }
+    .ability-card {
+      width: 100%;
+      min-height: 64px;
+      margin-top: 8px;
+      padding: 8px 10px;
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: linear-gradient(180deg, #123966, #071b33);
+      color: white;
+      text-align: left;
+    }
+    .ability-card.active { border-color: #f8ff9b; }
+    .ability-icon { display: grid; place-items: center; width: 44px; height: 44px; border: 3px solid #06101d; border-radius: 5px; background: linear-gradient(180deg, #2f92e5, #0d3d81); font-size: 24px; }
+    .ability-name { font-size: 18px; font-weight: 1000; }
+    .ability-sub { color: #b9d8ff; font-size: 13px; font-weight: 800; }
+    .room-controls { display: grid; gap: 9px; }
+    .room-controls input {
+      width: 100%;
+      height: 44px;
+      border: 3px solid #06101d;
+      border-radius: 6px;
+      padding: 0 12px;
+      background: #e8f4ff;
+      color: #06101d;
+      font-weight: 1000;
+      text-transform: uppercase;
+    }
+    .small-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .small-button {
+      min-height: 48px;
+      border: 3px solid #06101d;
+      border-radius: 6px;
+      color: white;
+      background: linear-gradient(180deg, #2f92e5, #0d3d81);
+      font-weight: 1000;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.12), 0 4px 0 #06101d;
+    }
+    .room-status { color: #b9d8ff; font-weight: 800; line-height: 1.35; }
+
+    .bottom-menu {
+      position: absolute;
+      z-index: 3;
+      left: 24px;
+      bottom: 20px;
+      display: flex;
+      gap: 16px;
+    }
+    .bottom-button {
+      display: grid;
+      place-items: center;
+      width: 124px;
+      height: 106px;
+      background: linear-gradient(180deg, #1959ae, #092452);
+      color: white;
+      font-size: 21px;
+      font-weight: 1000;
+      text-align: center;
+      text-shadow: 0 4px 0 #06101d;
+    }
+
+    .result-screen,
+    .modal {
+      position: absolute;
+      inset: 0;
+      z-index: 12;
+      display: grid;
+      place-items: center;
+      background: rgba(3, 8, 16, 0.78);
+      backdrop-filter: blur(8px);
+    }
+    .modal-card {
+      width: min(860px, calc(100vw - 30px));
+      max-height: min(760px, calc(100vh - 30px));
+      overflow: auto;
+      background: linear-gradient(180deg, #123d79, #071d3c);
+      padding: 18px;
+    }
+    .modal-title,
+    .result-title {
+      margin: 0 0 10px;
+      color: #dff8ff;
+      font-size: clamp(34px, 7vw, 70px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      text-shadow: 5px 5px 0 #06101d;
+    }
+    .result-title.win { color: #f8ff9b; }
+    .result-title.death { color: #ff6d78; }
+    .result-text { color: #d8eaff; font-size: 20px; font-weight: 900; }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .skin-card {
+      min-height: 150px;
+      padding: 12px;
+      background: linear-gradient(180deg, #0b254a, #051326);
+      color: white;
+      text-align: left;
+    }
+    .skin-preview { width: 54px; height: 54px; border: 5px solid #06101d; border-radius: 50%; box-shadow: 0 0 22px currentColor; }
+    .skin-card h3 { margin: 10px 0 4px; }
+    .skin-card p { margin: 0; color: #b9d8ff; font-weight: 800; }
+    .close-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+    .safe-pad { display: grid; gap: 10px; margin-top: 14px; }
+
+    @media (max-width: 980px) {
+      .hud { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .left-menu { top: auto; bottom: 142px; width: 260px; }
+      .right-stack { display: none; }
+      .hero-stage { top: 43%; width: 90vw; }
+      .bottom-menu { right: 18px; left: auto; }
+      .currency-row { display: none; }
+    }
+    @media (max-width: 640px) {
+      .brand { font-size: 54px; }
+      .left-menu { left: 16px; right: 16px; width: auto; }
+      .bottom-menu { left: 16px; right: 16px; justify-content: space-between; }
+      .bottom-button { width: 31%; height: 80px; font-size: 16px; }
+      .hud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <main id="gameShell" class="game-shell lobby-open">
+    <canvas id="game"></canvas>
+
+    <div id="hud" class="hud">
+      <div class="stat"><span class="label">Score</span><span id="scoreValue" class="value">0</span></div>
+      <div class="stat"><span class="label">Alive</span><span id="aliveValue" class="value">6</span></div>
+      <div class="stat"><span class="label">Target</span><span id="targetValue" class="value">-</span></div>
+      <div class="stat"><span class="label">Ability</span><span id="abilityValue" class="value">Dash</span></div>
+      <div class="stat"><span class="label">Cooldown</span><span id="cooldownValue" class="value">Ready</span></div>
+      <div class="stat"><span class="label">Controls</span><span class="value">WASD Space E</span></div>
+    </div>
+
+    <section id="lobby" class="overlay">
+      <div class="lobby-bg-grid"></div>
+      <div class="lobby-v2">
+        <header class="lobby-header">
+          <div class="brand">2D <strong>Ball</strong></div>
+          <div class="currency-row">
+            <div class="currency"><span class="coin"></span><span id="coinsValue">0</span></div>
+            <div class="currency"><span class="gem"></span><span id="gemsValue">0</span></div>
+          </div>
+        </header>
+
+        <nav class="left-menu">
+          <button id="startButton" class="pixel-button play">Play</button>
+          <button id="openShopButton" class="pixel-button blue">Shop</button>
+          <button id="openInventoryButton" class="pixel-button purple">Inventory</button>
+          <button id="safeButton" class="pixel-button green">Safe</button>
+        </nav>
+
+        <section class="hero-stage">
+          <div class="stage-rings"></div>
+          <div class="lobby-fighter">
+            <div class="fighter-aura"></div>
+            <div class="fighter-shadow"></div>
+            <div class="fighter-body"></div>
+            <div class="fighter-dot"></div>
+            <div class="fighter-face"></div>
+            <div class="fighter-gloves"></div>
+            <div class="fighter-blade"></div>
+          </div>
+          <div class="hero-copy">Deflect the ball, use abilities, and be the last fighter standing.</div>
+        </section>
+
+        <aside class="right-stack">
+          <section class="panel">
+            <div class="panel-heading">Abilities</div>
+            <div id="abilityList"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-heading">Room</div>
+            <div class="room-controls">
+              <input id="roomCode" maxlength="8" placeholder="ROOM CODE">
+              <div class="small-row">
+                <button id="createRoomButton" class="small-button">Create</button>
+                <button id="joinRoomButton" class="small-button">Join</button>
+              </div>
+              <div id="roomStatus" class="room-status">Solo mode until you join a room.</div>
+            </div>
+          </section>
+        </aside>
+
+        <div class="bottom-menu">
+          <button id="quickAbilityButton" class="bottom-button">Ability<br>E</button>
+          <button id="howButton" class="bottom-button">How<br>To</button>
+          <button id="creditsButton" class="bottom-button">News</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="result-screen hidden">
+      <div class="modal-card">
+        <h1 id="resultTitle" class="result-title">You Won</h1>
+        <p id="resultText" class="result-text"></p>
+        <div class="close-row">
+          <button id="playAgainButton" class="small-button">Play Again</button>
+          <button id="backToLobbyButton" class="small-button">Lobby</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="bigShop" class="modal hidden">
+      <div class="modal-card">
+        <h2 class="modal-title">Shop</h2>
+        <p class="result-text">Earn coins by eliminating bots. Buy skins and equip them in Inventory.</p>
+        <div id="shopGrid" class="modal-grid"></div>
+        <div class="close-row"><button id="closeShopButton" class="small-button">Close</button></div>
+      </div>
+    </section>
+
+    <section id="bigInventory" class="modal hidden">
+      <div class="modal-card">
+        <h2 class="modal-title">Inventory</h2>
+        <div id="inventoryGrid" class="modal-grid"></div>
+        <div class="close-row"><button id="closeInventoryButton" class="small-button">Close</button></div>
+      </div>
+    </section>
+
+    <section id="safeModal" class="modal hidden">
+      <div class="modal-card">
+        <h2 class="modal-title">Safe Room</h2>
+        <p class="result-text">Enter a secret code if you find one.</p>
+        <div class="safe-pad">
+          <input id="safeCode" maxlength="12" placeholder="CODE">
+          <button id="enterSafeCodeButton" class="small-button">Open Safe</button>
+          <p id="safeStatus" class="room-status">Locked.</p>
+        </div>
+        <div class="close-row"><button id="closeSafeButton" class="small-button">Close</button></div>
+      </div>
+    </section>
+
+    <section id="infoModal" class="modal hidden">
+      <div class="modal-card">
+        <h2 id="infoTitle" class="modal-title">How To</h2>
+        <p id="infoText" class="result-text"></p>
+        <div class="close-row"><button id="closeInfoButton" class="small-button">Close</button></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const gameShell = document.getElementById("gameShell");
+    const lobby = document.getElementById("lobby");
+    const resultScreen = document.getElementById("resultScreen");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultText = document.getElementById("resultText");
+    const scoreValue = document.getElementById("scoreValue");
+    const aliveValue = document.getElementById("aliveValue");
+    const targetValue = document.getElementById("targetValue");
+    const abilityValue = document.getElementById("abilityValue");
+    const cooldownValue = document.getElementById("cooldownValue");
+    const coinsValue = document.getElementById("coinsValue");
+    const gemsValue = document.getElementById("gemsValue");
+    const abilityList = document.getElementById("abilityList");
+    const roomCodeEl = document.getElementById("roomCode");
+    const roomStatus = document.getElementById("roomStatus");
+    const bigShop = document.getElementById("bigShop");
+    const bigInventory = document.getElementById("bigInventory");
+    const shopGrid = document.getElementById("shopGrid");
+    const inventoryGrid = document.getElementById("inventoryGrid");
+    const safeModal = document.getElementById("safeModal");
+    const safeCode = document.getElementById("safeCode");
+    const safeStatus = document.getElementById("safeStatus");
+    const infoModal = document.getElementById("infoModal");
+    const infoTitle = document.getElementById("infoTitle");
+    const infoText = document.getElementById("infoText");
+
+    const keys = new Set();
+    const mouse = { x: innerWidth * 0.5, y: innerHeight * 0.5 };
+    const abilities = [
+      { id: "dash", name: "Dash", icon: ">>", text: "Burst away from the ball.", cooldown: 5, price: 0 },
+      { id: "freeze", name: "Freeze", icon: "*", text: "Slow the ball for a moment.", cooldown: 8, price: 140 },
+      { id: "shield", name: "Shield", icon: "O", text: "Block one hit for 2 seconds.", cooldown: 10, price: 180 },
+      { id: "pulse", name: "Pulse", icon: "!", text: "Push the ball away.", cooldown: 7, price: 220 }
+    ];
+    const skins = [
+      { id: "aqua", name: "Aqua Core", price: 0, color: "#35e4ff", accent: "#b6fbff" },
+      { id: "ruby", name: "Ruby Core", price: 80, color: "#ff4f65", accent: "#ffd1d8" },
+      { id: "gold", name: "Gold Core", price: 120, color: "#ffd45c", accent: "#fff5a8" },
+      { id: "void", name: "Void Core", price: 180, color: "#a849ff", accent: "#ead4ff" },
+      { id: "lime", name: "Lime Core", price: 160, color: "#62e68a", accent: "#d6ffe1" }
+    ];
+    const arenaMaps = [
+      {
+        id: "neon",
+        name: "Neon Court",
+        pattern: "circuit",
+        colors: ["#09101a", "#101722", "#07090f"],
+        glow: "rgba(53,228,255,0.13)",
+        line: "rgba(95,233,255,0.13)",
+        blocks: (w, h) => [
+          rect(w * 0.12, h * 0.46, w * 0.15, 24),
+          rect(w * 0.73, h * 0.46, w * 0.15, 24),
+          rect(w * 0.46, h * 0.16, 24, h * 0.14),
+          rect(w * 0.52, h * 0.70, 24, h * 0.14)
+        ]
+      },
+      {
+        id: "ember",
+        name: "Ember Ring",
+        pattern: "lava",
+        colors: ["#160b10", "#20151a", "#090709"],
+        glow: "rgba(255,93,54,0.16)",
+        line: "rgba(255,190,92,0.12)",
+        blocks: (w, h) => [
+          rect(w * 0.32, h * 0.18, 24, h * 0.26),
+          rect(w * 0.32, h * 0.58, 24, h * 0.24),
+          rect(w * 0.66, h * 0.18, 24, h * 0.26),
+          rect(w * 0.66, h * 0.58, 24, h * 0.24)
+        ]
+      },
+      {
+        id: "frost",
+        name: "Frost Vault",
+        pattern: "ice",
+        colors: ["#07141c", "#0f2431", "#05090f"],
+        glow: "rgba(157,247,255,0.16)",
+        line: "rgba(210,252,255,0.13)",
+        blocks: (w, h) => [
+          rect(w * 0.43, h * 0.39, w * 0.14, 26),
+          rect(w * 0.43, h * 0.56, w * 0.14, 26),
+          rect(w * 0.24, h * 0.32, 26, h * 0.18),
+          rect(w * 0.74, h * 0.50, 26, h * 0.18)
+        ]
+      }
+    ];
+    const save = loadSave();
+    const state = {
+      running: false,
+      score: 0,
+      map: null,
+      walls: [],
+      particles: [],
+      freezeTime: 0,
+      shieldTime: 0,
+      abilityCooldown: 0,
+      deflectCooldown: 0,
+      justDeflected: 0,
+      targetWarning: 0,
+      shake: 0,
+      flash: 0
+    };
+    const player = { name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
+    const bots = [];
+    const ball = { x: 0, y: 0, vx: 0, vy: 0, r: 15, speed: 210, target: null, trail: [] };
+    let lastTime = 0;
+
+    function fitCanvas() {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(innerWidth * ratio);
+      canvas.height = Math.floor(innerHeight * ratio);
+      canvas.style.width = innerWidth + "px";
+      canvas.style.height = innerHeight + "px";
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+    function width() { return innerWidth; }
+    function height() { return innerHeight; }
+    function rand(min, max) { return min + Math.random() * (max - min); }
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+    function rect(x, y, w, h) { return { x, y, w, h }; }
+
+    function loadSave() {
+      const base = { coins: 60, gems: 8, owned: ["aqua"], equipped: "aqua", ability: "dash", unlockedAbilities: ["dash"], safeOpened: false };
+      try {
+        const loaded = { ...base, ...JSON.parse(localStorage.getItem("twoDBallSave") || "{}") };
+        loaded.unlockedAbilities = Array.isArray(loaded.unlockedAbilities) ? loaded.unlockedAbilities : ["dash"];
+        if (!loaded.unlockedAbilities.includes("dash")) loaded.unlockedAbilities.push("dash");
+        if (!loaded.unlockedAbilities.includes(loaded.ability)) loaded.ability = "dash";
+        return loaded;
+      }
+      catch { return base; }
+    }
+    function saveGame() {
+      localStorage.setItem("twoDBallSave", JSON.stringify(save));
+      syncLobby();
+    }
+    function syncLobby() {
+      coinsValue.textContent = save.coins;
+      gemsValue.textContent = save.gems;
+      renderAbilities();
+      renderShop();
+      applyEquippedSkin();
+    }
+    function applyEquippedSkin() {
+      const skin = skins.find(item => item.id === save.equipped) || skins[0];
+      player.color = skin.color;
+      player.accent = skin.accent;
+    }
+
+    function renderAbilities() {
+      abilityList.innerHTML = abilities.map(ability => `
+        <button class="ability-card ${save.ability === ability.id ? "active" : ""}" data-ability="${ability.id}" ${save.unlockedAbilities.includes(ability.id) ? "" : "disabled"}>
+          <span class="ability-icon">${ability.icon}</span>
+          <span><span class="ability-name">${ability.name}</span><br><span class="ability-sub">${ability.text}</span></span>
+          <span class="ability-sub">${save.unlockedAbilities.includes(ability.id) ? `${ability.cooldown}s` : `${ability.price} coins`}</span>
+        </button>
+      `).join("");
+      abilityList.querySelectorAll("[data-ability]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (!save.unlockedAbilities.includes(button.dataset.ability)) return;
+          save.ability = button.dataset.ability;
+          saveGame();
+        });
+      });
+    }
+
+    function renderShop() {
+      const skinCards = skins.map(skin => {
+        const owned = save.owned.includes(skin.id);
+        return `
+          <button class="skin-card" data-buy="${skin.id}">
+            <div class="skin-preview" style="background:${skin.color};color:${skin.color}"></div>
+            <h3>${skin.name}</h3>
+            <p>${owned ? "Owned" : `${skin.price} coins`}</p>
+          </button>
+        `;
+      }).join("");
+      const abilityCards = abilities.filter(ability => ability.price > 0).map(ability => {
+        const owned = save.unlockedAbilities.includes(ability.id);
+        return `
+          <button class="skin-card" data-buy-ability="${ability.id}">
+            <div class="skin-preview" style="display:grid;place-items:center;background:#123966;color:#dff8ff;border-radius:8px">${ability.icon}</div>
+            <h3>${ability.name}</h3>
+            <p>${owned ? "Unlocked" : `${ability.price} coins`}</p>
+          </button>
+        `;
+      }).join("");
+      shopGrid.innerHTML = skinCards + abilityCards;
+      shopGrid.querySelectorAll("[data-buy]").forEach(button => {
+        button.addEventListener("click", () => buySkin(button.dataset.buy));
+      });
+      shopGrid.querySelectorAll("[data-buy-ability]").forEach(button => {
+        button.addEventListener("click", () => buyAbility(button.dataset.buyAbility));
+      });
+      inventoryGrid.innerHTML = save.owned.map(id => {
+        const skin = skins.find(item => item.id === id) || skins[0];
+        return `
+          <button class="skin-card" data-equip="${skin.id}">
+            <div class="skin-preview" style="background:${skin.color};color:${skin.color}"></div>
+            <h3>${skin.name}</h3>
+            <p>${save.equipped === skin.id ? "Equipped" : "Tap to equip"}</p>
+          </button>
+        `;
+      }).join("");
+      inventoryGrid.querySelectorAll("[data-equip]").forEach(button => {
+        button.addEventListener("click", () => {
+          save.equipped = button.dataset.equip;
+          saveGame();
+          renderShop();
+        });
+      });
+    }
+    function buySkin(id) {
+      const skin = skins.find(item => item.id === id);
+      if (!skin || save.owned.includes(id)) return;
+      if (save.coins < skin.price) return;
+      save.coins -= skin.price;
+      save.owned.push(id);
+      save.equipped = id;
+      saveGame();
+      renderShop();
+    }
+    function buyAbility(id) {
+      const ability = abilities.find(item => item.id === id);
+      if (!ability || save.unlockedAbilities.includes(id)) return;
+      if (save.coins < ability.price) return;
+      save.coins -= ability.price;
+      save.unlockedAbilities.push(id);
+      save.ability = id;
+      saveGame();
+      renderShop();
+    }
+
+    function resetGame() {
+      lobby.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      bigShop.classList.add("hidden");
+      bigInventory.classList.add("hidden");
+      safeModal.classList.add("hidden");
+      infoModal.classList.add("hidden");
+      gameShell.classList.remove("lobby-open");
+      state.running = true;
+      state.score = 0;
+      state.map = arenaMaps[Math.floor(Math.random() * arenaMaps.length)];
+      state.walls = state.map.blocks(width(), height());
+      state.particles = [];
+      state.freezeTime = 0;
+      state.shieldTime = 0;
+      state.abilityCooldown = 0;
+      state.deflectCooldown = 0;
+      state.justDeflected = 0;
+      state.targetWarning = 0;
+      state.shake = 0;
+      state.flash = 0;
+      player.x = width() * 0.5;
+      player.y = height() * 0.72;
+      player.vx = 0;
+      player.vy = 0;
+      player.alive = true;
+      player.slashTime = 0;
+      bots.length = 0;
+      const spots = [
+        [0.18, 0.24], [0.82, 0.24], [0.18, 0.74], [0.82, 0.74], [0.5, 0.2]
+      ];
+      spots.forEach((spot, index) => bots.push(makeBot(index, width() * spot[0], height() * spot[1])));
+      ball.x = width() * 0.5;
+      ball.y = height() * 0.48;
+      ball.speed = 190;
+      ball.trail = [];
+      ball.lastDeflector = null;
+      chooseTarget();
+      aimBall();
+      updateHud();
+    }
+    function makeBot(index, x, y) {
+      const colors = ["#ff4f65", "#ffd45c", "#62e68a", "#a849ff", "#ff8bd1"];
+      return { name: `BOT ${index + 1}`, x, y, vx: rand(-80, 80), vy: rand(-80, 80), r: 20, speed: 250, alive: true, color: colors[index], accent: "#ffffff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false, dodge: rand(0, Math.PI * 2), deflectTimer: rand(0.2, 1.1) };
+    }
+
+    function update(dt) {
+      if (!state.running) return;
+      state.freezeTime = Math.max(0, state.freezeTime - dt);
+      state.shieldTime = Math.max(0, state.shieldTime - dt);
+      state.abilityCooldown = Math.max(0, state.abilityCooldown - dt);
+      state.deflectCooldown = Math.max(0, state.deflectCooldown - dt);
+      state.justDeflected = Math.max(0, state.justDeflected - dt);
+      state.shake = Math.max(0, state.shake - dt * 2.8);
+      state.flash = Math.max(0, state.flash - dt * 3.8);
+      player.slashTime = Math.max(0, player.slashTime - dt);
+      movePlayer(dt);
+      updateBots(dt);
+      updateBall(dt);
+      updateParticles(dt);
+      updateHud();
+    }
+
+    function movePlayer(dt) {
+      if (!player.alive) return;
+      const x = (keys.has("d") || keys.has("arrowright") ? 1 : 0) - (keys.has("a") || keys.has("arrowleft") ? 1 : 0);
+      const y = (keys.has("s") || keys.has("arrowdown") ? 1 : 0) - (keys.has("w") || keys.has("arrowup") ? 1 : 0);
+      const len = Math.hypot(x, y) || 1;
+      player.vx += (x / len) * player.speed * dt * 5.2;
+      player.vy += (y / len) * player.speed * dt * 5.2;
+      player.vx *= Math.pow(0.0008, dt);
+      player.vy *= Math.pow(0.0008, dt);
+      moveCircle(player, player.vx * dt, player.vy * dt);
+      if (Math.hypot(player.vx, player.vy) > 10) player.facing = Math.atan2(player.vy, player.vx);
+    }
+    function updateBots(dt) {
+      bots.forEach(bot => {
+        if (!bot.alive) return;
+        bot.slashTime = Math.max(0, bot.slashTime - dt);
+        bot.deflectTimer = Math.max(0, bot.deflectTimer - dt);
+        const targeted = ball.target === bot;
+        bot.dodge += dt * rand(-1.2, 1.5);
+        const ax = targeted ? bot.x - ball.x : Math.cos(bot.dodge);
+        const ay = targeted ? bot.y - ball.y : Math.sin(bot.dodge);
+        const len = Math.hypot(ax, ay) || 1;
+        bot.vx += (ax / len) * bot.speed * dt * (targeted ? 5.6 : 1.8);
+        bot.vy += (ay / len) * bot.speed * dt * (targeted ? 5.6 : 1.8);
+        bot.vx *= Math.pow(0.02, dt);
+        bot.vy *= Math.pow(0.02, dt);
+        moveCircle(bot, bot.vx * dt, bot.vy * dt);
+        bot.facing = Math.atan2(bot.vy, bot.vx);
+        if (targeted && bot.deflectTimer <= 0 && isBallIncomingTo(bot, 110)) {
+          bot.deflectTimer = rand(0.55, 1.35);
+          bot.slashAngle = Math.atan2(ball.y - bot.y, ball.x - bot.x);
+          bot.slashTime = 0.24;
+          deflectFrom(bot);
+        }
+      });
+    }
+    function moveCircle(circle, dx, dy) {
+      circle.x = clamp(circle.x + dx, circle.r, width() - circle.r);
+      for (const wall of state.walls) {
+        if (circleRect(circle, wall)) {
+          if (dx > 0) circle.x = wall.x - circle.r;
+          if (dx < 0) circle.x = wall.x + wall.w + circle.r;
+          circle.vx = 0;
+        }
+      }
+      circle.y = clamp(circle.y + dy, circle.r, height() - circle.r);
+      for (const wall of state.walls) {
+        if (circleRect(circle, wall)) {
+          if (dy > 0) circle.y = wall.y - circle.r;
+          if (dy < 0) circle.y = wall.y + wall.h + circle.r;
+          circle.vy = 0;
+        }
+      }
+    }
+    function circleRect(circle, wall) {
+      const x = clamp(circle.x, wall.x, wall.x + wall.w);
+      const y = clamp(circle.y, wall.y, wall.y + wall.h);
+      return Math.hypot(circle.x - x, circle.y - y) < circle.r;
+    }
+    function updateBall(dt) {
+      if (!ball.target || !ball.target.alive) {
+        chooseTarget();
+        aimBall();
+      }
+      if (!ball.target) return;
+      if (state.freezeTime > 0) {
+        ball.vx = 0;
+        ball.vy = 0;
+        ball.trail.push({ x: ball.x, y: ball.y, life: 0.62, speed: 0 });
+        ball.trail.forEach(dot => dot.life -= dt * 1.25);
+        ball.trail = ball.trail.filter(dot => dot.life > 0);
+        state.targetWarning = ball.target === player ? clamp(state.targetWarning + dt * 3, 0, 1) : clamp(state.targetWarning - dt * 4, 0, 1);
+        return;
+      }
+      const speed = ball.speed;
+      const dx = ball.target.x - ball.x;
+      const dy = ball.target.y - ball.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const turnRate = ball.target === player ? 5.8 : 5.2;
+      ball.vx += ((dx / len) * speed - ball.vx) * clamp(dt * turnRate, 0, 1);
+      ball.vy += ((dy / len) * speed - ball.vy) * clamp(dt * turnRate, 0, 1);
+      ball.x += ball.vx * dt;
+      ball.y += ball.vy * dt;
+      ball.trail.push({ x: ball.x, y: ball.y, life: 0.58, speed: ball.speed });
+      ball.trail.forEach(dot => dot.life -= dt * 1.8);
+      ball.trail = ball.trail.filter(dot => dot.life > 0);
+      ball.speed = Math.min(860, ball.speed + dt * 5.5);
+      state.targetWarning = ball.target === player ? clamp(state.targetWarning + dt * 3, 0, 1) : clamp(state.targetWarning - dt * 4, 0, 1);
+      if (distance(ball, ball.target) < ball.r + ball.target.r) hitTarget();
+    }
+    function hitTarget() {
+      const hit = ball.target;
+      if (ball.target === player && state.shieldTime > 0) {
+        state.shieldTime = 0;
+        deflectFrom(player);
+        return;
+      }
+      hit.alive = false;
+      burst(hit.x, hit.y, hit.color, 22);
+      state.shake = 0.32;
+      state.flash = 0.24;
+      if (hit !== player) {
+        state.score += 1;
+        save.coins += 12;
+        if (state.score % 3 === 0) save.gems += 1;
+        saveGame();
+      }
+      if (!player.alive) return endGame("Deathmatch over: the ball hit you.", "death");
+      if (bots.every(bot => !bot.alive)) return endGame("You won the deathmatch.", "win");
+      ball.speed = Math.min(880, ball.speed + 46);
+      chooseTarget();
+      aimBall();
+    }
+    function chooseTarget() {
+      const alive = allFighters().filter(fighter => fighter.alive && fighter !== ball.lastDeflector);
+      const fallback = allFighters().filter(fighter => fighter.alive);
+      const pool = alive.length ? alive : fallback;
+      ball.target = pool[Math.floor(Math.random() * pool.length)] || null;
+    }
+    function chooseTargetAfterDeflect(fighter) {
+      if (fighter === player) {
+        chooseCursorTarget();
+        ball.lastDeflector = fighter;
+        return;
+      }
+      const others = allFighters().filter(item => item.alive && item !== fighter);
+      const nearbyThreats = others.filter(item => distance(item, fighter) > 80);
+      const pool = nearbyThreats.length ? nearbyThreats : others;
+      ball.target = pool[Math.floor(Math.random() * pool.length)] || null;
+      ball.lastDeflector = fighter;
+    }
+    function isBallIncomingTo(fighter, range) {
+      if (ball.target !== fighter) return false;
+      const dx = fighter.x - ball.x;
+      const dy = fighter.y - ball.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist > range) return false;
+      const dot = (ball.vx * dx + ball.vy * dy) / ((Math.hypot(ball.vx, ball.vy) || 1) * (dist || 1));
+      return dot > 0.35;
+    }
+    function chooseCursorTarget() {
+      const candidates = allFighters().filter(item => item.alive && item !== player);
+      if (!candidates.length) {
+        ball.target = null;
+        return;
+      }
+      const aimX = mouse.x - ball.x;
+      const aimY = mouse.y - ball.y;
+      const aimLen = Math.hypot(aimX, aimY) || 1;
+      const nx = aimX / aimLen;
+      const ny = aimY / aimLen;
+      let best = candidates[0];
+      let bestScore = -Infinity;
+      candidates.forEach(candidate => {
+        const tx = candidate.x - ball.x;
+        const ty = candidate.y - ball.y;
+        const targetLen = Math.hypot(tx, ty) || 1;
+        const alignment = (tx / targetLen) * nx + (ty / targetLen) * ny;
+        const cursorDistance = Math.hypot(candidate.x - mouse.x, candidate.y - mouse.y);
+        const score = alignment * 900 - cursorDistance * 0.8;
+        if (score > bestScore) {
+          bestScore = score;
+          best = candidate;
+        }
+      });
+      ball.target = best;
+    }
+    function aimBall() {
+      if (!ball.target) return;
+      const cursorAim = ball.lastDeflector === player && ball.target !== player;
+      const dx = cursorAim ? mouse.x - ball.x : ball.target.x - ball.x;
+      const dy = cursorAim ? mouse.y - ball.y : ball.target.y - ball.y;
+      const len = Math.hypot(dx, dy) || 1;
+      ball.vx = (dx / len) * ball.speed;
+      ball.vy = (dy / len) * ball.speed;
+    }
+    function allFighters() { return [player, ...bots]; }
+    function distance(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
+
+    function deflect() {
+      if (!state.running || !player.alive || state.deflectCooldown > 0) return;
+      state.deflectCooldown = 0.45;
+      player.slashAngle = Math.atan2(mouse.y - player.y, mouse.x - player.x);
+      player.facing = player.slashAngle;
+      player.slashTime = 0.26;
+      player.slashHit = false;
+      if (isBallIncomingTo(player, 126)) {
+        player.slashHit = true;
+        deflectFrom(player);
+      }
+    }
+    function deflectFrom(fighter) {
+      if (allFighters().filter(item => item.alive && item !== fighter).length === 0) return;
+      chooseTargetAfterDeflect(fighter);
+      ball.speed = Math.min(920, ball.speed + 64);
+      aimBall();
+      burst(ball.x, ball.y, fighter.color, 14);
+      state.justDeflected = 0.18;
+      state.shake = 0.12;
+    }
+    function useAbility() {
+      if (!state.running || state.abilityCooldown > 0 || !player.alive) return;
+      const ability = abilities.find(item => item.id === save.ability) || abilities[0];
+      state.abilityCooldown = ability.cooldown;
+      if (ability.id === "dash") {
+        const awayX = player.x - ball.x;
+        const awayY = player.y - ball.y;
+        const len = Math.hypot(awayX, awayY) || 1;
+        player.vx += (awayX / len) * 720;
+        player.vy += (awayY / len) * 720;
+        burst(player.x, player.y, "#f8ff9b", 18);
+      }
+      if (ability.id === "freeze") {
+        state.freezeTime = 3;
+        ball.vx = 0;
+        ball.vy = 0;
+        burst(ball.x, ball.y, "#9df7ff", 32);
+      }
+      if (ability.id === "shield") {
+        state.shieldTime = 2.4;
+        burst(player.x, player.y, "#dffcff", 20);
+      }
+      if (ability.id === "pulse") {
+        const dx = ball.x - player.x;
+        const dy = ball.y - player.y;
+        const len = Math.hypot(dx, dy) || 1;
+        ball.x += (dx / len) * 80;
+        ball.y += (dy / len) * 80;
+        ball.vx += (dx / len) * 360;
+        ball.vy += (dy / len) * 360;
+        burst(player.x, player.y, "#ffec6b", 24);
+      }
+    }
+
+    function endGame(message, type) {
+      state.running = false;
+      gameShell.classList.add("lobby-open");
+      resultTitle.textContent = type === "win" ? "Victory" : "Defeated";
+      resultTitle.className = `result-title ${type}`;
+      resultText.textContent = `${message} Score: ${state.score}. Coins: ${save.coins}.`;
+      resultScreen.classList.remove("hidden");
+    }
+    function backToLobby() {
+      state.running = false;
+      lobby.classList.remove("hidden");
+      resultScreen.classList.add("hidden");
+      gameShell.classList.add("lobby-open");
+      syncLobby();
+    }
+
+    function draw() {
+      const w = width();
+      const h = height();
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      if (state.shake > 0) ctx.translate((Math.random() - 0.5) * state.shake * 18, (Math.random() - 0.5) * state.shake * 18);
+      drawArena(w, h);
+      if (state.running) {
+        drawMapWalls();
+        drawTargetBeam();
+        allFighters().forEach(fighter => fighter.alive ? drawFighter(fighter) : drawEliminated(fighter));
+        drawBall();
+      } else {
+        drawIdleBalls(w, h);
+      }
+      drawParticles();
+      ctx.restore();
+      if (state.flash > 0) {
+        ctx.fillStyle = `rgba(255,255,255,${state.flash})`;
+        ctx.fillRect(0, 0, w, h);
+      }
+      requestAnimationFrame(loop);
+    }
+    function drawArena(w, h) {
+      const map = state.map || arenaMaps[0];
+      const floor = ctx.createLinearGradient(0, 0, w, h);
+      floor.addColorStop(0, map.colors[0]);
+      floor.addColorStop(0.48, map.colors[1]);
+      floor.addColorStop(1, map.colors[2]);
+      ctx.fillStyle = floor;
+      ctx.fillRect(0, 0, w, h);
+      drawFloorPattern(map, w, h);
+      const glow = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.min(w, h) * 0.55);
+      glow.addColorStop(0, map.glow);
+      glow.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
+      if (state.running && map.name) {
+        ctx.save();
+        ctx.fillStyle = "rgba(223,248,255,0.36)";
+        ctx.font = "900 18px Arial";
+        ctx.textAlign = "right";
+        ctx.fillText(map.name, w - 22, h - 24);
+        ctx.restore();
+      }
+    }
+    function drawFloorPattern(map, w, h) {
+      ctx.save();
+      if (map.pattern === "circuit") {
+        ctx.strokeStyle = map.line;
+        ctx.lineWidth = 2;
+        for (let y = 48; y < h; y += 92) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(w * 0.18, y);
+          ctx.lineTo(w * 0.28, y + 32);
+          ctx.lineTo(w * 0.52, y + 32);
+          ctx.lineTo(w * 0.64, y - 18);
+          ctx.lineTo(w, y - 18);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "rgba(95,233,255,0.2)";
+        for (let x = 72; x < w; x += 170) {
+          for (let y = 70; y < h; y += 148) {
+            ctx.beginPath();
+            ctx.roundRect(x, y, 34, 12, 4);
+            ctx.fill();
+          }
+        }
+        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        for (let x = 0; x < w; x += 56) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
+      }
+      if (map.pattern === "lava") {
+        ctx.lineWidth = 5;
+        for (let r = 90; r < Math.max(w, h); r += 115) {
+          ctx.strokeStyle = r % 230 === 90 ? "rgba(255,93,54,0.24)" : "rgba(255,190,92,0.12)";
+          ctx.beginPath();
+          ctx.ellipse(w * 0.5, h * 0.5, r * 1.2, r * 0.62, 0, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = "rgba(255,119,65,0.2)";
+        ctx.lineWidth = 3;
+        for (let i = 0; i < 18; i++) {
+          const x = ((i * 137) % Math.max(w, 1));
+          const y = 50 + ((i * 89) % Math.max(h - 100, 1));
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + 36, y + 18);
+          ctx.lineTo(x + 8, y + 54);
+          ctx.stroke();
+        }
+        ctx.fillStyle = "rgba(255,93,54,0.08)";
+        for (let i = 0; i < 9; i++) {
+          ctx.beginPath();
+          ctx.arc((i * 211) % w, 80 + (i * 137) % Math.max(h - 160, 1), 38 + (i % 3) * 22, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      if (map.pattern === "ice") {
+        ctx.strokeStyle = "rgba(210,252,255,0.16)";
+        ctx.lineWidth = 2;
+        const size = 64;
+        for (let y = -size; y < h + size; y += size * 0.86) {
+          for (let x = -size; x < w + size; x += size * 1.5) {
+            const ox = ((Math.floor(y / (size * 0.86)) % 2) * size * 0.75);
+            drawHex(x + ox, y, size * 0.42);
+          }
+        }
+        ctx.strokeStyle = "rgba(255,255,255,0.18)";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 20; i++) {
+          const x = (i * 149) % w;
+          const y = (i * 97) % h;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + 42, y - 18);
+          ctx.lineTo(x + 76, y + 12);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+    }
+    function drawHex(x, y, r) {
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const angle = Math.PI / 6 + i * Math.PI / 3;
+        const px = x + Math.cos(angle) * r;
+        const py = y + Math.sin(angle) * r;
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+    function drawMapWalls() {
+      const map = state.map || arenaMaps[0];
+      state.walls.forEach(wall => {
+        const grd = ctx.createLinearGradient(wall.x, wall.y, wall.x + wall.w, wall.y + wall.h);
+        grd.addColorStop(0, "rgba(255,255,255,0.18)");
+        grd.addColorStop(0.35, map.glow);
+        grd.addColorStop(1, "rgba(3,8,16,0.82)");
+        ctx.save();
+        ctx.shadowColor = map.line;
+        ctx.shadowBlur = 18;
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.roundRect(wall.x, wall.y, wall.w, wall.h, 8);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = map.line;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      });
+    }
+    function drawIdleBalls(w, h) {
+      const t = performance.now() / 900;
+      for (let i = 0; i < 10; i++) {
+        ctx.fillStyle = i % 2 ? "rgba(255,79,101,0.14)" : "rgba(54,215,255,0.16)";
+        ctx.beginPath();
+        ctx.arc((Math.sin(t + i) * 0.5 + 0.5) * w, (Math.cos(t * 0.7 + i) * 0.5 + 0.5) * h, 18 + i % 4 * 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    function drawTargetBeam() {
+      if (!ball.target || !ball.target.alive) return;
+      ctx.save();
+      ctx.setLineDash([12, 14]);
+      ctx.lineDashOffset = -performance.now() / 35;
+      ctx.strokeStyle = ball.target === player ? `rgba(255,77,98,${0.28 + state.targetWarning * 0.48})` : "rgba(100,238,255,0.16)";
+      ctx.lineWidth = ball.target === player ? 4 : 2;
+      ctx.beginPath();
+      ctx.moveTo(ball.x, ball.y);
+      ctx.lineTo(ball.target.x, ball.target.y);
+      ctx.stroke();
+      ctx.restore();
+    }
+    function drawFighter(fighter) {
+      const isTarget = ball.target === fighter;
+      ctx.save();
+      ctx.translate(fighter.x, fighter.y);
+      const drawFacing = fighter.slashTime > 0 ? fighter.slashAngle : fighter.facing;
+      ctx.rotate(drawFacing || 0);
+      if (isTarget) {
+        ctx.shadowColor = fighter === player ? "#ff4f65" : "#ffd45c";
+        ctx.shadowBlur = 22;
+        ctx.strokeStyle = fighter === player ? "#ff4f65" : "#ffd45c";
+        ctx.lineWidth = fighter === player ? 5 : 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, fighter.r + 17 + Math.sin(performance.now() / 90) * 3, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      if (fighter === player && state.shieldTime > 0) {
+        ctx.strokeStyle = "rgba(210,252,255,0.95)";
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.arc(0, 0, fighter.r + 27, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      const body = ctx.createRadialGradient(-7, -8, 2, 0, 0, fighter.r + 10);
+      body.addColorStop(0, "#ffffff");
+      body.addColorStop(0.18, fighter.accent || "#ffffff");
+      body.addColorStop(0.5, fighter.color);
+      body.addColorStop(1, "#121820");
+      ctx.shadowColor = fighter.color;
+      ctx.shadowBlur = fighter === player ? 36 : 18;
+      ctx.fillStyle = body;
+      ctx.beginPath();
+      ctx.arc(0, 0, fighter.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = "rgba(255,255,255,0.8)";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.fillStyle = "rgba(3,9,17,0.58)";
+      ctx.beginPath();
+      ctx.roundRect(fighter.r * 0.03, -fighter.r * 0.38, fighter.r * 0.76, fighter.r * 0.42, 6);
+      ctx.fill();
+      ctx.strokeStyle = fighter === player && state.abilityCooldown <= 0 ? "#f8ff9b" : fighter.color;
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+      ctx.moveTo(fighter.r * 0.24, fighter.r * 0.42);
+      ctx.lineTo(fighter.r * 1.7, fighter.r * 0.88);
+      ctx.stroke();
+      if (fighter.slashTime > 0) {
+        const alpha = fighter.slashTime / 0.26;
+        const sweep = 1 - alpha;
+        ctx.shadowColor = fighter.slashHit ? "#ffffff" : "#f8ff9a";
+        ctx.shadowBlur = fighter.slashHit ? 28 : 16;
+        ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.92})`;
+        ctx.lineWidth = fighter.slashHit ? 10 : 7;
+        ctx.beginPath();
+        ctx.moveTo(fighter.r * 0.7, -fighter.r * 0.8);
+        ctx.lineTo(fighter.r * (4.2 + sweep * 0.8), -fighter.r * (1.15 - sweep * 0.5));
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(248,255,154,${alpha})`;
+        ctx.lineWidth = fighter.slashHit ? 16 : 11;
+        ctx.beginPath();
+        ctx.arc(0, 0, 60 + sweep * 48, -0.52 + sweep * 0.25, 0.95 + sweep * 0.55);
+        ctx.stroke();
+      }
+      ctx.restore();
+      ctx.save();
+      ctx.fillStyle = "rgba(232,242,255,0.88)";
+      ctx.font = "800 12px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(fighter.name, fighter.x, fighter.y - fighter.r - 18);
+      ctx.restore();
+    }
+    function drawEliminated(fighter) {
+      ctx.save();
+      ctx.globalAlpha = 0.26;
+      ctx.strokeStyle = fighter.color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(fighter.x, fighter.y, fighter.r + 10, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(fighter.x - 12, fighter.y - 12);
+      ctx.lineTo(fighter.x + 12, fighter.y + 12);
+      ctx.moveTo(fighter.x + 12, fighter.y - 12);
+      ctx.lineTo(fighter.x - 12, fighter.y + 12);
+      ctx.stroke();
+      ctx.restore();
+    }
+    function drawBall() {
+      ball.trail.forEach(dot => {
+        const hot = clamp((dot.speed - 160) / 620, 0, 1);
+        ctx.fillStyle = hot > 0.55 ? `rgba(255,75,102,${dot.life * 2.2})` : `rgba(255,234,91,${dot.life * 2.5})`;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, ball.r * dot.life * (4.2 + hot * 2), 0, Math.PI * 2);
+        ctx.fill();
+      });
+      const danger = ball.target === player;
+      const frozen = state.freezeTime > 0;
+      const orb = ctx.createRadialGradient(ball.x - 5, ball.y - 5, 2, ball.x, ball.y, ball.r + 8);
+      orb.addColorStop(0, "#ffffff");
+      orb.addColorStop(0.32, frozen ? "#dffcff" : danger ? "#ffec6b" : "#8cfffa");
+      orb.addColorStop(1, frozen ? "#69bfff" : danger ? "#ff4f77" : "#2fdcff");
+      ctx.save();
+      ctx.shadowColor = frozen ? "#9df7ff" : danger ? "#ffec6b" : "#8cfffa";
+      ctx.shadowBlur = 34;
+      ctx.fillStyle = orb;
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = danger ? "rgba(255,80,80,0.8)" : "rgba(255,255,255,0.55)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.r + 5 + state.targetWarning * 4, 0, Math.PI * 2);
+      ctx.stroke();
+      if (frozen) {
+        ctx.strokeStyle = "rgba(210,252,255,0.92)";
+        ctx.lineWidth = 3;
+        for (let i = 0; i < 8; i++) {
+          const angle = (Math.PI * 2 * i) / 8 + performance.now() / 1200;
+          ctx.beginPath();
+          ctx.moveTo(ball.x + Math.cos(angle) * (ball.r + 7), ball.y + Math.sin(angle) * (ball.r + 7));
+          ctx.lineTo(ball.x + Math.cos(angle) * (ball.r + 25), ball.y + Math.sin(angle) * (ball.r + 25));
+          ctx.stroke();
+        }
+        ctx.strokeStyle = "rgba(157,247,255,0.38)";
+        ctx.lineWidth = 9;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.r + 20 + Math.sin(performance.now() / 130) * 4, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    function burst(x, y, color, count) {
+      for (let i = 0; i < count; i++) {
+        const angle = rand(0, Math.PI * 2);
+        const speed = rand(80, 260);
+        state.particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, size: rand(3, 8), life: rand(0.5, 1), color });
+      }
+    }
+    function updateParticles(dt) {
+      state.particles.forEach(p => {
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.life -= dt * 1.9;
+      });
+      state.particles = state.particles.filter(p => p.life > 0);
+    }
+    function drawParticles() {
+      state.particles.forEach(p => {
+        ctx.save();
+        ctx.globalAlpha = clamp(p.life, 0, 1);
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      });
+    }
+    function updateHud() {
+      scoreValue.textContent = state.score;
+      aliveValue.textContent = allFighters().filter(fighter => fighter.alive).length;
+      targetValue.textContent = ball.target ? ball.target.name : "-";
+      abilityValue.textContent = (abilities.find(item => item.id === save.ability) || abilities[0]).name;
+      cooldownValue.textContent = state.abilityCooldown <= 0 ? "Ready" : state.abilityCooldown.toFixed(1) + "s";
+    }
+    function loop(time = 0) {
+      const dt = Math.min((time - lastTime) / 1000 || 0, 0.033);
+      lastTime = time;
+      update(dt);
+      draw();
+    }
+
+    function connectRoom(code) {
+      const room = code.trim().toUpperCase();
+      if (!room) {
+        roomStatus.textContent = "Type a room code first.";
+        return;
+      }
+      roomStatus.textContent = `Room ${room} ready. Multiplayer server is optional; solo still works.`;
+    }
+
+    window.addEventListener("resize", fitCanvas);
+    window.addEventListener("keydown", event => {
+      const key = event.key.toLowerCase();
+      keys.add(key);
+      if (key === " ") {
+        event.preventDefault();
+        deflect();
+      }
+      if (key === "e") useAbility();
+    });
+    window.addEventListener("keyup", event => keys.delete(event.key.toLowerCase()));
+    canvas.addEventListener("pointermove", event => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = event.clientX - rect.left;
+      mouse.y = event.clientY - rect.top;
+    });
+    canvas.addEventListener("pointerdown", event => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      event.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = event.clientX - rect.left;
+      mouse.y = event.clientY - rect.top;
+      deflect();
+    });
+
+    document.getElementById("startButton").addEventListener("click", resetGame);
+    document.getElementById("playAgainButton").addEventListener("click", resetGame);
+    document.getElementById("backToLobbyButton").addEventListener("click", backToLobby);
+    document.getElementById("openShopButton").addEventListener("click", () => { renderShop(); bigShop.classList.remove("hidden"); });
+    document.getElementById("closeShopButton").addEventListener("click", () => bigShop.classList.add("hidden"));
+    document.getElementById("openInventoryButton").addEventListener("click", () => { renderShop(); bigInventory.classList.remove("hidden"); });
+    document.getElementById("closeInventoryButton").addEventListener("click", () => bigInventory.classList.add("hidden"));
+    document.getElementById("createRoomButton").addEventListener("click", () => {
+      const code = Math.random().toString(36).slice(2, 6).toUpperCase();
+      roomCodeEl.value = code;
+      connectRoom(code);
+    });
+    document.getElementById("joinRoomButton").addEventListener("click", () => connectRoom(roomCodeEl.value));
+    roomCodeEl.addEventListener("keydown", event => { if (event.key === "Enter") connectRoom(roomCodeEl.value); });
+    document.getElementById("quickAbilityButton").addEventListener("click", () => {
+      const unlocked = abilities.filter(item => save.unlockedAbilities.includes(item.id));
+      const index = unlocked.findIndex(item => item.id === save.ability);
+      save.ability = unlocked[(index + 1) % unlocked.length].id;
+      saveGame();
+    });
+    document.getElementById("howButton").addEventListener("click", () => {
+      infoTitle.textContent = "How To";
+      infoText.textContent = "Move with WASD or arrow keys. When the ball targets you, press Space or click close to the ball to deflect it. Press E to use your equipped ability.";
+      infoModal.classList.remove("hidden");
+    });
+    document.getElementById("creditsButton").addEventListener("click", () => {
+      infoTitle.textContent = "News";
+      infoText.textContent = "Win rounds to earn coins. Buy skins and abilities in the shop.";
+      infoModal.classList.remove("hidden");
+    });
+    document.getElementById("closeInfoButton").addEventListener("click", () => infoModal.classList.add("hidden"));
+    document.getElementById("safeButton").addEventListener("click", () => safeModal.classList.remove("hidden"));
+    document.getElementById("closeSafeButton").addEventListener("click", () => safeModal.classList.add("hidden"));
+    document.getElementById("enterSafeCodeButton").addEventListener("click", submitSafeCode);
+    safeCode.addEventListener("keydown", event => { if (event.key === "Enter") submitSafeCode(); });
+    function submitSafeCode() {
+      if (safeCode.value.trim().toUpperCase() === "BLADE") {
+        if (!save.safeOpened) {
+          save.safeOpened = true;
+          save.coins += 150;
+          save.gems += 10;
+          saveGame();
+        }
+        safeStatus.textContent = "Opened. Reward claimed.";
+      } else {
+        safeStatus.textContent = "Wrong code.";
+      }
+    }
+
+    fitCanvas();
+    syncLobby();
+    updateHud();
+    if (location.hash === "#playtest") setTimeout(resetGame, 80);
+    if (location.hash === "#shop") setTimeout(() => bigShop.classList.remove("hidden"), 80);
+    if (location.hash === "#inventory") setTimeout(() => bigInventory.classList.remove("hidden"), 80);
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
