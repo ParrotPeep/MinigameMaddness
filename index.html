@@ -859,6 +859,15 @@
     }
     .cheat-fish-card small { color: #b9d8ff; font-weight: 900; }
     .cheat-fish-card.chroma small { color: #071a2f; }
+    .cheat-fish-card.prismatic {
+      background:
+        radial-gradient(circle at 50% 24%, rgba(255,255,255,0.75), transparent 4.4rem),
+        conic-gradient(from 0deg, #35e4ff, #b86cff, #ff5f72, #ffe76d, #35e4ff);
+      border-color: #fffdf2;
+      color: #071a2f;
+      box-shadow: 0 5px 0 #06101d, 0 0 34px rgba(184,108,255,0.75);
+    }
+    .cheat-fish-card.prismatic small { color: #071a2f; }
     .gift-coin-art {
       width: 74px;
       height: 74px;
@@ -1601,6 +1610,98 @@
     }
     .splash-burst.catch span { background: linear-gradient(180deg, #fffdf2, #ffe76d 40%, #35e4ff); }
     .splash-burst.escape span { background: linear-gradient(180deg, #dff8ff, #8aa8bd); }
+    .kraken-boss {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+    }
+    .kraken-top {
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      width: min(820px, calc(100vw - 240px));
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+      border: 5px solid #17120f;
+      border-radius: 16px;
+      background: linear-gradient(180deg, #301153, #0b1631);
+      color: #fff7d8;
+      font-weight: 1000;
+      box-shadow: 0 8px 0 rgba(23,18,15,0.24), 0 0 28px rgba(184,108,255,0.45);
+    }
+    .kraken-health {
+      grid-column: 1 / -1;
+      height: 28px;
+      border: 4px solid #17120f;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #150a24;
+    }
+    .kraken-health span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #35e4ff, #b86cff, #ff5f72);
+      box-shadow: inset 0 6px 0 rgba(255,255,255,0.28);
+      transition: width 0.2s ease;
+    }
+    .kraken-timer {
+      min-width: 86px;
+      text-align: center;
+      padding: 5px 10px;
+      border: 3px solid #fff7d8;
+      border-radius: 999px;
+      background: #ff5f72;
+      color: #17120f;
+    }
+    .kraken-tentacle {
+      position: absolute;
+      left: var(--tentacle-x, 50%);
+      top: var(--tentacle-y, 58%);
+      width: min(280px, 31vw);
+      height: min(300px, 38vh);
+      transform: translate(-50%, -50%) rotate(var(--tentacle-r, 0deg)) scale(var(--tentacle-s, 1));
+      pointer-events: auto;
+      cursor: pointer;
+      animation: tentacleArrive 0.18s ease-out, tentacleWiggle 0.22s ease-in-out infinite alternate;
+    }
+    .cartoon-screen .kraken-tentacle {
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .kraken-tentacle.hit {
+      animation: tentacleHit 0.12s ease-out, tentacleWiggle 0.18s ease-in-out infinite alternate;
+    }
+    .kraken-tentacle svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 10px 0 rgba(23,18,15,0.22));
+    }
+    .kraken-feedback {
+      position: absolute;
+      left: 50%;
+      bottom: 24%;
+      transform: translateX(-50%);
+      min-width: 260px;
+      padding: 8px 16px;
+      border: 4px solid #17120f;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fffdf2, #ffe76d);
+      color: #102033;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 1000;
+      box-shadow: 0 6px 0 rgba(23,18,15,0.22);
+    }
     .catch-panel {
       position: absolute;
       left: 50%;
@@ -1663,6 +1764,18 @@
       0% { transform: translate(-50%, -50%) rotate(var(--drop-r, 0deg)) scale(0.32); }
       68% { transform: translate(calc(-50% + var(--drop-x, 0px)), calc(-50% + var(--drop-y, 0px))) rotate(var(--drop-r, 0deg)) scale(1); }
       100% { transform: translate(calc(-50% + var(--drop-x, 0px)), calc(-50% + var(--drop-y-end, 26px))) rotate(var(--drop-r, 0deg)) scale(0.72); }
+    }
+    @keyframes tentacleArrive {
+      from { transform: translate(-50%, 20%) rotate(var(--tentacle-r, 0deg)) scale(calc(var(--tentacle-s, 1) * 0.35)); opacity: 0; }
+      to { transform: translate(-50%, -50%) rotate(var(--tentacle-r, 0deg)) scale(var(--tentacle-s, 1)); opacity: 1; }
+    }
+    @keyframes tentacleWiggle {
+      from { margin-top: -6px; }
+      to { margin-top: 8px; }
+    }
+    @keyframes tentacleHit {
+      from { filter: brightness(1.7); }
+      to { filter: brightness(1); }
     }
     @keyframes lineTug {
       from { transform: skewX(-10deg) translateY(-4px); }
@@ -1852,6 +1965,8 @@
     .bait-art.crown_bait { --bait-top:#fff4a2; --bait-bottom:#b86cff; --bait-core:#ffe76d; --bait-dot:#7b42ff; --bait-radius:8px; --bait-tilt:0deg; }
     .bait-art.galaxy_bait { --bait-top:#25115f; --bait-bottom:#071a2f; --bait-core:#71f5ff; --bait-dot:#ffe76d; }
     .bait-art.billionaire_bait { --bait-top:#fff7b9; --bait-bottom:#2bc16d; --bait-core:linear-gradient(135deg,#ffe76d,#62e68a); --bait-dot:#fffdf2; --bait-radius:12px; --bait-tilt:12deg; }
+    .bait-art.kraken_lure { --bait-top:#170a2b; --bait-bottom:#7b42ff; --bait-core:conic-gradient(#35e4ff,#b86cff,#ff5f72,#ffe76d,#35e4ff); --bait-dot:#fffdf2; --bait-radius:50%; --bait-tilt:0deg; }
+    .bait-art.kraken_lure::before { box-shadow: -34px 12px 0 -13px #35e4ff, 34px 10px 0 -13px #ff5f72, 0 31px 0 -13px #ffe76d, 0 0 22px rgba(184,108,255,.9); }
     .rod-art {
       height: 86px;
       position: relative;
@@ -2146,6 +2261,15 @@
         <span class="bobber"></span><span class="bite-splash"></span>
       </div>
       <div id="splashLayer" class="splash-layer"></div>
+      <div id="krakenBossLayer" class="kraken-boss hidden">
+        <div class="kraken-top">
+          <div id="krakenBossTitle">Prismatic Kraken</div>
+          <div id="krakenBossTimer" class="kraken-timer">3.0s</div>
+          <div class="kraken-health"><span id="krakenHealthFill"></span></div>
+        </div>
+        <button id="krakenTentacleButton" class="kraken-tentacle" title="Tap tentacle"></button>
+        <div id="krakenFeedback" class="kraken-feedback">Tap the tentacle!</div>
+      </div>
       <div class="stick-player"></div>
       <div id="catchPanel" class="catch-panel hidden">
         <div id="targetFishSprite" class="fish-sprite"></div>
@@ -2347,6 +2471,7 @@
             </label>
             <button id="cheatAddCoinsButton" class="small-button">Add Coins</button>
             <button id="cheatAddGiftCoinButton" class="small-button">Make 1000 Coin Gift</button>
+            <button id="cheatAddKrakenBaitButton" class="small-button">Add Kraken Bait</button>
           </div>
           <div id="cheatFishGrid" class="cheat-fish-grid"></div>
         </div>
@@ -2417,6 +2542,12 @@
     const fishResultText = document.getElementById("fishResultText");
     const castLine = document.getElementById("castLine");
     const splashLayer = document.getElementById("splashLayer");
+    const krakenBossLayer = document.getElementById("krakenBossLayer");
+    const krakenBossTitle = document.getElementById("krakenBossTitle");
+    const krakenBossTimer = document.getElementById("krakenBossTimer");
+    const krakenHealthFill = document.getElementById("krakenHealthFill");
+    const krakenTentacleButton = document.getElementById("krakenTentacleButton");
+    const krakenFeedback = document.getElementById("krakenFeedback");
     const rodGrid = document.getElementById("rodGrid");
     const baitBar = document.getElementById("baitBar");
     const playBoatArt = document.getElementById("playBoatArt");
@@ -2517,7 +2648,8 @@
       { id: "galaxy_dolphin", name: "Galaxy Dolphin", rarity: "Mythic", taps: 190, price: 14000, body: "#25115f", fin: "#71f5ff", pattern: "galaxy", source: "yacht", weightScale: 0.08 },
       { id: "sunken_crown_fish", name: "Sunken Crown Fish", rarity: "Mythic", taps: 215, price: 20000, body: "#0e4a66", fin: "#ffd45c", pattern: "sunken", source: "yacht", weightScale: 0.054 },
       { id: "prism_yacht_fish", name: "Prism Yacht Fish", rarity: "Chroma", taps: 250, price: 35000, body: "#ff68cf", fin: "#43e4ff", pattern: "prism", source: "yacht", weightScale: 0.076 },
-      { id: "billionaire_blobfish", name: "Billionaire Blobfish", rarity: "Chroma", taps: 300, price: 50000, body: "#ffb6c8", fin: "#ffe76d", pattern: "blob", source: "yacht", weightScale: 0.046 }
+      { id: "billionaire_blobfish", name: "Billionaire Blobfish", rarity: "Chroma", taps: 300, price: 50000, body: "#ffb6c8", fin: "#ffe76d", pattern: "blob", source: "yacht", weightScale: 0.046 },
+      { id: "prismatic_kraken", name: "Prismatic Kraken", rarity: "Prismatic", taps: 0, price: 150000, body: "#7b42ff", fin: "#35e4ff", pattern: "kraken", source: "yacht", weightScale: 0.028 }
     ];
     const rods = [
       { id: "starter", name: "Starter Rod", price: 0, tapReduction: 0, rareBoost: 0, sellPrice: 0 },
@@ -2539,9 +2671,10 @@
       { id: "diamond_bait", name: "Diamond Bait", price: 10000, rareBoost: 1.5, text: "+150% yacht rare luck", shop: "yacht" },
       { id: "crown_bait", name: "Crown Bait", price: 35000, rarityBoosts: { Legendary: 3, Mythic: 3 }, text: "Legend/Mythic x4", shop: "yacht" },
       { id: "galaxy_bait", name: "Galaxy Bait", price: 100000, rarityBoosts: { Mythic: 5 }, text: "Mythic x6", shop: "yacht" },
-      { id: "billionaire_bait", name: "Billionaire Bait", price: 250000, chromaBoost: 7, text: "Chroma luck x8", shop: "yacht" }
+      { id: "billionaire_bait", name: "Billionaire Bait", price: 250000, chromaBoost: 7, text: "Chroma luck x8", shop: "yacht" },
+      { id: "kraken_lure", name: "Kraken Lure", price: 0, forceFish: "prismatic_kraken", text: "Owner bait: guaranteed Kraken", shop: "owner", ownerOnly: true }
     ];
-    const rarityWeights = { Common: 58, Uncommon: 26, Rare: 11, Epic: 4, Legendary: 1, Mythic: 0.2, Chroma: 0.08 };
+    const rarityWeights = { Common: 58, Uncommon: 26, Rare: 11, Epic: 4, Legendary: 1, Mythic: 0.2, Chroma: 0.08, Prismatic: 0.035 };
     const fishById = Object.fromEntries(fishCatalog.map(fish => [fish.id, fish]));
     const rodById = Object.fromEntries(rods.map(rod => [rod.id, rod]));
     const baitById = Object.fromEntries(baits.map(bait => [bait.id, bait]));
@@ -2632,7 +2765,7 @@
     const player = { id: "host", name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
     const bots = [];
     const ball = { x: 0, y: 0, vx: 0, vy: 0, r: 15, speed: 210, target: null, trail: [] };
-    const fishing = { phase: "idle", spot: "boat1", shopSpot: "boat1", active: false, target: null, bait: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null, biteTimer: null };
+    const fishing = { phase: "idle", spot: "boat1", shopSpot: "boat1", active: false, target: null, bait: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null, biteTimer: null, bossTimer: null, boss: { active: false, index: 0, total: 7, taps: 0, needed: 20, timeLeft: 3 } };
     const shopNet = { peer: null, conn: null, role: "solo", room: "", connected: false, remoteListings: [] };
     let lastTime = 0;
 
@@ -2649,7 +2782,7 @@
     function rand(min, max) { return min + Math.random() * (max - min); }
     function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
     function rect(x, y, w, h) { return { x, y, w, h }; }
-    const audioState = { ctx: null, master: null, musicTimer: null, musicStep: 0, started: false };
+    const audioState = { ctx: null, master: null, musicTimer: null, musicStep: 0, bossTimer: null, bossStep: 0, started: false };
     function ensureAudio() {
       if (!audioState.ctx) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -2705,6 +2838,8 @@
       if (name === "catch") { playNoise(0.38, 0.18); [523, 659, 784, 1046].forEach((n, i) => playTone(n, 0.11, "triangle", 0.08, i * 0.07)); }
       if (name === "escape") { playNoise(0.26, 0.12); [392, 330, 262].forEach((n, i) => playTone(n, 0.12, "sawtooth", 0.055, i * 0.07)); }
       if (name === "quest") [392, 523, 659, 784].forEach((n, i) => playTone(n, 0.12, "triangle", 0.07, i * 0.08));
+      if (name === "bossTap") { playTone(180 + Math.random() * 180, 0.035, "sawtooth", 0.045); playNoise(0.045, 0.035); }
+      if (name === "bossHit") { playNoise(0.22, 0.18); [196, 262, 392].forEach((n, i) => playTone(n, 0.1, "square", 0.07, i * 0.045)); }
     }
     function startPirateMusic() {
       const ctx = ensureAudio();
@@ -2721,6 +2856,22 @@
     function stopPirateMusic() {
       if (audioState.musicTimer) clearInterval(audioState.musicTimer);
       audioState.musicTimer = null;
+    }
+    function startBossMusic() {
+      const ctx = ensureAudio();
+      if (!ctx || audioState.bossTimer) return;
+      stopPirateMusic();
+      const melody = [130, 146, 164, 196, 220, 196, 164, 146, 130, 174, 207, 246];
+      audioState.bossTimer = setInterval(() => {
+        const step = audioState.bossStep++;
+        playTone(melody[step % melody.length], 0.1, step % 3 === 0 ? "sawtooth" : "square", 0.035);
+        if (step % 2 === 0) playTone(65 + (step % 4) * 9, 0.18, "sawtooth", 0.032);
+        if (step % 6 === 0) playNoise(0.08, 0.045);
+      }, 115);
+    }
+    function stopBossMusic() {
+      if (audioState.bossTimer) clearInterval(audioState.bossTimer);
+      audioState.bossTimer = null;
     }
 
     function cleanNumber(value, fallback = 0) {
@@ -2840,6 +2991,7 @@
       applyEquippedSkin();
     }
     function hideAllScreens() {
+      stopBossMusic();
       stopPirateMusic();
       gameSelector.classList.add("hidden");
       gameShell.classList.add("hidden");
@@ -2855,6 +3007,8 @@
       resultScreen.classList.add("hidden");
       clearInterval(fishing.timer);
       clearTimeout(fishing.biteTimer);
+      clearInterval(fishing.bossTimer);
+      resetKrakenBoss();
       fishing.phase = "idle";
       fishing.active = false;
       state.running = false;
@@ -2959,6 +3113,67 @@
       if (fish.pattern === "galaxy") return fishBody(`<circle cx="38" cy="28" r="4" fill="#fff"/><circle cx="60" cy="50" r="3" fill="#ffe76d"/><circle cx="78" cy="27" r="4" fill="#71f5ff"/><path d="M26 58c29-28 55 19 85-10" stroke="#ff8bd1" stroke-width="6" fill="none" filter="url(#glow${id})"/><path d="M27 31c20-13 39-12 58 0" stroke="#5a33ff" stroke-width="4" fill="none"/>`);
       if (fish.pattern === "sunken") return fishBody(`<path d="M42 12l8 14 11-18 11 18 9-14v24H42z" fill="#8b6b2e" stroke="#17202a" stroke-width="4"/><path d="M30 55c23 10 49 9 74-2" stroke="#71f5ff" stroke-width="6" fill="none"/><circle cx="47" cy="38" r="5" fill="#35e4ff"/><path d="M37 22c8-8 21-8 31 0" stroke="#0e4a66" stroke-width="4"/>`);
       if (fish.pattern === "prism") return fishBody(`<path d="M29 30h68" stroke="#ff5f72" stroke-width="7"/><path d="M28 43h71" stroke="#ffe76d" stroke-width="7"/><path d="M29 56h68" stroke="#35e4ff" stroke-width="7"/><path d="M47 11l11 17 13-17" stroke="#fff" stroke-width="5" fill="none"/><path d="M18 43L4 20v46z" fill="#b86cff" stroke="#17202a" stroke-width="5"/>${sparkle}`);
+      if (fish.pattern === "kraken") return `<svg class="fish-sprite" viewBox="0 0 210 150" width="${size}" height="${Math.round(size * 0.82)}" aria-hidden="true">
+        <defs>
+          <radialGradient id="krakenBody${id}" cx="42%" cy="24%" r="80%">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset=".12" stop-color="#ffd6ff"/>
+            <stop offset=".28" stop-color="#ff64d8"/>
+            <stop offset=".48" stop-color="#7b42ff"/>
+            <stop offset=".72" stop-color="#1e49ff"/>
+            <stop offset="1" stop-color="#0a0822"/>
+          </radialGradient>
+          <linearGradient id="krakenBelly${id}" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff7d8"/>
+            <stop offset=".54" stop-color="#ff9cff"/>
+            <stop offset="1" stop-color="#6530dc"/>
+          </linearGradient>
+          <linearGradient id="krakenTent${id}" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#35e4ff"/>
+            <stop offset=".32" stop-color="#b86cff"/>
+            <stop offset=".62" stop-color="#263ee8"/>
+            <stop offset="1" stop-color="#ff5f72"/>
+          </linearGradient>
+          <pattern id="krakenScales${id}" width="18" height="14" patternUnits="userSpaceOnUse">
+            <path d="M0 8c5-7 13-7 18 0" fill="none" stroke="#fffdf2" stroke-width="2" opacity=".38"/>
+          </pattern>
+          <filter id="krakenGlow${id}" x="-45%" y="-45%" width="190%" height="190%">
+            <feGaussianBlur stdDeviation="3.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <ellipse cx="105" cy="133" rx="78" ry="10" fill="#071a2f" opacity=".25"/>
+        <path d="M39 87C4 99 6 137 33 130c21-5 21-32 55-43" fill="none" stroke="url(#krakenTent${id})" stroke-width="16" stroke-linecap="round"/>
+        <path d="M60 99c-31 26-5 59 20 34 15-16 5-42 31-57" fill="none" stroke="url(#krakenTent${id})" stroke-width="15" stroke-linecap="round"/>
+        <path d="M87 109c-12 41 28 45 34 11 3-19-14-35-2-54" fill="none" stroke="url(#krakenTent${id})" stroke-width="15" stroke-linecap="round"/>
+        <path d="M125 110c9 42 50 32 34-3-9-20-32-26-27-48" fill="none" stroke="url(#krakenTent${id})" stroke-width="15" stroke-linecap="round"/>
+        <path d="M150 96c40 13 49 49 19 49-24 0-28-30-65-48" fill="none" stroke="url(#krakenTent${id})" stroke-width="16" stroke-linecap="round"/>
+        <path d="M62 79c-31-25-21-67 16-79l12 18 15-17 17 17 14-18c38 13 48 55 19 79 8 30-14 52-50 55-41 3-66-20-43-55z" fill="url(#krakenBody${id})" stroke="#17202a" stroke-width="6" stroke-linejoin="round"/>
+        <path d="M70 80c13 18 57 21 78 1 4 25-15 38-43 40-28 1-46-14-35-41z" fill="url(#krakenBelly${id})" stroke="#17202a" stroke-width="5"/>
+        <path d="M71 35c21-20 55-22 78 1" fill="none" stroke="#fff6ff" stroke-width="6" opacity=".72" stroke-linecap="round"/>
+        <path d="M67 58c21 11 51 13 82 0" fill="none" stroke="#ffffff" stroke-width="5" opacity=".3" stroke-linecap="round"/>
+        <path d="M66 44c9-10 23-10 32 1M118 44c10-11 25-10 35 1" stroke="#17202a" stroke-width="6" stroke-linecap="round" fill="none"/>
+        <circle cx="86" cy="57" r="12" fill="#fff7b9" stroke="#17202a" stroke-width="5" filter="url(#krakenGlow${id})"/>
+        <circle cx="134" cy="57" r="12" fill="#fff7b9" stroke="#17202a" stroke-width="5" filter="url(#krakenGlow${id})"/>
+        <circle cx="90" cy="59" r="5" fill="#170a2b"/>
+        <circle cx="130" cy="59" r="5" fill="#170a2b"/>
+        <circle cx="92" cy="55" r="2" fill="#fff"/>
+        <circle cx="132" cy="55" r="2" fill="#fff"/>
+        <path d="M87 81c14 13 34 13 49 0" fill="#0b0b20" stroke="#17202a" stroke-width="5" stroke-linecap="round"/>
+        <path d="M96 85l5 10 6-10M118 86l6 10 5-10" fill="#fffdf2" stroke="#17202a" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M74 88c21 14 54 14 72-1" fill="none" stroke="#ff8cff" stroke-width="4" opacity=".65" stroke-linecap="round"/>
+        <path d="M70 12l10 17 12-21 14 21 15-22 13 22 11-17 7 33H63z" fill="#ffe76d" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="92" cy="19" r="4.5" fill="#35e4ff" stroke="#17202a" stroke-width="2"/>
+        <circle cx="108" cy="14" r="5" fill="#ff5f72" stroke="#17202a" stroke-width="2"/>
+        <circle cx="127" cy="20" r="4.5" fill="#b86cff" stroke="#17202a" stroke-width="2"/>
+        <path d="M62 79c-31-25-21-67 16-79l12 18 15-17 17 17 14-18c38 13 48 55 19 79 8 30-14 52-50 55-41 3-66-20-43-55z" fill="url(#krakenScales${id})" opacity=".5"/>
+        <g fill="#fffdf2" stroke="#17202a" stroke-width="2.5" filter="url(#krakenGlow${id})">
+          <path d="M30 21l5 10 11 5-11 5-5 11-5-11-11-5 11-5z"/>
+          <path d="M176 25l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#35e4ff"/>
+          <circle cx="42" cy="67" r="4" fill="#ffe76d"/>
+          <circle cx="166" cy="76" r="4" fill="#ff8cff"/>
+        </g>
+      </svg>`;
       if (fish.pattern === "blob") return `<svg class="fish-sprite" viewBox="0 0 150 105" width="${size}" height="${Math.round(size * 0.72)}" aria-hidden="true">
         <defs>
           <radialGradient id="blobBody${id}" cx="44%" cy="35%" r="70%">
@@ -3087,6 +3302,7 @@
       return rodById[save.equippedRod] || rods[0];
     }
     function fishTapNeed(fish) {
+      if (fish?.id === "prismatic_kraken") return krakenTentaclePlan.reduce((sum, taps) => sum + taps, 0);
       return Math.max(3, fish.taps - getRod().tapReduction);
     }
     function baitArt(id) {
@@ -3094,6 +3310,7 @@
     }
     function getEquippedBait() {
       const bait = baitById[save.equippedBait];
+      if (bait?.forceFish && fishing.spot !== "yacht") return null;
       return bait && cleanNumber(save.baits[bait.id], 0) > 0 ? bait : null;
     }
     function buyBait(id) {
@@ -3129,6 +3346,7 @@
       return bait;
     }
     function baitBoostForFish(fish, bait) {
+      if (bait?.forceFish) return fish.id === bait.forceFish ? 999999 : 0;
       let boost = 1;
       if (bait?.rarityBoosts?.[fish.rarity]) boost *= 1 + bait.rarityBoosts[fish.rarity];
       if (bait?.chromaBoost && fish.rarity === "Chroma") boost *= 1 + bait.chromaBoost;
@@ -3140,7 +3358,7 @@
       return 1;
     }
     function weightForFish(fish, rod = getRod(), bait = null) {
-      const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma"].indexOf(fish.rarity);
+      const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma", "Prismatic"].indexOf(fish.rarity);
       const boost = 1 + rod.rareBoost * Math.max(0, rarityIndex);
       const commonNerf = fish.rarity === "Common" ? Math.max(0.35, 1 - rod.rareBoost * 0.25) : 1;
       return (rarityWeights[fish.rarity] || 0) * boost * commonNerf * baitBoostForFish(fish, bait) * rodBoostForFish(fish, rod) * (fish.weightScale || 1);
@@ -3176,6 +3394,171 @@
       splashLayer.appendChild(splash);
       setTimeout(() => splash.remove(), 1300);
     }
+    const krakenTentaclePlan = [20, 25, 30, 36, 43, 50, 80];
+    const krakenTentaclePositions = [
+      { x: 14, y: 72, r: -50, s: 0.92 },
+      { x: 84, y: 70, r: 42, s: 1.02 },
+      { x: 28, y: 40, r: -24, s: 0.82 },
+      { x: 70, y: 37, r: 25, s: 0.88 },
+      { x: 46, y: 77, r: 0, s: 1.08 },
+      { x: 90, y: 48, r: 62, s: 0.78 },
+      { x: 50, y: 53, r: 0, s: 1.28 }
+    ];
+    function krakenTentacleSvg(index = 0) {
+      const hue = (index * 43) % 360;
+      const curve = index % 2 === 0
+        ? "M71 166c-37-44-14-85 18-111 25-21 25-38 6-53 42 11 53 52 27 88-21 30-62 38-51 76z"
+        : "M61 166c34-43 16-83-14-110-23-21-22-38-2-54-43 8-57 49-34 87 19 31 59 39 50 77z";
+      const shine = index % 2 === 0
+        ? "M79 151c-15-38 1-60 25-80 16-13 20-28 11-47"
+        : "M55 151c15-38 0-60-23-80-15-13-18-29-8-47";
+      return `<svg viewBox="0 0 140 180" aria-hidden="true">
+        <defs>
+          <linearGradient id="tentacleGrad${index}" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="hsl(${hue}, 95%, 70%)"/>
+            <stop offset=".48" stop-color="#7b42ff"/>
+            <stop offset="1" stop-color="#101539"/>
+          </linearGradient>
+          <filter id="tentacleGlow${index}" x="-45%" y="-45%" width="190%" height="190%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <ellipse cx="70" cy="160" rx="42" ry="10" fill="#071a2f" opacity=".24"/>
+        <path d="${curve}" fill="url(#tentacleGrad${index})" stroke="#17202a" stroke-width="8" stroke-linejoin="round"/>
+        <path d="${shine}" fill="none" stroke="#fff6ff" stroke-width="5" opacity=".42" stroke-linecap="round"/>
+        <g stroke="#17202a" stroke-width="3" filter="url(#tentacleGlow${index})">
+          <circle cx="${index % 2 === 0 ? 54 : 88}" cy="135" r="7.5" fill="#35e4ff"/>
+          <circle cx="${index % 2 === 0 ? 62 : 77}" cy="111" r="6.8" fill="#ff8cff"/>
+          <circle cx="${index % 2 === 0 ? 75 : 63}" cy="88" r="6" fill="#fff7b9"/>
+          <circle cx="${index % 2 === 0 ? 95 : 43}" cy="67" r="5.5" fill="#35e4ff"/>
+          <circle cx="${index % 2 === 0 ? 111 : 29}" cy="42" r="4.8" fill="#ff5f72"/>
+        </g>
+        <path d="M36 34l5 10 11 5-11 5-5 11-5-11-11-5 11-5z" fill="#fffdf2" stroke="#17202a" stroke-width="2.5" filter="url(#tentacleGlow${index})"/>
+        <path d="M112 126l4 8 8 4-8 4-4 8-4-8-8-4 8-4z" fill="#ffe76d" stroke="#17202a" stroke-width="2.5" filter="url(#tentacleGlow${index})"/>
+      </svg>`;
+    }
+    function resetKrakenBoss() {
+      clearInterval(fishing.bossTimer);
+      fishing.bossTimer = null;
+      fishing.boss.active = false;
+      fishing.boss.index = 0;
+      fishing.boss.taps = 0;
+      fishing.boss.needed = krakenTentaclePlan[0];
+      fishing.boss.timeLeft = 3;
+      if (krakenBossLayer) krakenBossLayer.classList.add("hidden");
+      if (krakenTentacleButton) krakenTentacleButton.classList.remove("hit");
+      if (krakenHealthFill) krakenHealthFill.style.width = "100%";
+    }
+    function updateKrakenBossUI() {
+      const boss = fishing.boss;
+      const current = Math.min(boss.total, boss.index + 1);
+      const remaining = Math.max(0, boss.total - boss.index);
+      krakenHealthFill.style.width = `${(remaining / boss.total) * 100}%`;
+      krakenBossTitle.textContent = `Prismatic Kraken ${current}/${boss.total}`;
+      krakenBossTimer.textContent = `${boss.timeLeft.toFixed(1)}s`;
+      krakenFeedback.textContent = `Tentacle taps: ${boss.taps} / ${boss.needed}`;
+    }
+    function startKrakenBoss() {
+      if (!fishing.target || fishing.target.id !== "prismatic_kraken") return;
+      clearInterval(fishing.timer);
+      clearTimeout(fishing.biteTimer);
+      stopPirateMusic();
+      startBossMusic();
+      fishing.phase = "boss";
+      fishing.active = false;
+      fishing.boss.active = true;
+      fishing.boss.index = 0;
+      fishing.boss.total = 7;
+      catchPanel.classList.add("hidden");
+      krakenBossLayer.classList.remove("hidden");
+      createSplash("catch");
+      playSfx("bossHit");
+      startKrakenTentacle();
+      updateFishingCastVisual();
+    }
+    function startKrakenTentacle() {
+      const boss = fishing.boss;
+      if (!boss.active) return;
+      clearInterval(fishing.bossTimer);
+      const index = boss.index;
+      const position = krakenTentaclePositions[index] || krakenTentaclePositions[0];
+      boss.taps = 0;
+      boss.needed = krakenTentaclePlan[index] || 50;
+      boss.timeLeft = index === boss.total - 1 ? 5 : 3;
+      krakenTentacleButton.innerHTML = krakenTentacleSvg(index);
+      krakenTentacleButton.style.setProperty("--tentacle-x", `${position.x}%`);
+      krakenTentacleButton.style.setProperty("--tentacle-y", `${position.y}%`);
+      krakenTentacleButton.style.setProperty("--tentacle-r", `${position.r}deg`);
+      krakenTentacleButton.style.setProperty("--tentacle-s", position.s || 1);
+      krakenTentacleButton.classList.remove("hit");
+      updateKrakenBossUI();
+      fishing.bossTimer = setInterval(() => {
+        boss.timeLeft = Math.max(0, boss.timeLeft - 0.1);
+        updateKrakenBossUI();
+        if (boss.timeLeft <= 0) finishKrakenBoss(false);
+      }, 100);
+    }
+    function tapKrakenTentacle() {
+      const boss = fishing.boss;
+      if (!boss.active || fishing.phase !== "boss") return;
+      boss.taps += 1;
+      playSfx("bossTap");
+      if (boss.taps % 6 === 0) createSplash("big");
+      krakenTentacleButton.classList.remove("hit");
+      void krakenTentacleButton.offsetWidth;
+      krakenTentacleButton.classList.add("hit");
+      updateKrakenBossUI();
+      if (boss.taps < boss.needed) return;
+      clearInterval(fishing.bossTimer);
+      boss.index += 1;
+      playSfx("bossHit");
+      createSplash(boss.index >= boss.total ? "catch" : "big");
+      updateKrakenBossUI();
+      if (boss.index >= boss.total) {
+        setTimeout(() => finishKrakenBoss(true), 180);
+      } else {
+        krakenFeedback.textContent = "Tentacle down! Next one!";
+        setTimeout(startKrakenTentacle, 260);
+      }
+    }
+    function finishKrakenBoss(won) {
+      if (!fishing.boss.active && fishing.phase !== "boss") return;
+      clearInterval(fishing.bossTimer);
+      fishing.bossTimer = null;
+      fishing.boss.active = false;
+      fishing.active = false;
+      fishing.phase = "result";
+      krakenBossLayer.classList.add("hidden");
+      stopBossMusic();
+      startPirateMusic();
+      catchPanel.classList.remove("hidden");
+      targetFishSprite.innerHTML = fishSvg(fishing.target, 124);
+      targetFishName.textContent = `${fishing.target.name} (${fishing.target.rarity})`;
+      targetFishSubtitle.textContent = fishing.target.subtitle || "";
+      targetFishSubtitle.classList.toggle("hidden", !fishing.target.subtitle);
+      if (won) {
+        addFish(fishing.target.id, 1);
+        fishing.score += fishing.target.price;
+        fishScoreValue.textContent = fishing.score;
+        fishTimerValue.textContent = "Defeated!";
+        fishTapValue.textContent = krakenTentaclePlan.reduce((sum, taps) => sum + taps, 0);
+        fishTapNeedValue.textContent = krakenTentaclePlan.reduce((sum, taps) => sum + taps, 0);
+        tapMeterFill.style.width = "100%";
+        fishResultText.textContent = "Defeated Prismatic Kraken! It went to inventory.";
+        playSfx("catch");
+        createSplash("catch");
+      } else {
+        fishTimerValue.textContent = "Escaped";
+        fishTapValue.textContent = fishing.boss.taps;
+        fishTapNeedValue.textContent = fishing.boss.needed;
+        tapMeterFill.style.width = `${clamp((fishing.boss.taps / fishing.boss.needed) * 100, 0, 100)}%`;
+        fishResultText.textContent = "The Prismatic Kraken escaped into the deep!";
+        playSfx("escape");
+        createSplash("escape");
+      }
+      updateFishingCastVisual();
+    }
     function renderBaitBar() {
       if (!baitBar) return;
       const equipped = getEquippedBait();
@@ -3184,7 +3567,8 @@
         <button class="bait-pill ${!equipped ? "active" : ""}" data-bait-equip="none">No Bait</button>
         ${visibleBaits.map(bait => {
           const count = cleanNumber(save.baits[bait.id], 0);
-          return `<button class="bait-pill ${equipped?.id === bait.id ? "active" : ""}" data-bait-equip="${bait.id}" ${count > 0 ? "" : "disabled"}>${bait.name} x${count}</button>`;
+          const blocked = bait.forceFish && fishing.spot !== "yacht";
+          return `<button class="bait-pill ${equipped?.id === bait.id ? "active" : ""}" data-bait-equip="${bait.id}" ${count > 0 && !blocked ? "" : "disabled"}>${bait.name} x${count}${blocked ? " (Yacht)" : ""}</button>`;
         }).join("")}
       `;
       baitBar.querySelectorAll("[data-bait-equip]").forEach(button => {
@@ -3215,10 +3599,18 @@
       safeStatus.textContent = "Made a 1000 Coin Gift. List it in the Shop for 0 coins.";
       renderCheatFishGrid();
     }
+    function grantKrakenBait() {
+      save.baits.kraken_lure = cleanNumber(save.baits.kraken_lure, 0) + 1;
+      save.equippedBait = "kraken_lure";
+      saveGame();
+      safeStatus.textContent = "Added 1 Kraken Lure. Use it on the yacht for a guaranteed Kraken.";
+      renderBaitBar();
+      renderCheatFishGrid();
+    }
     function renderCheatFishGrid() {
       if (!cheatFishGrid) return;
       cheatFishGrid.innerHTML = fishCatalog.map(fish => `
-        <button class="cheat-fish-card ${fish.id === "endless" ? "endless" : ""} ${fish.id === "sssd_fish" ? "sssd" : ""} ${fish.rarity === "Chroma" ? "chroma" : ""}" data-cheat-fish="${fish.id}">
+        <button class="cheat-fish-card ${fish.id === "endless" ? "endless" : ""} ${fish.id === "sssd_fish" ? "sssd" : ""} ${fish.rarity === "Chroma" ? "chroma" : ""} ${fish.rarity === "Prismatic" ? "prismatic" : ""}" data-cheat-fish="${fish.id}">
           ${fishSvg(fish, 82)}
           <span>${fish.name}</span>
           <small>${fish.subtitle ? `${fish.subtitle} - ` : ""}${fish.rarity} - ${fish.price} coins</small>
@@ -3491,7 +3883,7 @@
       const odds = oddsForPool(spot);
       fishingOddsTitle.textContent = `${spot === "yacht" ? "Yacht" : "Boat 1"} Odds`;
       fishingOddsText.textContent = `${odds.rod.name}${odds.bait ? ` + ${odds.bait.name}` : ""}`;
-      const rarityOrder = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma"];
+      const rarityOrder = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma", "Prismatic"];
       const rarityRows = rarityOrder
         .filter(rarity => odds.rarityTotals[rarity])
         .map(rarity => `<div class="odds-row"><strong>${rarity}</strong><br>${oddsText(odds.total, odds.rarityTotals[rarity])}</div>`)
@@ -3531,6 +3923,8 @@
       catchPanel.classList.add("hidden");
       clearTimeout(fishing.biteTimer);
       clearInterval(fishing.timer);
+      clearInterval(fishing.bossTimer);
+      resetKrakenBoss();
       fishing.phase = "idle";
       fishing.active = false;
       fishing.target = null;
@@ -3558,6 +3952,7 @@
       syncLobby();
     }
     function chooseFish(bait = null) {
+      if (bait?.forceFish && fishing.spot === "yacht" && fishById[bait.forceFish]) return fishById[bait.forceFish];
       const rod = getRod();
       const weighted = fishPoolForSpot().map(fish => ({ fish, weight: weightForFish(fish, rod, bait) }));
       const total = weighted.reduce((sum, item) => sum + item.weight, 0);
@@ -3569,6 +3964,7 @@
       return fishPoolForSpot()[0] || fishCatalog[0];
     }
     function startFishingAttempt() {
+      if (fishing.phase === "boss") return;
       startPirateMusic();
       if (fishing.phase === "idle") return castRod();
       if (fishing.phase === "waiting") return;
@@ -3624,6 +4020,7 @@
       if (fishing.phase !== "bite") return;
       playSfx("bite");
       createSplash("big");
+      if (fishing.target?.id === "prismatic_kraken") return startKrakenBoss();
       fishing.phase = "reeling";
       fishing.active = true;
       targetFishName.textContent = `${fishing.target.name} (${fishing.target.rarity})`;
@@ -3655,17 +4052,18 @@
       tapMeterFill.style.width = `${clamp((fishing.taps / fishing.needed) * 100, 0, 100)}%`;
     }
     function updateFishingCastVisual() {
-      castLine.classList.toggle("active", fishing.phase === "waiting" || fishing.phase === "bite" || fishing.phase === "reeling");
+      castLine.classList.toggle("active", fishing.phase === "waiting" || fishing.phase === "bite" || fishing.phase === "reeling" || fishing.phase === "boss");
       castLine.classList.toggle("bite", fishing.phase === "bite");
-      castLine.classList.toggle("reeling", fishing.phase === "reeling");
+      castLine.classList.toggle("reeling", fishing.phase === "reeling" || fishing.phase === "boss");
       fishActionButton.classList.toggle("waiting", fishing.phase === "waiting");
       fishActionButton.classList.toggle("bite", fishing.phase === "bite");
       fishActionButton.classList.toggle("reeling", fishing.phase === "reeling" || fishing.phase === "result");
-      fishActionButton.disabled = fishing.phase === "waiting";
+      fishActionButton.disabled = fishing.phase === "waiting" || fishing.phase === "boss";
       if (fishing.phase === "idle") fishActionButton.textContent = "Cast";
       if (fishing.phase === "waiting") fishActionButton.textContent = "Wait...";
       if (fishing.phase === "bite") fishActionButton.textContent = "Catch!";
       if (fishing.phase === "reeling") fishActionButton.textContent = "Tap!";
+      if (fishing.phase === "boss") fishActionButton.textContent = "Boss!";
       if (fishing.phase === "result") fishActionButton.textContent = "Cast Again";
     }
     function finishFishing(caught) {
@@ -5044,6 +5442,7 @@
     document.getElementById("exitFishingPlayButton").addEventListener("click", openFishingHome);
     document.getElementById("fishingInventoryButton").addEventListener("click", () => openSharedInventory("fishing"));
     document.getElementById("fishActionButton").addEventListener("click", startFishingAttempt);
+    document.getElementById("krakenTentacleButton").addEventListener("click", tapKrakenTentacle);
     document.getElementById("fishingShopBackButton").addEventListener("click", () => fishing.shopSpot === "yacht" ? openFishingPlay("yacht") : openFishingHome());
     document.getElementById("fishingShopMenuButton").addEventListener("click", openMinigamesSelector);
     document.getElementById("closeYachtQuestButton").addEventListener("click", () => yachtQuestModal.classList.add("hidden"));
@@ -5086,13 +5485,14 @@
     document.getElementById("enterSafeCodeButton").addEventListener("click", submitSafeCode);
     document.getElementById("cheatAddCoinsButton").addEventListener("click", grantCheatCoins);
     document.getElementById("cheatAddGiftCoinButton").addEventListener("click", grantGiftCoin);
+    document.getElementById("cheatAddKrakenBaitButton").addEventListener("click", grantKrakenBait);
     safeCode.addEventListener("keydown", event => { if (event.key === "Enter") submitSafeCode(); });
     function submitSafeCode() {
       const code = safeCode.value.trim().toUpperCase();
       if (code === "1444") {
         cheatPanel.classList.remove("hidden");
         renderCheatFishGrid();
-        safeStatus.textContent = "Fish Vault opened. Click any fish to add it.";
+        safeStatus.textContent = "Fish Vault opened. Click any fish or add owner Kraken bait.";
         return;
       }
       if (code === "BLADE") {
