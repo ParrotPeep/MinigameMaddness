@@ -132,7 +132,7 @@
     }
     .game-selector-grid {
       display: grid;
-      grid-template-columns: minmax(280px, 520px);
+      grid-template-columns: repeat(3, minmax(250px, 390px));
       align-content: center;
       justify-content: center;
       align-items: stretch;
@@ -289,6 +289,68 @@
       font-weight: 1000;
       text-shadow: 0 2px 0 #7b2c0a;
       box-shadow: 0 3px 0 #06101d;
+    }
+    .fishing-preview,
+    .shop-preview {
+      position: relative;
+      height: 245px;
+      border: 4px solid #07111f;
+      border-radius: 10px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #9be7ff 0 48%, #2eafe7 49% 100%);
+      box-shadow: inset 0 0 26px rgba(255,255,255,0.25);
+    }
+    .fishing-preview::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      bottom: 52px;
+      width: 130px;
+      height: 76px;
+      border: 4px solid #07111f;
+      border-radius: 8px 8px 2px 2px;
+      background: linear-gradient(180deg, #fff3c7, #f0b96f);
+      box-shadow: 0 8px 0 rgba(0,0,0,0.18);
+    }
+    .fishing-preview::after {
+      content: "";
+      position: absolute;
+      right: 28px;
+      bottom: 44px;
+      width: 145px;
+      height: 52px;
+      border: 4px solid #07111f;
+      border-radius: 8px 8px 48px 48px;
+      background: #fff8df;
+      box-shadow: inset 0 -12px 0 #e0a864;
+    }
+    .shop-preview {
+      background: linear-gradient(180deg, #ffecc0 0 54%, #c1884c 55% 100%);
+    }
+    .shop-preview::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 70px;
+      height: 80px;
+      border: 4px solid #07111f;
+      background: linear-gradient(180deg, #f7c176, #8c5630);
+      box-shadow: 0 9px 0 rgba(0,0,0,0.22);
+    }
+    .shop-preview::after {
+      content: "SELL";
+      position: absolute;
+      left: 50%;
+      bottom: 170px;
+      transform: translateX(-50%);
+      border: 4px solid #07111f;
+      border-radius: 8px;
+      padding: 8px 18px;
+      background: #fff8df;
+      color: #07111f;
+      font-size: 24px;
+      font-weight: 1000;
     }
     .selector-footer {
       display: flex;
@@ -672,6 +734,10 @@
       background: rgba(3, 8, 16, 0.78);
       backdrop-filter: blur(8px);
     }
+    .shared-modal {
+      position: fixed;
+      z-index: 80;
+    }
     .modal-card {
       width: min(860px, calc(100vw - 30px));
       max-height: min(760px, calc(100vh - 30px));
@@ -710,6 +776,417 @@
     .close-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
     .safe-pad { display: grid; gap: 10px; margin-top: 14px; }
 
+    .cartoon-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 28;
+      overflow: hidden;
+      background: #fffaf0;
+      color: #17120f;
+      font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
+    }
+    .cartoon-screen button,
+    .cartoon-screen select,
+    .cartoon-screen input {
+      border: 4px solid #17120f;
+      border-radius: 14px;
+      background: #fffaf0;
+      color: #17120f;
+      font: inherit;
+      font-weight: 900;
+      box-shadow: 0 5px 0 rgba(23,18,15,0.22);
+    }
+    .cartoon-screen button { min-height: 54px; padding: 10px 16px; }
+    .cartoon-top {
+      position: absolute;
+      z-index: 4;
+      left: 24px;
+      right: 24px;
+      top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      pointer-events: none;
+    }
+    .cartoon-top button,
+    .cartoon-top .money-badge,
+    .cartoon-top select { pointer-events: auto; }
+    .cartoon-title {
+      margin: 82px 0 0;
+      text-align: center;
+      font-size: clamp(48px, 7vw, 92px);
+      line-height: 0.9;
+      font-weight: 500;
+      letter-spacing: 0;
+      text-shadow: 0 5px 0 rgba(23,18,15,0.08);
+    }
+    .cartoon-title::after {
+      content: "";
+      display: block;
+      width: min(520px, 52vw);
+      height: 18px;
+      margin: 10px auto 0;
+      border-bottom: 6px solid #17120f;
+      border-radius: 50%;
+    }
+    .money-badge {
+      display: inline-grid;
+      place-items: center;
+      min-width: 146px;
+      min-height: 54px;
+      border: 4px solid #17120f;
+      border-radius: 14px;
+      background: #fffaf0;
+      font-size: 22px;
+      font-weight: 900;
+      box-shadow: 0 5px 0 rgba(23,18,15,0.22);
+    }
+    .menu-square {
+      width: 74px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      font-size: 34px;
+      line-height: 1;
+    }
+    .cloud, .bird, .wave, .sun, .island, .lighthouse, .dock, .fish-shop-house, .boat, .shop-counter, .shop-shelves {
+      position: absolute;
+      pointer-events: none;
+    }
+    .cloud {
+      width: 120px;
+      height: 36px;
+      border: 5px solid #17120f;
+      border-radius: 999px;
+      background: #fffaf0;
+    }
+    .cloud::before, .cloud::after {
+      content: "";
+      position: absolute;
+      bottom: 12px;
+      border: 5px solid #17120f;
+      border-bottom: 0;
+      border-radius: 999px 999px 0 0;
+      background: #fffaf0;
+    }
+    .cloud::before { left: 20px; width: 38px; height: 34px; }
+    .cloud::after { right: 20px; width: 48px; height: 44px; }
+    .bird::before {
+      content: "";
+      position: absolute;
+      width: 44px;
+      height: 18px;
+      border-top: 5px solid #17120f;
+      border-radius: 50%;
+      transform: rotate(10deg);
+    }
+    .bird::after {
+      content: "";
+      position: absolute;
+      left: 28px;
+      width: 44px;
+      height: 18px;
+      border-top: 5px solid #17120f;
+      border-radius: 50%;
+      transform: rotate(-10deg);
+    }
+    .wave {
+      width: 110px;
+      height: 24px;
+      border-bottom: 5px solid #17120f;
+      border-radius: 50%;
+    }
+    .fish-home-sea,
+    .fish-play-sea {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 33%;
+      background: linear-gradient(180deg, #bdf1ff, #55c5f2);
+      border-top: 5px solid #17120f;
+      z-index: 0;
+    }
+    .fish-shop-house {
+      left: 7%;
+      bottom: 26%;
+      width: 340px;
+      height: 240px;
+      border: 6px solid #17120f;
+      background: #ffe7b3;
+      cursor: pointer;
+      pointer-events: auto;
+      box-shadow: 0 10px 0 rgba(23,18,15,0.18);
+      z-index: 2;
+    }
+    .fish-shop-house::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      right: -22px;
+      top: -72px;
+      height: 72px;
+      border: 6px solid #17120f;
+      background: repeating-linear-gradient(115deg, #ffcc74 0 34px, #fff4d8 35px 68px);
+      clip-path: polygon(10% 100%, 50% 0, 90% 100%);
+    }
+    .fish-shop-house::after {
+      content: "FISHING SHOP";
+      position: absolute;
+      left: 48px;
+      right: 48px;
+      top: 62px;
+      padding: 12px 4px;
+      border: 5px solid #17120f;
+      border-radius: 8px;
+      background: #fffaf0;
+      text-align: center;
+      font-size: 26px;
+      font-weight: 900;
+    }
+    .shop-door {
+      position: absolute;
+      left: 145px;
+      bottom: 0;
+      width: 78px;
+      height: 100px;
+      border: 5px solid #17120f;
+      background: #d99b60;
+    }
+    .dock {
+      left: 0;
+      bottom: 23%;
+      width: 46%;
+      height: 50px;
+      border: 5px solid #17120f;
+      background: repeating-linear-gradient(90deg, #d49b62 0 72px, #f0c083 73px 80px);
+      box-shadow: 0 18px 0 rgba(23,18,15,0.16);
+    }
+    .boat {
+      right: 23%;
+      bottom: 25%;
+      width: 340px;
+      height: 126px;
+      cursor: pointer;
+      pointer-events: auto;
+      z-index: 2;
+    }
+    .boat::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 78px;
+      border: 6px solid #17120f;
+      border-radius: 12px 12px 90px 90px;
+      background: #fffaf0;
+      box-shadow: inset 0 -18px 0 #f0c083;
+    }
+    .boat::after {
+      content: "";
+      position: absolute;
+      left: 86px;
+      top: 0;
+      width: 112px;
+      height: 82px;
+      border: 6px solid #17120f;
+      background: #fffaf0;
+      clip-path: polygon(15% 100%, 28% 0, 88% 0, 100% 100%);
+    }
+    .tap-note {
+      position: absolute;
+      right: 26%;
+      bottom: 48%;
+      font-size: 32px;
+      font-weight: 900;
+      text-align: center;
+      z-index: 3;
+    }
+    .lighthouse {
+      right: 7%;
+      bottom: 34%;
+      width: 70px;
+      height: 170px;
+      border: 5px solid #17120f;
+      background: repeating-linear-gradient(180deg, #fffaf0 0 34px, #ff7d7d 35px 54px);
+      clip-path: polygon(25% 100%, 75% 100%, 64% 0, 36% 0);
+      z-index: 1;
+    }
+    .lighthouse::before {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      top: -26px;
+      height: 30px;
+      border: 5px solid #17120f;
+      background: #ffe36e;
+    }
+    .fishing-view, .fish-shop-view, .market-view {
+      position: absolute;
+      inset: 0;
+    }
+    .fish-play-sea { height: 38%; }
+    .play-boat {
+      position: absolute;
+      left: 50%;
+      bottom: 32%;
+      width: min(560px, 52vw);
+      height: 165px;
+      transform: translateX(-50%);
+    }
+    .stick-player {
+      position: absolute;
+      left: 52%;
+      bottom: 43%;
+      width: 80px;
+      height: 140px;
+      transform: translateX(-50%);
+    }
+    .stick-player::before {
+      content: "";
+      position: absolute;
+      left: 21px;
+      top: 0;
+      width: 44px;
+      height: 44px;
+      border: 6px solid #17120f;
+      border-radius: 50%;
+      background: #fffaf0;
+      box-shadow: inset 10px 0 0 rgba(255,214,145,0.35);
+    }
+    .stick-player::after {
+      content: "";
+      position: absolute;
+      left: 41px;
+      top: 50px;
+      width: 6px;
+      height: 74px;
+      background: #17120f;
+      box-shadow: -28px 38px 0 -1px #17120f, 28px 38px 0 -1px #17120f;
+    }
+    .fish-action {
+      position: absolute;
+      right: 8%;
+      bottom: 9%;
+      width: 170px;
+      height: 170px;
+      border-radius: 50% !important;
+      background: #fffaf0 !important;
+      font-size: 26px;
+    }
+    .catch-panel {
+      position: absolute;
+      left: 50%;
+      top: 24%;
+      transform: translateX(-50%);
+      width: min(580px, calc(100vw - 40px));
+      display: grid;
+      gap: 10px;
+      justify-items: center;
+      padding: 16px;
+      border: 5px solid #17120f;
+      border-radius: 20px;
+      background: rgba(255,250,240,0.94);
+      box-shadow: 0 10px 0 rgba(23,18,15,0.18);
+    }
+    .tap-meter {
+      width: 100%;
+      height: 30px;
+      border: 4px solid #17120f;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #d8f3ff;
+    }
+    .tap-meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4bd66f, #ffe36e, #ff8f5a);
+    }
+    .shop-counter {
+      left: 24%;
+      right: 30%;
+      top: 40%;
+      height: 150px;
+      border: 6px solid #17120f;
+      background: repeating-linear-gradient(90deg, #e8b875 0 42px, #ffd697 43px 48px);
+      box-shadow: 0 10px 0 rgba(23,18,15,0.18);
+    }
+    .shop-shelves {
+      right: 5%;
+      top: 20%;
+      width: 310px;
+      height: 260px;
+      border-top: 7px solid #17120f;
+      border-bottom: 7px solid #17120f;
+      background:
+        repeating-linear-gradient(90deg, transparent 0 70px, rgba(23,18,15,0.15) 71px 78px),
+        linear-gradient(180deg, transparent 0 45%, #17120f 46% 49%, transparent 50%);
+    }
+    .rod-grid, .market-grid {
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      bottom: 7%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 18px;
+      z-index: 3;
+    }
+    .rod-card, .market-card {
+      min-height: 190px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      border: 5px solid #17120f;
+      border-radius: 18px;
+      background: #fffaf0;
+      box-shadow: 0 8px 0 rgba(23,18,15,0.2);
+    }
+    .rod-art {
+      height: 70px;
+      position: relative;
+    }
+    .rod-art::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      top: 42px;
+      width: 136px;
+      height: 8px;
+      border-radius: 999px;
+      background: #17120f;
+      transform: rotate(-28deg);
+    }
+    .rod-art::after {
+      content: "";
+      position: absolute;
+      left: 134px;
+      top: 17px;
+      width: 44px;
+      height: 52px;
+      border-right: 4px solid #17120f;
+      border-bottom: 4px solid #17120f;
+      border-radius: 0 0 60px 0;
+    }
+    .fish-sprite {
+      width: 86px;
+      height: 58px;
+      display: inline-block;
+    }
+    .inventory-toolbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
     @keyframes selectorBallFloat {
       from { transform: translate(-3px, 5px) scale(0.98); }
       to { transform: translate(5px, -8px) scale(1.06); }
@@ -727,6 +1204,9 @@
       .selector-screen { padding: 18px; }
       .selector-header { align-items: flex-start; }
       .game-selector-grid { grid-template-columns: 1fr; }
+      .fish-shop-house { transform: scale(0.78); transform-origin: left bottom; }
+      .boat { right: 8%; transform: scale(0.78); transform-origin: right bottom; }
+      .rod-grid, .market-grid { left: 18px; right: 18px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
       .selector-card,
       .selector-card.featured { min-height: 330px; }
       .selector-preview,
@@ -739,6 +1219,7 @@
       .currency-row { display: none; }
     }
     @media (max-width: 640px) {
+      .cartoon-title { margin-top: 94px; font-size: 48px; }
       .selector-header { display: grid; }
       .selector-title { font-size: 56px; }
       .selector-pill { justify-self: start; font-size: 15px; }
@@ -776,11 +1257,128 @@
             <span class="selector-tag">Random Maps</span>
           </div>
         </button>
+        <button id="openFishingButton" class="selector-card">
+          <span class="selector-ribbon">New</span>
+          <div class="fishing-preview"></div>
+          <h2>Tap Fishing</h2>
+          <p>Tap fast, catch rare fish, upgrade rods, and build a collection.</p>
+          <div class="selector-tags">
+            <span class="selector-tag">Tap Challenge</span>
+            <span class="selector-tag">Fish Collection</span>
+            <span class="selector-tag">Rods</span>
+          </div>
+        </button>
+        <button id="openMarketButton" class="selector-card">
+          <div class="shop-preview"></div>
+          <h2>Shop</h2>
+          <p>Sell to NPCs or open a shop code so friends can buy your listed items.</p>
+          <div class="selector-tags">
+            <span class="selector-tag">Sell Fish</span>
+            <span class="selector-tag">Trade</span>
+            <span class="selector-tag">Shared Coins</span>
+          </div>
+        </button>
       </div>
       <footer class="selector-footer">
-        <span>1 game ready</span>
-        <span>Choose 2D Ball to enter the lobby</span>
+        <span>3 games ready</span>
+        <span>Coins and inventory save across every game</span>
       </footer>
+    </div>
+  </section>
+
+  <section id="fishingShell" class="cartoon-screen hidden">
+    <section id="fishingHome" class="fishing-view">
+      <div class="cartoon-top">
+        <button id="fishingBackButton">Back</button>
+        <div class="money-badge">Coins: <span id="fishingCoinsValue">0</span></div>
+        <button id="fishingMenuButton" class="menu-square">=</button>
+      </div>
+      <h1 class="cartoon-title">Tap Fishing</h1>
+      <div class="cloud" style="left:6%;top:15%"></div>
+      <div class="cloud" style="right:9%;top:21%;transform:scale(.8)"></div>
+      <div class="cloud" style="left:44%;top:34%;transform:scale(.55)"></div>
+      <div class="bird" style="left:44%;top:47%"></div>
+      <div class="bird" style="right:20%;top:36%;transform:scale(.72)"></div>
+      <div class="dock"></div>
+      <button id="openFishingShopButton" class="fish-shop-house" title="Fishing Shop"><span class="shop-door"></span></button>
+      <button id="startFishingButton" class="boat" title="Start Fishing"></button>
+      <div class="tap-note">Tap boat<br>to start</div>
+      <div class="lighthouse"></div>
+      <div class="fish-home-sea"></div>
+      <div class="wave" style="left:48%;bottom:12%"></div>
+      <div class="wave" style="right:12%;bottom:9%"></div>
+      <div class="wave" style="left:15%;bottom:8%"></div>
+    </section>
+
+    <section id="fishingPlay" class="fishing-view hidden">
+      <div class="cartoon-top">
+        <div class="money-badge">Score: <span id="fishScoreValue">0</span></div>
+        <div style="display:flex;gap:12px">
+          <button id="fishingInventoryButton">Inventory</button>
+          <button id="exitFishingPlayButton" class="menu-square">=</button>
+        </div>
+      </div>
+      <div class="sun" style="left:8%;top:19%;width:92px;height:92px;border:6px solid #17120f;border-radius:50%;background:#ffe36e"></div>
+      <div class="cloud" style="left:37%;top:19%"></div>
+      <div class="cloud" style="right:24%;top:26%;transform:scale(.7)"></div>
+      <div class="bird" style="left:28%;top:37%"></div>
+      <div class="bird" style="right:20%;top:43%;transform:scale(.75)"></div>
+      <div class="fish-play-sea"></div>
+      <div class="boat play-boat"></div>
+      <div class="stick-player"></div>
+      <div id="catchPanel" class="catch-panel hidden">
+        <div id="targetFishSprite" class="fish-sprite"></div>
+        <strong id="targetFishName">Small Fish</strong>
+        <div>Time: <span id="fishTimerValue">5.0</span>s</div>
+        <div>Taps: <span id="fishTapValue">0</span>/<span id="fishTapNeedValue">10</span></div>
+        <div class="tap-meter"><span id="tapMeterFill"></span></div>
+        <div id="fishResultText">Tap the FISH button fast!</div>
+      </div>
+      <button id="fishActionButton" class="fish-action">Fish</button>
+    </section>
+
+    <section id="fishingShopScreen" class="fish-shop-view hidden">
+      <div class="cartoon-top">
+        <button id="fishingShopBackButton">Back</button>
+        <div class="money-badge">Coins: <span id="rodCoinsValue">0</span></div>
+        <button id="fishingShopMenuButton" class="menu-square">=</button>
+      </div>
+      <h1 class="cartoon-title">Fishing Shop</h1>
+      <div class="shop-counter"></div>
+      <div class="shop-shelves"></div>
+      <div id="rodGrid" class="rod-grid"></div>
+    </section>
+  </section>
+
+  <section id="marketShell" class="cartoon-screen hidden">
+    <div class="cartoon-top">
+      <button id="marketBackButton">Back</button>
+      <div class="money-badge">Coins: <span id="marketCoinsValue">0</span></div>
+      <button id="marketInventoryButton">Inventory</button>
+    </div>
+    <h1 class="cartoon-title">Shop</h1>
+    <div class="shop-counter" style="top:25%;left:12%;right:12%"></div>
+    <div class="shop-shelves" style="right:6%;top:24%;transform:scale(.82)"></div>
+    <div style="position:absolute;left:5%;top:24%;width:min(360px,32vw);display:grid;gap:10px;z-index:4">
+      <button id="createShopRoomButton">Create Shop Code</button>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
+        <input id="shopRoomCode" maxlength="8" placeholder="SHOP CODE">
+        <button id="joinShopRoomButton">Join</button>
+      </div>
+      <div id="shopRoomStatus" class="room-status" style="color:#17120f">Sell to NPCs anytime, or let friends join.</div>
+    </div>
+    <div style="position:absolute;right:5%;top:24%;width:min(360px,32vw);display:grid;gap:10px;z-index:4">
+      <button id="addListingButton">Choose Item To List</button>
+      <button id="npcSellButton">Sell Selected To NPC</button>
+    </div>
+    <div id="marketGrid" class="market-grid"></div>
+  </section>
+
+  <section id="sharedInventoryModal" class="modal shared-modal hidden">
+    <div class="modal-card">
+      <h2 class="modal-title">Inventory</h2>
+      <div id="sharedInventoryGrid" class="modal-grid"></div>
+      <div class="close-row"><button id="closeSharedInventoryButton" class="small-button">Close</button></div>
     </div>
   </section>
 
@@ -929,12 +1527,35 @@
     const bigInventory = document.getElementById("bigInventory");
     const shopGrid = document.getElementById("shopGrid");
     const inventoryGrid = document.getElementById("inventoryGrid");
+    const sharedInventoryModal = document.getElementById("sharedInventoryModal");
+    const sharedInventoryGrid = document.getElementById("sharedInventoryGrid");
     const safeModal = document.getElementById("safeModal");
     const safeCode = document.getElementById("safeCode");
     const safeStatus = document.getElementById("safeStatus");
     const infoModal = document.getElementById("infoModal");
     const infoTitle = document.getElementById("infoTitle");
     const infoText = document.getElementById("infoText");
+    const fishingShell = document.getElementById("fishingShell");
+    const fishingHome = document.getElementById("fishingHome");
+    const fishingPlay = document.getElementById("fishingPlay");
+    const fishingShopScreen = document.getElementById("fishingShopScreen");
+    const fishingCoinsValue = document.getElementById("fishingCoinsValue");
+    const fishScoreValue = document.getElementById("fishScoreValue");
+    const rodCoinsValue = document.getElementById("rodCoinsValue");
+    const catchPanel = document.getElementById("catchPanel");
+    const targetFishSprite = document.getElementById("targetFishSprite");
+    const targetFishName = document.getElementById("targetFishName");
+    const fishTimerValue = document.getElementById("fishTimerValue");
+    const fishTapValue = document.getElementById("fishTapValue");
+    const fishTapNeedValue = document.getElementById("fishTapNeedValue");
+    const tapMeterFill = document.getElementById("tapMeterFill");
+    const fishResultText = document.getElementById("fishResultText");
+    const rodGrid = document.getElementById("rodGrid");
+    const marketShell = document.getElementById("marketShell");
+    const marketCoinsValue = document.getElementById("marketCoinsValue");
+    const marketGrid = document.getElementById("marketGrid");
+    const shopRoomCode = document.getElementById("shopRoomCode");
+    const shopRoomStatus = document.getElementById("shopRoomStatus");
 
     const keys = new Set();
     const mouse = { x: innerWidth * 0.5, y: innerHeight * 0.5 };
@@ -967,6 +1588,42 @@
       { id: "void", name: "Void Core", price: 180, color: "#a849ff", accent: "#ead4ff" },
       { id: "lime", name: "Lime Core", price: 160, color: "#62e68a", accent: "#d6ffe1" }
     ];
+    const fishCatalog = [
+      { id: "tiny_minnow", name: "Tiny Minnow", rarity: "Common", taps: 8, price: 3, body: "#b8c7d1", fin: "#6e8a9e", pattern: "stripe" },
+      { id: "small_fish", name: "Small Fish", rarity: "Common", taps: 10, price: 5, body: "#72b7d8", fin: "#337fa5", pattern: "dot" },
+      { id: "pond_perch", name: "Pond Perch", rarity: "Common", taps: 12, price: 7, body: "#89b04d", fin: "#415f24", pattern: "stripe" },
+      { id: "sardine", name: "Sardine", rarity: "Common", taps: 13, price: 8, body: "#cbd8e4", fin: "#7d91a7", pattern: "shine" },
+      { id: "mud_carp", name: "Mud Carp", rarity: "Common", taps: 15, price: 10, body: "#9b6b43", fin: "#5c3926", pattern: "dot" },
+      { id: "blue_fish", name: "Blue Fish", rarity: "Uncommon", taps: 18, price: 15, body: "#308dff", fin: "#1455b8", pattern: "wave" },
+      { id: "clown_fish", name: "Clown Fish", rarity: "Uncommon", taps: 20, price: 18, body: "#ff8a2a", fin: "#ffffff", pattern: "bands" },
+      { id: "silver_trout", name: "Silver Trout", rarity: "Uncommon", taps: 22, price: 22, body: "#d9e7f1", fin: "#95a6bb", pattern: "shine" },
+      { id: "puffer_fish", name: "Puffer Fish", rarity: "Uncommon", taps: 24, price: 25, body: "#f2cf61", fin: "#c99328", pattern: "spikes" },
+      { id: "jellyfish", name: "Jellyfish", rarity: "Uncommon", taps: 25, price: 28, body: "#d797ff", fin: "#8d4cc4", pattern: "jelly" },
+      { id: "gold_fish", name: "Gold Fish", rarity: "Rare", taps: 30, price: 50, body: "#ffd33f", fin: "#e8891c", pattern: "shine" },
+      { id: "angler_fish", name: "Angler Fish", rarity: "Rare", taps: 33, price: 65, body: "#4a5368", fin: "#222836", pattern: "angler" },
+      { id: "electric_eel", name: "Electric Eel", rarity: "Rare", taps: 35, price: 75, body: "#5edcff", fin: "#f9ff6e", pattern: "bolt" },
+      { id: "swordfish", name: "Swordfish", rarity: "Rare", taps: 38, price: 90, body: "#5f88c8", fin: "#2f4f8c", pattern: "sword" },
+      { id: "crystal_koi", name: "Crystal Koi", rarity: "Rare", taps: 40, price: 100, body: "#9ff5ff", fin: "#ff8bd1", pattern: "crystal" },
+      { id: "shark", name: "Shark", rarity: "Epic", taps: 45, price: 120, body: "#7c8994", fin: "#313941", pattern: "shark" },
+      { id: "octopus", name: "Octopus", rarity: "Epic", taps: 48, price: 150, body: "#d05bba", fin: "#7f2f84", pattern: "tentacle" },
+      { id: "stingray", name: "Stingray", rarity: "Epic", taps: 52, price: 175, body: "#596c85", fin: "#26354a", pattern: "ray" },
+      { id: "ghost_fish", name: "Ghost Fish", rarity: "Epic", taps: 55, price: 220, body: "#dff8ff", fin: "#8cb8d0", pattern: "ghost" },
+      { id: "lava_tuna", name: "Lava Tuna", rarity: "Epic", taps: 58, price: 260, body: "#ff5938", fin: "#5b1612", pattern: "lava" },
+      { id: "rainbow_fish", name: "Rainbow Fish", rarity: "Legendary", taps: 70, price: 500, body: "#ff68cf", fin: "#43e4ff", pattern: "rainbow" },
+      { id: "golden_whale", name: "Golden Whale", rarity: "Legendary", taps: 78, price: 750, body: "#ffd75a", fin: "#b66f09", pattern: "whale" },
+      { id: "dragonfish", name: "Dragonfish", rarity: "Legendary", taps: 85, price: 1000, body: "#7a45ff", fin: "#ff4f65", pattern: "dragon" },
+      { id: "starfish_king", name: "Starfish King", rarity: "Legendary", taps: 92, price: 1250, body: "#ff9e49", fin: "#ffe36e", pattern: "star" },
+      { id: "cosmic_leviathan", name: "Cosmic Leviathan", rarity: "Mythic", taps: 110, price: 2500, body: "#24185f", fin: "#71f5ff", pattern: "cosmic" }
+    ];
+    const rods = [
+      { id: "starter", name: "Starter Rod", price: 0, tapReduction: 0, rareBoost: 0, sellPrice: 0 },
+      { id: "better", name: "Better Rod", price: 100, tapReduction: 5, rareBoost: 0.25, sellPrice: 75 },
+      { id: "pro", name: "Pro Rod", price: 500, tapReduction: 15, rareBoost: 0.65, sellPrice: 375 },
+      { id: "golden", name: "Golden Rod", price: 1500, tapReduction: 18, rareBoost: 1.35, sellPrice: 1125 }
+    ];
+    const rarityWeights = { Common: 58, Uncommon: 26, Rare: 11, Epic: 4, Legendary: 1, Mythic: 0.2 };
+    const fishById = Object.fromEntries(fishCatalog.map(fish => [fish.id, fish]));
+    const rodById = Object.fromEntries(rods.map(rod => [rod.id, rod]));
     const arenaMaps = [
       {
         id: "neon",
@@ -1025,7 +1682,11 @@
       bestScore: 0,
       totalEliminations: 0,
       roundsPlayed: 0,
-      wins: 0
+      wins: 0,
+      fish: {},
+      ownedRods: ["starter"],
+      equippedRod: "starter",
+      marketListings: []
     };
     const save = loadSave();
     const state = {
@@ -1046,6 +1707,8 @@
     const player = { id: "host", name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
     const bots = [];
     const ball = { x: 0, y: 0, vx: 0, vy: 0, r: 15, speed: 210, target: null, trail: [] };
+    const fishing = { active: false, target: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null };
+    const shopNet = { peer: null, conn: null, role: "solo", room: "", connected: false, remoteListings: [] };
     let lastTime = 0;
 
     function fitCanvas() {
@@ -1072,9 +1735,31 @@
       if (!cleaned.includes(requiredId)) cleaned.unshift(requiredId);
       return [...new Set(cleaned)];
     }
+    function cleanFishStacks(rawFish = {}) {
+      const validIds = fishCatalog.map(fish => fish.id);
+      return Object.fromEntries(Object.entries(rawFish || {})
+        .filter(([id]) => validIds.includes(id))
+        .map(([id, count]) => [id, cleanNumber(count, 0)])
+        .filter(([, count]) => count > 0));
+    }
+    function normalizeListings(listings = []) {
+      return normalizeListingsForSave(listings, save || DEFAULT_SAVE);
+    }
+    function normalizeListingsForSave(listings = [], data = DEFAULT_SAVE) {
+      const counts = {};
+      const sellable = new Map(getSellableItemsFromData(data).map(item => [item.key, item]));
+      (Array.isArray(listings) ? listings : []).forEach(item => {
+        if (!item || !sellable.has(item.key)) return;
+        const maxQty = sellable.get(item.key).count;
+        const requested = Math.max(1, cleanNumber(item.qty, 1));
+        counts[item.key] = Math.min(maxQty, (counts[item.key] || 0) + requested);
+      });
+      return Object.entries(counts).map(([key, qty]) => ({ key, qty }));
+    }
     function normalizeSave(raw = {}) {
       const validSkinIds = skins.map(skin => skin.id);
       const validAbilityIds = abilities.map(ability => ability.id);
+      const validRodIds = rods.map(rod => rod.id);
       const normalized = {
         ...DEFAULT_SAVE,
         ...raw,
@@ -1087,10 +1772,15 @@
         wins: cleanNumber(raw.wins, DEFAULT_SAVE.wins),
         safeOpened: Boolean(raw.safeOpened),
         owned: uniqueValidIds(raw.owned, validSkinIds, "aqua"),
-        unlockedAbilities: uniqueValidIds(raw.unlockedAbilities, validAbilityIds, "dash")
+        unlockedAbilities: uniqueValidIds(raw.unlockedAbilities, validAbilityIds, "dash"),
+        ownedRods: uniqueValidIds(raw.ownedRods, validRodIds, "starter"),
+        fish: cleanFishStacks(raw.fish),
+        marketListings: Array.isArray(raw.marketListings) ? raw.marketListings : []
       };
       if (!normalized.owned.includes(raw.equipped)) normalized.equipped = "aqua";
       if (!normalized.unlockedAbilities.includes(raw.ability)) normalized.ability = "dash";
+      if (!normalized.ownedRods.includes(raw.equippedRod)) normalized.equippedRod = "starter";
+      normalized.marketListings = normalizeListingsForSave(normalized.marketListings, normalized);
       return normalized;
     }
     function readStoredSave(key) {
@@ -1129,12 +1819,32 @@
     function syncLobby() {
       coinsValue.textContent = save.coins;
       gemsValue.textContent = save.gems;
+      if (fishingCoinsValue) fishingCoinsValue.textContent = save.coins;
+      if (rodCoinsValue) rodCoinsValue.textContent = save.coins;
+      if (marketCoinsValue) marketCoinsValue.textContent = save.coins;
       renderAbilities();
       renderShop();
+      renderRods();
+      renderMarket();
       applyEquippedSkin();
     }
-    function open2DBallMenu() {
+    function hideAllScreens() {
       gameSelector.classList.add("hidden");
+      gameShell.classList.add("hidden");
+      fishingShell.classList.add("hidden");
+      marketShell.classList.add("hidden");
+      bigShop.classList.add("hidden");
+      bigInventory.classList.add("hidden");
+      sharedInventoryModal.classList.add("hidden");
+      safeModal.classList.add("hidden");
+      infoModal.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      clearInterval(fishing.timer);
+      fishing.active = false;
+      state.running = false;
+    }
+    function open2DBallMenu() {
+      hideAllScreens();
       gameShell.classList.remove("hidden");
       lobby.classList.remove("hidden");
       gameShell.classList.add("lobby-open");
@@ -1142,21 +1852,116 @@
       syncLobby();
     }
     function openMinigamesSelector() {
-      state.running = false;
-      gameShell.classList.add("hidden");
+      hideAllScreens();
       gameSelector.classList.remove("hidden");
-      lobby.classList.remove("hidden");
-      resultScreen.classList.add("hidden");
-      bigShop.classList.add("hidden");
-      bigInventory.classList.add("hidden");
-      safeModal.classList.add("hidden");
-      infoModal.classList.add("hidden");
       gameShell.classList.add("lobby-open");
     }
     function applyEquippedSkin() {
       const skin = skins.find(item => item.id === save.equipped) || skins[0];
       player.color = skin.color;
       player.accent = skin.accent;
+    }
+
+    function fishSvg(fish, size = 86) {
+      const body = fish.body;
+      const fin = fish.fin;
+      const extras = {
+        stripe: `<path d="M36 18v24M50 18v24" stroke="#17202a" stroke-width="4" opacity=".45"/>`,
+        dot: `<circle cx="38" cy="24" r="4" fill="#17202a" opacity=".45"/><circle cx="53" cy="35" r="4" fill="#17202a" opacity=".35"/>`,
+        shine: `<path d="M29 18c16 9 29 9 45 0" stroke="#fff" stroke-width="5" opacity=".72"/>`,
+        wave: `<path d="M27 31c8-8 16 8 24 0s16 8 24 0" fill="none" stroke="#fff" stroke-width="4" opacity=".65"/>`,
+        bands: `<path d="M35 15v31M58 14v33" stroke="#fff" stroke-width="7"/><path d="M35 15v31M58 14v33" stroke="#17202a" stroke-width="2"/>`,
+        spikes: `<path d="M26 10l6 10M44 7l2 12M62 10l-6 10M35 48l-5 9M57 48l5 9" stroke="#17202a" stroke-width="4"/>`,
+        jelly: `<path d="M30 42c0 18 10 18 10 0M47 42c0 20 10 20 10 0M64 42c0 18 10 18 10 0" fill="none" stroke="${fin}" stroke-width="5"/>`,
+        angler: `<path d="M40 15C32 0 60 0 54 14" fill="none" stroke="#17202a" stroke-width="4"/><circle cx="55" cy="13" r="6" fill="#ffe36e"/>`,
+        bolt: `<path d="M45 13l-10 19h12l-8 21 22-29H48l9-11z" fill="#fff96b" stroke="#17202a" stroke-width="3"/>`,
+        sword: `<path d="M70 30h24" stroke="#dff8ff" stroke-width="7" stroke-linecap="round"/><path d="M70 30h24" stroke="#17202a" stroke-width="3" stroke-linecap="round"/>`,
+        crystal: `<path d="M42 11l12 11-10 14-14-10zM62 25l10 10-9 13-11-11z" fill="#fff" opacity=".68" stroke="#17202a" stroke-width="2"/>`,
+        shark: `<path d="M45 7l13 18H33zM60 42l12 14H46z" fill="${fin}" stroke="#17202a" stroke-width="3"/><path d="M23 36h22" stroke="#fff" stroke-width="3"/>`,
+        tentacle: `<path d="M30 42c-8 20 12 14 4 30M47 43c-4 24 16 18 8 31M63 42c4 23 22 13 11 29" fill="none" stroke="${fin}" stroke-width="6" stroke-linecap="round"/>`,
+        ray: `<path d="M20 30l28-20 30 20-30 20z" fill="${body}" stroke="#17202a" stroke-width="4"/><path d="M69 34l24 16" stroke="#17202a" stroke-width="4"/>`,
+        ghost: `<path d="M28 42c6 14 14-9 22 5s15-8 27 3" fill="none" stroke="#8cb8d0" stroke-width="5"/>`,
+        lava: `<path d="M30 37l10-20 9 18 8-16 12 23" fill="none" stroke="#ffe36e" stroke-width="5"/>`,
+        rainbow: `<path d="M26 23h45" stroke="#ff4f65" stroke-width="5"/><path d="M26 31h45" stroke="#ffe36e" stroke-width="5"/><path d="M26 39h45" stroke="#43e46b" stroke-width="5"/>`,
+        whale: `<path d="M20 23c10-17 28-10 33 4 15-13 28 0 19 13" fill="${body}" stroke="#17202a" stroke-width="4"/><path d="M20 40h58" stroke="#fff" stroke-width="5" opacity=".5"/>`,
+        dragon: `<path d="M27 11l9 13 10-14 10 14 10-13" fill="none" stroke="#ffe36e" stroke-width="5"/><path d="M73 31l14-11-4 18z" fill="#ff4f65" stroke="#17202a" stroke-width="3"/>`,
+        star: `<path d="M48 5l10 23 25 2-19 16 6 24-22-13-22 13 6-24-19-16 25-2z" fill="${body}" stroke="#17202a" stroke-width="4"/>`,
+        cosmic: `<circle cx="34" cy="23" r="3" fill="#fff"/><circle cx="52" cy="36" r="2" fill="#ffe36e"/><circle cx="65" cy="21" r="3" fill="#71f5ff"/><path d="M25 45c18 10 39 10 58-4" stroke="#ff8bd1" stroke-width="4" fill="none"/>`
+      }[fish.pattern] || "";
+      const bodyShape = fish.pattern === "jelly"
+        ? `<path d="M22 36c2-22 51-22 55 0v10H22z" fill="${body}" stroke="#17202a" stroke-width="4"/>`
+        : fish.pattern === "star"
+          ? extras
+          : `<path d="M18 30c15-22 48-22 67 0-19 22-52 22-67 0z" fill="${body}" stroke="#17202a" stroke-width="4"/>`;
+      const tail = fish.pattern === "star" ? "" : `<path d="M18 30L3 15v30z" fill="${fin}" stroke="#17202a" stroke-width="4"/>`;
+      const finPath = fish.pattern === "star" ? "" : `<path d="M47 44l-12 14h28z" fill="${fin}" stroke="#17202a" stroke-width="3"/>`;
+      const eye = fish.pattern === "star" ? `<circle cx="49" cy="29" r="4" fill="#17202a"/>` : `<circle cx="68" cy="26" r="4" fill="#17202a"/><circle cx="69" cy="24" r="1.5" fill="#fff"/>`;
+      return `<svg class="fish-sprite" viewBox="0 0 100 74" width="${size}" height="${Math.round(size * 0.67)}" aria-hidden="true">${tail}${bodyShape}${fish.pattern === "star" ? "" : extras}${finPath}${eye}</svg>`;
+    }
+    function getRod() {
+      return rodById[save.equippedRod] || rods[0];
+    }
+    function fishTapNeed(fish) {
+      return Math.max(3, fish.taps - getRod().tapReduction);
+    }
+    function addFish(id, count = 1) {
+      save.fish[id] = cleanNumber(save.fish[id], 0) + count;
+      saveGame();
+    }
+    function removeFish(id, count = 1) {
+      if (cleanNumber(save.fish[id], 0) < count) return false;
+      save.fish[id] -= count;
+      if (save.fish[id] <= 0) delete save.fish[id];
+      saveGame();
+      return true;
+    }
+    function itemLabel(item) {
+      if (item.type === "fish") return fishById[item.id]?.name || "Fish";
+      if (item.type === "skin") return skins.find(skin => skin.id === item.id)?.name || "Skin";
+      if (item.type === "ability") return abilities.find(ability => ability.id === item.id)?.name || "Ability";
+      if (item.type === "rod") return rodById[item.id]?.name || "Rod";
+      return "Item";
+    }
+    function itemPrice(item) {
+      if (item.type === "fish") return fishById[item.id]?.price || 0;
+      if (item.type === "skin") return Math.floor((skins.find(skin => skin.id === item.id)?.price || 0) * 0.75);
+      if (item.type === "ability") return Math.floor((abilities.find(ability => ability.id === item.id)?.price || 0) * 0.75);
+      if (item.type === "rod") return rodById[item.id]?.sellPrice || 0;
+      return 0;
+    }
+    function parseItemKey(key) {
+      const [type, id] = key.split(":");
+      return { type, id, key };
+    }
+    function alreadyOwnsTradeItem(key) {
+      const item = parseItemKey(key);
+      if (item.type === "fish") return false;
+      if (item.type === "skin") return save.owned.includes(item.id);
+      if (item.type === "ability") return save.unlockedAbilities.includes(item.id);
+      if (item.type === "rod") return save.ownedRods.includes(item.id);
+      return true;
+    }
+    function getSellableItemsFromData(data) {
+      const items = [];
+      Object.entries(data.fish || {}).forEach(([id, count]) => {
+        if (fishById[id] && count > 0) items.push({ key: `fish:${id}`, type: "fish", id, count, price: fishById[id].price });
+      });
+      (data.owned || []).forEach(id => {
+        const skin = skins.find(item => item.id === id);
+        if (skin && skin.price > 0) items.push({ key: `skin:${id}`, type: "skin", id, count: 1, price: Math.floor(skin.price * 0.75) });
+      });
+      (data.unlockedAbilities || []).forEach(id => {
+        const ability = abilities.find(item => item.id === id);
+        if (ability && ability.price > 0) items.push({ key: `ability:${id}`, type: "ability", id, count: 1, price: Math.floor(ability.price * 0.75) });
+      });
+      (data.ownedRods || []).forEach(id => {
+        const rod = rodById[id];
+        if (rod && rod.sellPrice > 0) items.push({ key: `rod:${id}`, type: "rod", id, count: 1, price: rod.sellPrice });
+      });
+      return items;
+    }
+    function getSellableItems() {
+      return getSellableItemsFromData(save);
     }
 
     function renderAbilities() {
@@ -1204,23 +2009,7 @@
       shopGrid.querySelectorAll("[data-buy-ability]").forEach(button => {
         button.addEventListener("click", () => buyAbility(button.dataset.buyAbility));
       });
-      inventoryGrid.innerHTML = save.owned.map(id => {
-        const skin = skins.find(item => item.id === id) || skins[0];
-        return `
-          <button class="skin-card" data-equip="${skin.id}">
-            <div class="skin-preview" style="background:${skin.color};color:${skin.color}"></div>
-            <h3>${skin.name}</h3>
-            <p>${save.equipped === skin.id ? "Equipped" : "Tap to equip"}</p>
-          </button>
-        `;
-      }).join("");
-      inventoryGrid.querySelectorAll("[data-equip]").forEach(button => {
-        button.addEventListener("click", () => {
-          save.equipped = button.dataset.equip;
-          saveGame();
-          renderShop();
-        });
-      });
+      renderSharedInventory();
     }
     function buySkin(id) {
       const skin = skins.find(item => item.id === id);
@@ -1241,6 +2030,409 @@
       save.ability = id;
       saveGame();
       renderShop();
+    }
+    function inventoryItems(filter = "all") {
+      const items = [];
+      Object.entries(save.fish || {}).forEach(([id, count]) => {
+        const fish = fishById[id];
+        if (fish) items.push({ key: `fish:${id}`, type: "fish", group: "fishing", id, name: fish.name, detail: `${fish.rarity} x${count}`, count, price: fish.price, visual: fishSvg(fish) });
+      });
+      save.ownedRods.forEach(id => {
+        const rod = rodById[id];
+        if (rod) items.push({ key: `rod:${id}`, type: "rod", group: "fishing", id, name: rod.name, detail: save.equippedRod === id ? "Equipped rod" : `-${rod.tapReduction} taps`, count: 1, price: rod.sellPrice, visual: `<div class="rod-art"></div>` });
+      });
+      save.owned.forEach(id => {
+        const skin = skins.find(item => item.id === id);
+        if (skin) items.push({ key: `skin:${id}`, type: "skin", group: "2dball", id, name: skin.name, detail: save.equipped === id ? "Equipped skin" : "2D Ball skin", count: 1, price: Math.floor(skin.price * 0.75), visual: `<div class="skin-preview" style="background:${skin.color};color:${skin.color}"></div>` });
+      });
+      save.unlockedAbilities.forEach(id => {
+        const ability = abilities.find(item => item.id === id);
+        if (ability) items.push({ key: `ability:${id}`, type: "ability", group: "2dball", id, name: ability.name, detail: save.ability === id ? "Equipped ability" : "2D Ball ability", count: 1, price: Math.floor(ability.price * 0.75), visual: `<div class="skin-preview" style="display:grid;place-items:center;background:#123966;color:#dff8ff;border-radius:8px">${ability.icon}</div>` });
+      });
+      return items.filter(item => filter === "all" || item.group === filter || item.type === filter);
+    }
+    function renderSharedInventory(filter = "all", target = inventoryGrid) {
+      if (!target) return;
+      const current = target.querySelector("[data-inventory-filter]")?.value;
+      filter = current || filter || "all";
+      const items = inventoryItems(filter);
+      target.innerHTML = `
+        <div class="inventory-toolbar" style="grid-column:1/-1">
+          <select data-inventory-filter>
+            <option value="all">All Inventory</option>
+            <option value="fishing">Fishing</option>
+            <option value="fish">Fish</option>
+            <option value="rod">Rods</option>
+            <option value="2dball">2D Ball</option>
+            <option value="skin">Skins</option>
+            <option value="ability">Abilities</option>
+          </select>
+          <span class="result-text" style="font-size:18px">Coins: ${save.coins}</span>
+        </div>
+        ${items.length ? items.map(item => `
+          <div class="skin-card">
+            ${item.visual}
+            <h3>${item.name}</h3>
+            <p>${item.detail}</p>
+            <p>Sell: ${item.price || 0} coins</p>
+            ${item.type === "skin" ? `<button class="small-button" data-equip-skin="${item.id}">${save.equipped === item.id ? "Equipped" : "Equip"}</button>` : ""}
+            ${item.type === "ability" ? `<button class="small-button" data-equip-ability="${item.id}">${save.ability === item.id ? "Equipped" : "Equip"}</button>` : ""}
+            ${item.type === "rod" ? `<button class="small-button" data-equip-rod="${item.id}">${save.equippedRod === item.id ? "Equipped" : "Equip"}</button>` : ""}
+            ${item.type === "fish" ? `<button class="small-button" data-sell-fish="${item.id}">Sell One</button>` : ""}
+          </div>
+        `).join("") : `<p class="result-text" style="grid-column:1/-1">No items in this filter yet.</p>`}
+      `;
+      const select = target.querySelector("[data-inventory-filter]");
+      select.value = filter;
+      select.addEventListener("change", event => renderSharedInventory(event.target.value, target));
+      target.querySelectorAll("[data-equip-skin]").forEach(button => button.addEventListener("click", () => { save.equipped = button.dataset.equipSkin; saveGame(); renderSharedInventory(filter, target); }));
+      target.querySelectorAll("[data-equip-ability]").forEach(button => button.addEventListener("click", () => { save.ability = button.dataset.equipAbility; saveGame(); renderSharedInventory(filter, target); }));
+      target.querySelectorAll("[data-equip-rod]").forEach(button => button.addEventListener("click", () => { save.equippedRod = button.dataset.equipRod; saveGame(); renderSharedInventory(filter, target); }));
+      target.querySelectorAll("[data-sell-fish]").forEach(button => button.addEventListener("click", () => { sellItemToNpc(`fish:${button.dataset.sellFish}`, 1); renderSharedInventory(filter, target); }));
+    }
+    function openSharedInventory(filter = "all") {
+      renderSharedInventory(filter, sharedInventoryGrid);
+      sharedInventoryModal.classList.remove("hidden");
+    }
+    function openFishingHome() {
+      hideAllScreens();
+      fishingShell.classList.remove("hidden");
+      fishingHome.classList.remove("hidden");
+      fishingPlay.classList.add("hidden");
+      fishingShopScreen.classList.add("hidden");
+      syncLobby();
+    }
+    function openFishingPlay() {
+      hideAllScreens();
+      fishingShell.classList.remove("hidden");
+      fishingHome.classList.add("hidden");
+      fishingPlay.classList.remove("hidden");
+      fishingShopScreen.classList.add("hidden");
+      catchPanel.classList.add("hidden");
+      fishing.active = false;
+      fishScoreValue.textContent = fishing.score;
+      syncLobby();
+    }
+    function openFishingShop() {
+      hideAllScreens();
+      fishingShell.classList.remove("hidden");
+      fishingHome.classList.add("hidden");
+      fishingPlay.classList.add("hidden");
+      fishingShopScreen.classList.remove("hidden");
+      renderRods();
+      syncLobby();
+    }
+    function chooseFish() {
+      const rod = getRod();
+      const weighted = fishCatalog.map(fish => {
+        const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"].indexOf(fish.rarity);
+        const boost = 1 + rod.rareBoost * Math.max(0, rarityIndex);
+        const commonNerf = fish.rarity === "Common" ? Math.max(0.35, 1 - rod.rareBoost * 0.25) : 1;
+        return { fish, weight: rarityWeights[fish.rarity] * boost * commonNerf };
+      });
+      const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+      let roll = Math.random() * total;
+      for (const item of weighted) {
+        roll -= item.weight;
+        if (roll <= 0) return item.fish;
+      }
+      return fishCatalog[0];
+    }
+    function startFishingAttempt() {
+      if (fishing.active) return tapFish();
+      fishing.target = chooseFish();
+      fishing.taps = 0;
+      fishing.needed = fishTapNeed(fishing.target);
+      fishing.timeLeft = 5;
+      fishing.active = true;
+      catchPanel.classList.remove("hidden");
+      targetFishSprite.innerHTML = fishSvg(fishing.target, 116);
+      targetFishName.textContent = `${fishing.target.name} (${fishing.target.rarity})`;
+      fishResultText.textContent = "Tap the FISH button fast!";
+      updateFishingPanel();
+      clearInterval(fishing.timer);
+      fishing.timer = setInterval(() => {
+        fishing.timeLeft = Math.max(0, fishing.timeLeft - 0.1);
+        updateFishingPanel();
+        if (fishing.timeLeft <= 0) finishFishing(false);
+      }, 100);
+    }
+    function tapFish() {
+      if (!fishing.active) return startFishingAttempt();
+      fishing.taps += 1;
+      if (fishing.taps >= fishing.needed) finishFishing(true);
+      else updateFishingPanel();
+    }
+    function updateFishingPanel() {
+      fishTimerValue.textContent = fishing.timeLeft.toFixed(1);
+      fishTapValue.textContent = fishing.taps;
+      fishTapNeedValue.textContent = fishing.needed;
+      tapMeterFill.style.width = `${clamp((fishing.taps / fishing.needed) * 100, 0, 100)}%`;
+    }
+    function finishFishing(caught) {
+      if (!fishing.active) return;
+      clearInterval(fishing.timer);
+      fishing.active = false;
+      if (caught) {
+        addFish(fishing.target.id, 1);
+        fishing.score += fishing.target.price;
+        fishScoreValue.textContent = fishing.score;
+        fishResultText.textContent = `Caught ${fishing.target.name}! It went to inventory.`;
+      } else {
+        fishResultText.textContent = `${fishing.target.name} escaped!`;
+      }
+    }
+    function renderRods() {
+      if (!rodGrid) return;
+      rodGrid.innerHTML = rods.map(rod => {
+        const owned = save.ownedRods.includes(rod.id);
+        const equipped = save.equippedRod === rod.id;
+        const rareText = rod.rareBoost > 0 ? `+${Math.round(rod.rareBoost * 100)}% rare luck` : "Normal luck";
+        return `
+          <div class="rod-card">
+            <h3>${rod.name}</h3>
+            <div class="rod-art"></div>
+            <p>${rod.tapReduction ? `${rod.tapReduction} fewer taps` : "Normal fishing"}</p>
+            <p>${rareText}</p>
+            <button data-rod="${rod.id}">${owned ? (equipped ? "Equipped" : "Equip") : `${rod.price} coins`}</button>
+          </div>
+        `;
+      }).join("");
+      rodGrid.querySelectorAll("[data-rod]").forEach(button => button.addEventListener("click", () => {
+        const rod = rodById[button.dataset.rod];
+        if (save.ownedRods.includes(rod.id)) {
+          save.equippedRod = rod.id;
+          saveGame();
+          return;
+        }
+        if (save.coins < rod.price) return;
+        save.coins -= rod.price;
+        save.ownedRods.push(rod.id);
+        save.equippedRod = rod.id;
+        saveGame();
+      }));
+    }
+    function removeItemByKey(key, qty = 1) {
+      const item = parseItemKey(key);
+      if (item.type === "fish") return removeFish(item.id, qty);
+      if (item.type === "skin") {
+        const skin = skins.find(entry => entry.id === item.id);
+        if (!skin || skin.price <= 0 || !save.owned.includes(item.id)) return false;
+        save.owned = save.owned.filter(id => id !== item.id);
+        if (save.equipped === item.id) save.equipped = "aqua";
+        saveGame();
+        return true;
+      }
+      if (item.type === "ability") {
+        const ability = abilities.find(entry => entry.id === item.id);
+        if (!ability || ability.price <= 0 || !save.unlockedAbilities.includes(item.id)) return false;
+        save.unlockedAbilities = save.unlockedAbilities.filter(id => id !== item.id);
+        if (save.ability === item.id) save.ability = "dash";
+        saveGame();
+        return true;
+      }
+      if (item.type === "rod") {
+        const rod = rodById[item.id];
+        if (!rod || rod.sellPrice <= 0 || !save.ownedRods.includes(item.id)) return false;
+        save.ownedRods = save.ownedRods.filter(id => id !== item.id);
+        if (save.equippedRod === item.id) save.equippedRod = "starter";
+        saveGame();
+        return true;
+      }
+      return false;
+    }
+    function addItemByKey(key, qty = 1) {
+      const item = parseItemKey(key);
+      if (item.type === "fish") addFish(item.id, qty);
+      if (item.type === "skin" && !save.owned.includes(item.id)) { save.owned.push(item.id); saveGame(); }
+      if (item.type === "ability" && !save.unlockedAbilities.includes(item.id)) { save.unlockedAbilities.push(item.id); saveGame(); }
+      if (item.type === "rod" && !save.ownedRods.includes(item.id)) { save.ownedRods.push(item.id); saveGame(); }
+    }
+    function sellItemToNpc(key, qty = 1) {
+      const item = parseItemKey(key);
+      const catalogItem = { ...item, price: itemPrice(item) };
+      if (!catalogItem.price || !removeItemByKey(key, qty)) return false;
+      save.coins += catalogItem.price * qty;
+      save.marketListings = normalizeListings(save.marketListings);
+      saveGame();
+      renderSharedInventory();
+      renderMarket();
+      return true;
+    }
+    function openMarketHome() {
+      hideAllScreens();
+      marketShell.classList.remove("hidden");
+      renderMarket();
+      syncLobby();
+    }
+    function renderMarket() {
+      if (!marketGrid) return;
+      marketCoinsValue.textContent = save.coins;
+      const listings = normalizeListings(save.marketListings);
+      save.marketListings = listings;
+      const remote = shopNet.role === "guest" ? shopNet.remoteListings : [];
+      const cards = shopNet.role === "guest" ? remote : listings;
+      marketGrid.innerHTML = cards.length ? cards.map(listing => {
+        const item = parseItemKey(listing.key);
+        const label = itemLabel(item);
+        const price = itemPrice(item);
+        const fish = item.type === "fish" ? fishById[item.id] : null;
+        const skin = item.type === "skin" ? skins.find(s => s.id === item.id) : null;
+        const ability = item.type === "ability" ? abilities.find(a => a.id === item.id) : null;
+        const visual = fish ? fishSvg(fish) : item.type === "rod" ? `<div class="rod-art"></div>` : item.type === "skin" ? `<div class="skin-preview" style="background:${skin?.color || "#35e4ff"};color:${skin?.color || "#35e4ff"}"></div>` : `<div class="skin-preview" style="display:grid;place-items:center;background:#123966;color:#dff8ff;border-radius:8px">${ability?.icon || "!"}</div>`;
+        return `
+          <div class="market-card">
+            ${visual}
+            <h3>${label}${listing.qty > 1 ? ` x${listing.qty}` : ""}</h3>
+            <p>${item.type.toUpperCase()}</p>
+            <p>${price} coins</p>
+            ${shopNet.role === "guest" ? `<button data-buy-listing="${listing.key}">Buy</button>` : `<button data-remove-listing="${listing.key}">Unlist</button>`}
+          </div>
+        `;
+      }).join("") : `<div class="market-card" style="grid-column:1/-1"><h3>No listings yet</h3><p>Choose items to list, or sell directly to NPCs.</p></div>`;
+      marketGrid.querySelectorAll("[data-remove-listing]").forEach(button => button.addEventListener("click", () => {
+        save.marketListings = save.marketListings.filter(item => item.key !== button.dataset.removeListing);
+        saveGame();
+        sendShopListings();
+      }));
+      marketGrid.querySelectorAll("[data-buy-listing]").forEach(button => button.addEventListener("click", () => buyRemoteListing(button.dataset.buyListing)));
+    }
+    function chooseListing() {
+      const items = getSellableItems().filter(item => !save.marketListings.some(listing => listing.key === item.key));
+      if (!items.length) {
+        shopRoomStatus.textContent = "No sellable items available. Free items cannot be sold.";
+        return;
+      }
+      const menu = items.map((item, index) => `${index + 1}: ${itemLabel(item)} (${item.price} coins)${item.count > 1 ? ` x${item.count}` : ""}`).join("\n");
+      const choice = prompt(`Choose item to list:\n${menu}`);
+      const index = Number(choice) - 1;
+      if (!Number.isInteger(index) || !items[index]) return;
+      save.marketListings.push({ key: items[index].key, qty: 1 });
+      save.marketListings = normalizeListings(save.marketListings);
+      saveGame();
+      renderMarket();
+      sendShopListings();
+    }
+    function sellSelectedNpc() {
+      const items = getSellableItems();
+      if (!items.length) {
+        shopRoomStatus.textContent = "No sellable items. Free stuff stays with you.";
+        return;
+      }
+      const menu = items.map((item, index) => `${index + 1}: ${itemLabel(item)} (${item.price} coins)${item.count > 1 ? ` x${item.count}` : ""}`).join("\n");
+      const choice = prompt(`Sell to NPC:\n${menu}`);
+      const index = Number(choice) - 1;
+      if (!Number.isInteger(index) || !items[index]) return;
+      sellItemToNpc(items[index].key, 1);
+      shopRoomStatus.textContent = `Sold ${itemLabel(items[index])} to NPC.`;
+    }
+    function cleanupShopPeer() {
+      if (shopNet.conn) shopNet.conn.close();
+      if (shopNet.peer) shopNet.peer.destroy();
+      shopNet.peer = null;
+      shopNet.conn = null;
+      shopNet.connected = false;
+    }
+    function shopPeerId(room) { return `mgm-shop-${room.toLowerCase()}`; }
+    function createShopRoom() {
+      if (!window.Peer) {
+        shopRoomStatus.textContent = "Online shop could not load. Refresh and try again.";
+        return;
+      }
+      const code = Math.random().toString(36).slice(2, 6).toUpperCase();
+      shopRoomCode.value = code;
+      cleanupShopPeer();
+      shopNet.role = "host";
+      shopNet.room = code;
+      shopRoomStatus.textContent = `Creating shop ${code}...`;
+      shopNet.peer = new Peer(shopPeerId(code), peerOptions);
+      shopNet.peer.on("open", () => shopRoomStatus.textContent = `Shop ${code} open. Friend can join.`);
+      shopNet.peer.on("connection", conn => setupShopConnection(conn));
+      shopNet.peer.on("error", err => shopRoomStatus.textContent = `Shop error: ${err.type || "connection failed"}.`);
+    }
+    function joinShopRoom() {
+      if (!window.Peer) {
+        shopRoomStatus.textContent = "Online shop could not load. Refresh and try again.";
+        return;
+      }
+      const code = shopRoomCode.value.trim().toUpperCase();
+      if (!code) {
+        shopRoomStatus.textContent = "Type a shop code first.";
+        return;
+      }
+      cleanupShopPeer();
+      shopNet.role = "guest";
+      shopNet.room = code;
+      shopRoomStatus.textContent = `Joining shop ${code}...`;
+      shopNet.peer = new Peer(undefined, peerOptions);
+      shopNet.peer.on("open", () => setupShopConnection(shopNet.peer.connect(shopPeerId(code), { reliable: true })));
+      shopNet.peer.on("error", err => shopRoomStatus.textContent = `Join failed: ${err.type || "connection failed"}.`);
+    }
+    function setupShopConnection(conn) {
+      shopNet.conn = conn;
+      conn.on("open", () => {
+        shopNet.connected = true;
+        shopRoomStatus.textContent = shopNet.role === "host" ? `Friend joined shop ${shopNet.room}.` : `Joined shop ${shopNet.room}.`;
+        if (shopNet.role === "host") sendShopListings();
+      });
+      conn.on("data", handleShopData);
+      conn.on("close", () => {
+        shopNet.connected = false;
+        shopRoomStatus.textContent = "Shop friend disconnected.";
+      });
+    }
+    function sendShop(message) {
+      if (shopNet.conn && shopNet.conn.open) shopNet.conn.send(message);
+    }
+    function sendShopListings() {
+      if (shopNet.role !== "host") return;
+      sendShop({ type: "listings", listings: normalizeListings(save.marketListings) });
+    }
+    function handleShopData(message) {
+      if (!message || !message.type) return;
+      if (message.type === "listings") {
+        shopNet.remoteListings = Array.isArray(message.listings) ? message.listings : [];
+        renderMarket();
+      }
+      if (message.type === "buy" && shopNet.role === "host") completeShopSale(message.key);
+      if (message.type === "saleComplete" && shopNet.role === "guest") {
+        save.coins = Math.max(0, save.coins - message.price);
+        addItemByKey(message.key, 1);
+        shopRoomStatus.textContent = `Bought ${itemLabel(parseItemKey(message.key))}.`;
+      }
+      if (message.type === "saleFailed") shopRoomStatus.textContent = message.reason || "Sale failed.";
+    }
+    function buyRemoteListing(key) {
+      const listing = shopNet.remoteListings.find(item => item.key === key);
+      if (!listing) return;
+      const price = itemPrice(parseItemKey(key));
+      if (save.coins < price) {
+        shopRoomStatus.textContent = "Not enough coins.";
+        return;
+      }
+      if (alreadyOwnsTradeItem(key)) {
+        shopRoomStatus.textContent = "You already own that item.";
+        return;
+      }
+      sendShop({ type: "buy", key });
+    }
+    function completeShopSale(key) {
+      const listing = save.marketListings.find(item => item.key === key);
+      if (!listing) {
+        sendShop({ type: "saleFailed", reason: "Item is no longer listed." });
+        return;
+      }
+      const price = itemPrice(parseItemKey(key));
+      if (!removeItemByKey(key, 1)) {
+        sendShop({ type: "saleFailed", reason: "Seller no longer has that item." });
+        return;
+      }
+      save.coins += price;
+      save.marketListings = save.marketListings.filter(item => item.key !== key);
+      saveGame();
+      sendShop({ type: "saleComplete", key, price });
+      sendShopListings();
+      shopRoomStatus.textContent = `Sold ${itemLabel(parseItemKey(key))} to friend.`;
     }
 
     function resetGame() {
@@ -2286,12 +3478,31 @@
 
     document.getElementById("startButton").addEventListener("click", resetGame);
     document.getElementById("open2DBallButton").addEventListener("click", open2DBallMenu);
+    document.getElementById("openFishingButton").addEventListener("click", openFishingHome);
+    document.getElementById("openMarketButton").addEventListener("click", openMarketHome);
     document.getElementById("playAgainButton").addEventListener("click", resetGame);
     document.getElementById("backToLobbyButton").addEventListener("click", backToLobby);
     document.getElementById("openShopButton").addEventListener("click", () => { renderShop(); bigShop.classList.remove("hidden"); });
     document.getElementById("closeShopButton").addEventListener("click", () => bigShop.classList.add("hidden"));
     document.getElementById("openInventoryButton").addEventListener("click", () => { renderShop(); bigInventory.classList.remove("hidden"); });
     document.getElementById("closeInventoryButton").addEventListener("click", () => bigInventory.classList.add("hidden"));
+    document.getElementById("closeSharedInventoryButton").addEventListener("click", () => sharedInventoryModal.classList.add("hidden"));
+    document.getElementById("fishingBackButton").addEventListener("click", openMinigamesSelector);
+    document.getElementById("fishingMenuButton").addEventListener("click", openMinigamesSelector);
+    document.getElementById("openFishingShopButton").addEventListener("click", openFishingShop);
+    document.getElementById("startFishingButton").addEventListener("click", openFishingPlay);
+    document.getElementById("exitFishingPlayButton").addEventListener("click", openFishingHome);
+    document.getElementById("fishingInventoryButton").addEventListener("click", () => openSharedInventory("fishing"));
+    document.getElementById("fishActionButton").addEventListener("click", startFishingAttempt);
+    document.getElementById("fishingShopBackButton").addEventListener("click", openFishingHome);
+    document.getElementById("fishingShopMenuButton").addEventListener("click", openMinigamesSelector);
+    document.getElementById("marketBackButton").addEventListener("click", openMinigamesSelector);
+    document.getElementById("marketInventoryButton").addEventListener("click", () => openSharedInventory("all"));
+    document.getElementById("createShopRoomButton").addEventListener("click", createShopRoom);
+    document.getElementById("joinShopRoomButton").addEventListener("click", joinShopRoom);
+    document.getElementById("addListingButton").addEventListener("click", chooseListing);
+    document.getElementById("npcSellButton").addEventListener("click", sellSelectedNpc);
+    shopRoomCode.addEventListener("keydown", event => { if (event.key === "Enter") joinShopRoom(); });
     document.getElementById("createRoomButton").addEventListener("click", () => {
       const code = Math.random().toString(36).slice(2, 6).toUpperCase();
       roomCodeEl.value = code;
@@ -2341,6 +3552,10 @@
     if (location.hash === "#playtest") setTimeout(resetGame, 80);
     if (location.hash === "#shop") setTimeout(() => bigShop.classList.remove("hidden"), 80);
     if (location.hash === "#inventory") setTimeout(() => bigInventory.classList.remove("hidden"), 80);
+    if (location.hash === "#fishing") setTimeout(openFishingHome, 80);
+    if (location.hash === "#fishing-shop") setTimeout(openFishingShop, 80);
+    if (location.hash === "#fishing-play") setTimeout(openFishingPlay, 80);
+    if (location.hash === "#market") setTimeout(openMarketHome, 80);
     requestAnimationFrame(loop);
   </script>
 </body>
