@@ -781,8 +781,8 @@
       inset: 0;
       z-index: 28;
       overflow: hidden;
-      background: #fffaf0;
-      color: #17120f;
+      background: linear-gradient(180deg, #6ed9ff 0 56%, #19aee7 57% 100%);
+      color: #102033;
       font-family: "Comic Sans MS", "Trebuchet MS", Arial, sans-serif;
     }
     .cartoon-screen button,
@@ -790,8 +790,8 @@
     .cartoon-screen input {
       border: 4px solid #17120f;
       border-radius: 14px;
-      background: #fffaf0;
-      color: #17120f;
+      background: linear-gradient(180deg, #fffdf2, #ffe49a);
+      color: #102033;
       font: inherit;
       font-weight: 900;
       box-shadow: 0 5px 0 rgba(23,18,15,0.22);
@@ -819,7 +819,9 @@
       line-height: 0.9;
       font-weight: 500;
       letter-spacing: 0;
-      text-shadow: 0 5px 0 rgba(23,18,15,0.08);
+      color: #fff8dc;
+      -webkit-text-stroke: 4px #102033;
+      text-shadow: 0 7px 0 rgba(17,55,92,0.22), 0 0 24px rgba(255,255,255,0.55);
     }
     .cartoon-title::after {
       content: "";
@@ -837,7 +839,7 @@
       min-height: 54px;
       border: 4px solid #17120f;
       border-radius: 14px;
-      background: #fffaf0;
+      background: linear-gradient(180deg, #fffdf2, #ffd36a);
       font-size: 22px;
       font-weight: 900;
       box-shadow: 0 5px 0 rgba(23,18,15,0.22);
@@ -859,7 +861,8 @@
       height: 36px;
       border: 5px solid #17120f;
       border-radius: 999px;
-      background: #fffaf0;
+      background: linear-gradient(180deg, #ffffff, #dff8ff);
+      box-shadow: 0 7px 0 rgba(17,55,92,0.1);
     }
     .cloud::before, .cloud::after {
       content: "";
@@ -897,6 +900,27 @@
       border-bottom: 5px solid #17120f;
       border-radius: 50%;
     }
+    #fishingHome,
+    #fishingPlay {
+      background:
+        radial-gradient(circle at 12% 26%, #ffe76d 0 42px, rgba(255,231,109,0.34) 43px 75px, transparent 76px),
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,0.5), transparent 12rem),
+        linear-gradient(180deg, #55c9ff 0 48%, #b7f2ff 49% 64%, #21b9e8 65% 100%);
+    }
+    #fishingHome::before,
+    #fishingPlay::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 52%;
+      height: 16%;
+      background:
+        radial-gradient(ellipse at 12% 95%, #56d66f 0 18%, transparent 19%),
+        radial-gradient(ellipse at 91% 95%, #44c765 0 18%, transparent 19%);
+      opacity: 0.95;
+      pointer-events: none;
+    }
     .fish-home-sea,
     .fish-play-sea {
       position: absolute;
@@ -904,21 +928,29 @@
       right: 0;
       bottom: 0;
       height: 33%;
-      background: linear-gradient(180deg, #bdf1ff, #55c5f2);
+      background:
+        radial-gradient(ellipse at 12% 18%, rgba(255,255,255,0.48) 0 5%, transparent 6%),
+        radial-gradient(ellipse at 52% 38%, rgba(255,255,255,0.32) 0 6%, transparent 7%),
+        radial-gradient(ellipse at 85% 28%, rgba(255,255,255,0.32) 0 5%, transparent 6%),
+        repeating-linear-gradient(175deg, rgba(255,255,255,0.25) 0 8px, transparent 9px 44px),
+        linear-gradient(180deg, #24c7f0, #0987d1);
       border-top: 5px solid #17120f;
       z-index: 0;
     }
     .fish-shop-house {
-      left: 7%;
-      bottom: 26%;
-      width: 340px;
-      height: 240px;
+      left: 6%;
+      bottom: 31%;
+      width: 350px;
+      height: 230px;
       border: 6px solid #17120f;
-      background: #ffe7b3;
+      border-radius: 16px 16px 10px 10px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.28), transparent 20%),
+        repeating-linear-gradient(180deg, #ffe9a8 0 28px, #ffd176 29px 33px);
       cursor: pointer;
       pointer-events: auto;
-      box-shadow: 0 10px 0 rgba(23,18,15,0.18);
-      z-index: 2;
+      box-shadow: 0 12px 0 #9c6132, 0 24px 28px rgba(17,55,92,0.22);
+      z-index: 4;
     }
     .fish-shop-house::before {
       content: "";
@@ -928,7 +960,7 @@
       top: -72px;
       height: 72px;
       border: 6px solid #17120f;
-      background: repeating-linear-gradient(115deg, #ffcc74 0 34px, #fff4d8 35px 68px);
+      background: repeating-linear-gradient(115deg, #ff6b5d 0 34px, #ffd65c 35px 68px);
       clip-path: polygon(10% 100%, 50% 0, 90% 100%);
     }
     .fish-shop-house::after {
@@ -940,10 +972,12 @@
       padding: 12px 4px;
       border: 5px solid #17120f;
       border-radius: 8px;
-      background: #fffaf0;
+      background: linear-gradient(180deg, #ffffff, #c7f6ff);
       text-align: center;
       font-size: 26px;
       font-weight: 900;
+      color: #11528f;
+      text-shadow: 0 2px 0 #fff;
     }
     .shop-door {
       position: absolute;
@@ -952,57 +986,77 @@
       width: 78px;
       height: 100px;
       border: 5px solid #17120f;
-      background: #d99b60;
+      border-radius: 12px 12px 0 0;
+      background:
+        radial-gradient(circle at 75% 48%, #ffe76d 0 5px, #17120f 6px 8px, transparent 9px),
+        linear-gradient(180deg, #e88449, #a65731);
     }
     .dock {
       left: 0;
-      bottom: 23%;
-      width: 46%;
-      height: 50px;
+      bottom: 30%;
+      width: 48%;
+      height: 66px;
       border: 5px solid #17120f;
-      background: repeating-linear-gradient(90deg, #d49b62 0 72px, #f0c083 73px 80px);
+      border-left: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.25), transparent),
+        repeating-linear-gradient(90deg, #b8773d 0 62px, #f1b96d 63px 72px);
       box-shadow: 0 18px 0 rgba(23,18,15,0.16);
+      z-index: 3;
+    }
+    .dock::before {
+      content: "";
+      position: absolute;
+      left: 74px;
+      bottom: -88px;
+      width: 34px;
+      height: 88px;
+      border: 5px solid #17120f;
+      border-top: 0;
+      background: linear-gradient(180deg, #8c5228, #5a321a);
+      box-shadow:
+        118px 0 0 #70411f,
+        236px 0 0 #70411f,
+        354px 0 0 #70411f,
+        472px 0 0 #70411f;
     }
     .boat {
-      right: 23%;
-      bottom: 25%;
-      width: 340px;
-      height: 126px;
+      right: 22%;
+      bottom: 30%;
+      width: 370px;
+      height: 150px;
       cursor: pointer;
       pointer-events: auto;
-      z-index: 2;
+      z-index: 4;
+      min-height: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      filter: drop-shadow(0 12px 0 rgba(17,55,92,0.18));
     }
-    .boat::before {
-      content: "";
+    .boat::before,
+    .boat::after { content: none; }
+    .boat svg {
       position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 78px;
-      border: 6px solid #17120f;
-      border-radius: 12px 12px 90px 90px;
-      background: #fffaf0;
-      box-shadow: inset 0 -18px 0 #f0c083;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 8px 0 rgba(17,55,92,0.18));
     }
-    .boat::after {
-      content: "";
-      position: absolute;
-      left: 86px;
-      top: 0;
-      width: 112px;
-      height: 82px;
-      border: 6px solid #17120f;
-      background: #fffaf0;
-      clip-path: polygon(15% 100%, 28% 0, 88% 0, 100% 100%);
-    }
+    .boat-outline { stroke: #17120f; stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; }
     .tap-note {
       position: absolute;
-      right: 26%;
-      bottom: 48%;
+      right: 27%;
+      bottom: 55%;
       font-size: 32px;
       font-weight: 900;
       text-align: center;
-      z-index: 3;
+      color: #fff7ca;
+      -webkit-text-stroke: 2px #102033;
+      text-shadow: 0 4px 0 rgba(17,55,92,0.2);
+      z-index: 5;
     }
     .lighthouse {
       right: 7%;
@@ -1010,9 +1064,9 @@
       width: 70px;
       height: 170px;
       border: 5px solid #17120f;
-      background: repeating-linear-gradient(180deg, #fffaf0 0 34px, #ff7d7d 35px 54px);
+      background: repeating-linear-gradient(180deg, #fffdf2 0 34px, #ff5f72 35px 54px);
       clip-path: polygon(25% 100%, 75% 100%, 64% 0, 36% 0);
-      z-index: 1;
+      z-index: 3;
     }
     .lighthouse::before {
       content: "";
@@ -1027,6 +1081,96 @@
     .fishing-view, .fish-shop-view, .market-view {
       position: absolute;
       inset: 0;
+    }
+    .fish-shop-view {
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.48), transparent 15rem),
+        linear-gradient(180deg, #63cdfa 0 19%, #ffe39d 20% 61%, #d99453 62% 100%);
+    }
+    #marketShell {
+      background:
+        radial-gradient(circle at 12% 13%, rgba(255,255,255,0.45), transparent 13rem),
+        linear-gradient(180deg, #73d6ff 0 24%, #ffeab3 25% 67%, #d99453 68% 100%);
+    }
+    .fish-shop-view::before,
+    #marketShell::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 34%;
+      background:
+        repeating-linear-gradient(105deg, rgba(116,65,31,0.18) 0 3px, transparent 4px 96px),
+        repeating-linear-gradient(90deg, #d08a47 0 76px, #efb66c 77px 84px);
+      border-top: 5px solid #17120f;
+      pointer-events: none;
+    }
+    .shop-rod-rack {
+      position: absolute;
+      left: 7%;
+      top: 27%;
+      width: 260px;
+      height: 260px;
+      border: 6px solid #17120f;
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, #fff7d8, #ffd978);
+      box-shadow: 0 10px 0 rgba(23,18,15,0.2);
+      z-index: 2;
+    }
+    .shop-rod-rack::before {
+      content: "";
+      position: absolute;
+      left: 32px;
+      top: 32px;
+      width: 15px;
+      height: 200px;
+      border-radius: 999px;
+      background: #7b4a2d;
+      box-shadow:
+        42px 0 0 #167ac7,
+        84px 0 0 #673bdb,
+        126px 0 0 #ffcf38,
+        168px 0 0 #ef5f72;
+      transform: rotate(8deg);
+    }
+    .shop-rod-rack::after {
+      content: "RODS";
+      position: absolute;
+      left: 54px;
+      right: 54px;
+      bottom: 18px;
+      padding: 7px 0;
+      border: 4px solid #17120f;
+      border-radius: 10px;
+      background: #dff8ff;
+      color: #11528f;
+      text-align: center;
+      font-weight: 1000;
+    }
+    .shop-window {
+      position: absolute;
+      left: 35%;
+      top: 24%;
+      width: 210px;
+      height: 130px;
+      border: 6px solid #17120f;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 24% 35%, #ffe76d 0 28px, transparent 29px),
+        linear-gradient(180deg, #8be8ff 0 56%, #3cc971 57% 100%);
+      box-shadow: inset 0 0 0 8px rgba(255,255,255,0.38), 0 10px 0 rgba(23,18,15,0.18);
+      z-index: 1;
+    }
+    .shop-window::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 6px;
+      background: #17120f;
     }
     .fish-play-sea { height: 38%; }
     .play-boat {
@@ -1077,6 +1221,90 @@
       background: #fffaf0 !important;
       font-size: 26px;
     }
+    .fish-action.waiting {
+      background: linear-gradient(180deg, #dff8ff, #83dfff) !important;
+      color: #11528f;
+    }
+    .fish-action.bite {
+      background: linear-gradient(180deg, #ffef70, #ff7b5a) !important;
+      color: #102033;
+      animation: bitePulse 0.45s ease-in-out infinite alternate;
+    }
+    .fish-action.reeling {
+      background: linear-gradient(180deg, #a9ffb8, #3bd66f) !important;
+      color: #102033;
+    }
+    .cast-line {
+      position: absolute;
+      left: 51%;
+      top: 49%;
+      width: 34%;
+      height: 23%;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0;
+      transform-origin: left top;
+    }
+    .cast-line.active { opacity: 1; }
+    .cast-line::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-right: 5px solid #102033;
+      border-bottom: 5px solid #102033;
+      border-radius: 0 0 95% 0;
+      transform: skewX(-10deg);
+    }
+    .bobber {
+      position: absolute;
+      right: -18px;
+      bottom: -20px;
+      width: 42px;
+      height: 42px;
+      border: 5px solid #17120f;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ff5f72 0 48%, #fffdf2 49% 100%);
+      box-shadow: 0 9px 0 rgba(17,55,92,0.14);
+      animation: bobberFloat 0.9s ease-in-out infinite alternate;
+    }
+    .bite-splash {
+      position: absolute;
+      right: -40px;
+      bottom: -36px;
+      width: 90px;
+      height: 44px;
+      border: 5px solid rgba(255,255,255,0.78);
+      border-left: 0;
+      border-right: 0;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0.7);
+    }
+    .cast-line.bite .bobber {
+      animation: biteBob 0.16s ease-in-out infinite alternate;
+    }
+    .cast-line.reeling::before {
+      border-right-width: 7px;
+      border-bottom-width: 7px;
+      border-color: #0b315f;
+      animation: lineTug 0.18s ease-in-out infinite alternate;
+    }
+    .cast-line.reeling .bobber {
+      background: linear-gradient(180deg, #ffe76d 0 48%, #ff5f72 49% 100%);
+      animation: biteBob 0.2s ease-in-out infinite alternate;
+    }
+    .cast-line.reeling .bite-splash {
+      opacity: 1;
+      border-color: rgba(255,255,255,0.9);
+      animation: splashPop 0.35s ease-in-out infinite alternate;
+    }
+    .cast-line.bite .bite-splash {
+      opacity: 1;
+      animation: splashPop 0.42s ease-in-out infinite alternate;
+    }
     .catch-panel {
       position: absolute;
       left: 50%;
@@ -1106,25 +1334,94 @@
       width: 0%;
       background: linear-gradient(90deg, #4bd66f, #ffe36e, #ff8f5a);
     }
+    @keyframes bobberFloat {
+      from { transform: translateY(-4px); }
+      to { transform: translateY(8px); }
+    }
+    @keyframes biteBob {
+      from { transform: translateY(-16px) rotate(-8deg); }
+      to { transform: translateY(14px) rotate(8deg); }
+    }
+    @keyframes splashPop {
+      from { transform: scale(0.65); opacity: 0.4; }
+      to { transform: scale(1.08); opacity: 1; }
+    }
+    @keyframes lineTug {
+      from { transform: skewX(-10deg) translateY(-4px); }
+      to { transform: skewX(-16deg) translateY(6px); }
+    }
+    @keyframes bitePulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
     .shop-counter {
-      left: 24%;
-      right: 30%;
-      top: 40%;
-      height: 150px;
+      left: 27%;
+      right: 28%;
+      top: 42%;
+      height: 165px;
       border: 6px solid #17120f;
-      background: repeating-linear-gradient(90deg, #e8b875 0 42px, #ffd697 43px 48px);
-      box-shadow: 0 10px 0 rgba(23,18,15,0.18);
+      border-radius: 12px 12px 0 0;
+      background:
+        radial-gradient(circle at 78% 29%, #fffdf2 0 30px, #17120f 31px 35px, transparent 36px),
+        linear-gradient(180deg, #fff1c0 0 27%, transparent 28%),
+        repeating-linear-gradient(90deg, #a85f32 0 46px, #f2b86f 47px 55px);
+      box-shadow: 0 12px 0 #70411f, 0 22px 0 rgba(23,18,15,0.18);
+      z-index: 2;
+    }
+    .shop-counter::before {
+      content: "WELCOME";
+      position: absolute;
+      left: 38%;
+      top: 55%;
+      transform: translate(-50%, -50%);
+      padding: 10px 18px;
+      border: 5px solid #17120f;
+      border-radius: 12px;
+      background: #dff8ff;
+      color: #11528f;
+      font-weight: 1000;
+    }
+    .shop-counter::after {
+      content: "";
+      position: absolute;
+      right: 42px;
+      top: -58px;
+      width: 120px;
+      height: 58px;
+      border: 5px solid #17120f;
+      border-radius: 10px 10px 0 0;
+      background:
+        linear-gradient(180deg, #e9fbff 0 35%, #55768e 36% 48%, #ff6f82 49% 100%);
     }
     .shop-shelves {
       right: 5%;
-      top: 20%;
+      top: 24%;
       width: 310px;
       height: 260px;
       border-top: 7px solid #17120f;
       border-bottom: 7px solid #17120f;
       background:
+        radial-gradient(circle at 20% 22%, #ff71a8 0 18px, #17120f 19px 23px, transparent 24px),
+        radial-gradient(circle at 52% 24%, #62e68a 0 18px, #17120f 19px 23px, transparent 24px),
+        radial-gradient(circle at 82% 23%, #ffd45c 0 18px, #17120f 19px 23px, transparent 24px),
+        radial-gradient(circle at 24% 72%, #35e4ff 0 18px, #17120f 19px 23px, transparent 24px),
+        radial-gradient(circle at 58% 72%, #a849ff 0 18px, #17120f 19px 23px, transparent 24px),
+        radial-gradient(circle at 86% 72%, #ff8a2a 0 18px, #17120f 19px 23px, transparent 24px),
         repeating-linear-gradient(90deg, transparent 0 70px, rgba(23,18,15,0.15) 71px 78px),
         linear-gradient(180deg, transparent 0 45%, #17120f 46% 49%, transparent 50%);
+      z-index: 2;
+    }
+    .shop-shelves::before {
+      content: "BAIT";
+      position: absolute;
+      left: 95px;
+      top: -46px;
+      padding: 6px 20px;
+      border: 5px solid #17120f;
+      border-radius: 10px;
+      background: #fffdf2;
+      color: #11528f;
+      font-weight: 1000;
     }
     .rod-grid, .market-grid {
       position: absolute;
@@ -1144,35 +1441,53 @@
       align-content: start;
       border: 5px solid #17120f;
       border-radius: 18px;
-      background: #fffaf0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%),
+        linear-gradient(180deg, #fff7d8, #ffd978);
       box-shadow: 0 8px 0 rgba(23,18,15,0.2);
     }
+    .rod-card:nth-child(2) { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #dff8ff, #64c8ff); }
+    .rod-card:nth-child(3) { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #e5dcff, #8e62ff); }
+    .rod-card:nth-child(4) { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), linear-gradient(180deg, #fff0a8, #ff9b35); }
+    .rod-card h3,
+    .rod-card p { margin: 0; color: #102033; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
     .rod-art {
-      height: 70px;
+      height: 86px;
       position: relative;
+      border: 4px solid #17120f;
+      border-radius: 14px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 78%, rgba(255,255,255,0.72) 0 16px, transparent 17px),
+        linear-gradient(180deg, #b9f0ff, #54c2ee);
     }
     .rod-art::before {
       content: "";
       position: absolute;
       left: 18px;
-      top: 42px;
-      width: 136px;
-      height: 8px;
+      top: 52px;
+      width: 150px;
+      height: 9px;
       border-radius: 999px;
-      background: #17120f;
+      background: linear-gradient(90deg, var(--rod-handle, #8b4a2f) 0 27%, var(--rod-main, #17120f) 28% 100%);
       transform: rotate(-28deg);
+      box-shadow: 0 4px 0 rgba(0,0,0,0.12);
     }
     .rod-art::after {
       content: "";
       position: absolute;
-      left: 134px;
-      top: 17px;
-      width: 44px;
-      height: 52px;
-      border-right: 4px solid #17120f;
-      border-bottom: 4px solid #17120f;
+      left: 136px;
+      top: 18px;
+      width: 54px;
+      height: 58px;
+      border-right: 5px solid var(--rod-line, #102033);
+      border-bottom: 5px solid var(--rod-line, #102033);
       border-radius: 0 0 60px 0;
     }
+    .rod-art.starter { --rod-main: #4a2d1c; --rod-handle: #c9844b; --rod-line: #102033; background: linear-gradient(180deg, #b9f0ff, #59c6ef); }
+    .rod-art.better { --rod-main: #177bc7; --rod-handle: #ffd45c; --rod-line: #0f5080; background: radial-gradient(circle at 76% 22%, #fff 0 8px, transparent 9px), linear-gradient(180deg, #b8fff0, #35b2ff); }
+    .rod-art.pro { --rod-main: #5a34dd; --rod-handle: #35e4ff; --rod-line: #321079; background: radial-gradient(circle at 74% 23%, #fff 0 8px, transparent 9px), linear-gradient(180deg, #ded5ff, #8b66ff); }
+    .rod-art.golden { --rod-main: #ffdf42; --rod-handle: #ff5f72; --rod-line: #7a3f00; background: radial-gradient(circle at 24% 28%, #fff 0 7px, transparent 8px), radial-gradient(circle at 82% 20%, #fff 0 10px, transparent 11px), linear-gradient(180deg, #fff5a8, #ff9b35); }
     .fish-sprite {
       width: 86px;
       height: 58px;
@@ -1301,7 +1616,20 @@
       <div class="bird" style="right:20%;top:36%;transform:scale(.72)"></div>
       <div class="dock"></div>
       <button id="openFishingShopButton" class="fish-shop-house" title="Fishing Shop"><span class="shop-door"></span></button>
-      <button id="startFishingButton" class="boat" title="Start Fishing"></button>
+      <button id="startFishingButton" class="boat" title="Start Fishing">
+        <svg viewBox="0 0 420 190" aria-hidden="true">
+          <ellipse cx="215" cy="168" rx="170" ry="18" fill="#0b78bf" opacity=".25"></ellipse>
+          <path class="boat-outline" d="M45 104h330c-16 47-58 72-126 72H156c-62 0-99-25-111-72z" fill="#fff5c7"></path>
+          <path d="M58 126h304c-13 23-46 36-103 36H153c-50 0-80-13-95-36z" fill="#ffbe55"></path>
+          <path d="M75 150h258c-20 16-49 24-88 24h-83c-40 0-70-8-87-24z" fill="#e96b43"></path>
+          <circle class="boat-outline" cx="126" cy="123" r="27" fill="#ffe76d"></circle>
+          <path class="boat-outline" d="M174 55h120l-9 78H164z" fill="#fff5c7"></path>
+          <path d="M205 62h48l-9 64h-49z" fill="#83e1ff"></path>
+          <path d="M165 132h121" stroke="#17120f" stroke-width="7" stroke-linecap="round"></path>
+          <path d="M298 58h48l12 49" stroke="#17120f" stroke-width="7" stroke-linecap="round" fill="none"></path>
+          <path d="M348 57l38 13-38 14z" fill="#ff5f72" stroke="#17120f" stroke-width="6" stroke-linejoin="round"></path>
+        </svg>
+      </button>
       <div class="tap-note">Tap boat<br>to start</div>
       <div class="lighthouse"></div>
       <div class="fish-home-sea"></div>
@@ -1324,17 +1652,29 @@
       <div class="bird" style="left:28%;top:37%"></div>
       <div class="bird" style="right:20%;top:43%;transform:scale(.75)"></div>
       <div class="fish-play-sea"></div>
-      <div class="boat play-boat"></div>
+      <div class="boat play-boat">
+        <svg viewBox="0 0 420 190" aria-hidden="true">
+          <ellipse cx="215" cy="168" rx="170" ry="18" fill="#0b78bf" opacity=".25"></ellipse>
+          <path class="boat-outline" d="M45 104h330c-16 47-58 72-126 72H156c-62 0-99-25-111-72z" fill="#fff5c7"></path>
+          <path d="M58 126h304c-13 23-46 36-103 36H153c-50 0-80-13-95-36z" fill="#ffbe55"></path>
+          <path d="M75 150h258c-20 16-49 24-88 24h-83c-40 0-70-8-87-24z" fill="#e96b43"></path>
+          <circle class="boat-outline" cx="126" cy="123" r="27" fill="#ffe76d"></circle>
+          <path class="boat-outline" d="M174 55h120l-9 78H164z" fill="#fff5c7"></path>
+          <path d="M205 62h48l-9 64h-49z" fill="#83e1ff"></path>
+          <path d="M165 132h121" stroke="#17120f" stroke-width="7" stroke-linecap="round"></path>
+        </svg>
+      </div>
+      <div id="castLine" class="cast-line"><span class="bobber"></span><span class="bite-splash"></span></div>
       <div class="stick-player"></div>
       <div id="catchPanel" class="catch-panel hidden">
         <div id="targetFishSprite" class="fish-sprite"></div>
         <strong id="targetFishName">Small Fish</strong>
-        <div>Time: <span id="fishTimerValue">5.0</span>s</div>
+        <div>Time: <span id="fishTimerValue">Ready</span></div>
         <div>Taps: <span id="fishTapValue">0</span>/<span id="fishTapNeedValue">10</span></div>
         <div class="tap-meter"><span id="tapMeterFill"></span></div>
-        <div id="fishResultText">Tap the FISH button fast!</div>
+        <div id="fishResultText">Cast your rod, wait for a bite, then tap fast!</div>
       </div>
-      <button id="fishActionButton" class="fish-action">Fish</button>
+      <button id="fishActionButton" class="fish-action">Cast</button>
     </section>
 
     <section id="fishingShopScreen" class="fish-shop-view hidden">
@@ -1344,6 +1684,8 @@
         <button id="fishingShopMenuButton" class="menu-square">=</button>
       </div>
       <h1 class="cartoon-title">Fishing Shop</h1>
+      <div class="shop-rod-rack"></div>
+      <div class="shop-window"></div>
       <div class="shop-counter"></div>
       <div class="shop-shelves"></div>
       <div id="rodGrid" class="rod-grid"></div>
@@ -1550,6 +1892,7 @@
     const fishTapNeedValue = document.getElementById("fishTapNeedValue");
     const tapMeterFill = document.getElementById("tapMeterFill");
     const fishResultText = document.getElementById("fishResultText");
+    const castLine = document.getElementById("castLine");
     const rodGrid = document.getElementById("rodGrid");
     const marketShell = document.getElementById("marketShell");
     const marketCoinsValue = document.getElementById("marketCoinsValue");
@@ -1613,7 +1956,8 @@
       { id: "golden_whale", name: "Golden Whale", rarity: "Legendary", taps: 78, price: 750, body: "#ffd75a", fin: "#b66f09", pattern: "whale" },
       { id: "dragonfish", name: "Dragonfish", rarity: "Legendary", taps: 85, price: 1000, body: "#7a45ff", fin: "#ff4f65", pattern: "dragon" },
       { id: "starfish_king", name: "Starfish King", rarity: "Legendary", taps: 92, price: 1250, body: "#ff9e49", fin: "#ffe36e", pattern: "star" },
-      { id: "cosmic_leviathan", name: "Cosmic Leviathan", rarity: "Mythic", taps: 110, price: 2500, body: "#24185f", fin: "#71f5ff", pattern: "cosmic" }
+      { id: "cosmic_leviathan", name: "Cosmic Leviathan", rarity: "Mythic", taps: 110, price: 2500, body: "#24185f", fin: "#71f5ff", pattern: "cosmic" },
+      { id: "endless", name: "Endless", rarity: "Mythic", taps: 125, price: 4000, body: "#05070d", fin: "#161c2b", pattern: "endless" }
     ];
     const rods = [
       { id: "starter", name: "Starter Rod", price: 0, tapReduction: 0, rareBoost: 0, sellPrice: 0 },
@@ -1707,7 +2051,7 @@
     const player = { id: "host", name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
     const bots = [];
     const ball = { x: 0, y: 0, vx: 0, vy: 0, r: 15, speed: 210, target: null, trail: [] };
-    const fishing = { active: false, target: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null };
+    const fishing = { phase: "idle", active: false, target: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null, biteTimer: null };
     const shopNet = { peer: null, conn: null, role: "solo", room: "", connected: false, remoteListings: [] };
     let lastTime = 0;
 
@@ -1840,6 +2184,8 @@
       infoModal.classList.add("hidden");
       resultScreen.classList.add("hidden");
       clearInterval(fishing.timer);
+      clearTimeout(fishing.biteTimer);
+      fishing.phase = "idle";
       fishing.active = false;
       state.running = false;
     }
@@ -1886,15 +2232,16 @@
         whale: `<path d="M20 23c10-17 28-10 33 4 15-13 28 0 19 13" fill="${body}" stroke="#17202a" stroke-width="4"/><path d="M20 40h58" stroke="#fff" stroke-width="5" opacity=".5"/>`,
         dragon: `<path d="M27 11l9 13 10-14 10 14 10-13" fill="none" stroke="#ffe36e" stroke-width="5"/><path d="M73 31l14-11-4 18z" fill="#ff4f65" stroke="#17202a" stroke-width="3"/>`,
         star: `<path d="M48 5l10 23 25 2-19 16 6 24-22-13-22 13 6-24-19-16 25-2z" fill="${body}" stroke="#17202a" stroke-width="4"/>`,
-        cosmic: `<circle cx="34" cy="23" r="3" fill="#fff"/><circle cx="52" cy="36" r="2" fill="#ffe36e"/><circle cx="65" cy="21" r="3" fill="#71f5ff"/><path d="M25 45c18 10 39 10 58-4" stroke="#ff8bd1" stroke-width="4" fill="none"/>`
+        cosmic: `<circle cx="34" cy="23" r="3" fill="#fff"/><circle cx="52" cy="36" r="2" fill="#ffe36e"/><circle cx="65" cy="21" r="3" fill="#71f5ff"/><path d="M25 45c18 10 39 10 58-4" stroke="#ff8bd1" stroke-width="4" fill="none"/>`,
+        endless: `<path d="M28 22c13 15 28 15 42 0M28 40c13-15 28-15 42 0" fill="none" stroke="#8af7ff" stroke-width="4" opacity=".95"/><circle cx="37" cy="31" r="3" fill="#fff"/><circle cx="51" cy="21" r="2" fill="#b88cff"/><circle cx="60" cy="40" r="2.5" fill="#8af7ff"/><path d="M23 31c13-13 29-13 42 0 7 7 14 7 22 0" fill="none" stroke="#5a33ff" stroke-width="3" opacity=".7"/>`
       }[fish.pattern] || "";
       const bodyShape = fish.pattern === "jelly"
         ? `<path d="M22 36c2-22 51-22 55 0v10H22z" fill="${body}" stroke="#17202a" stroke-width="4"/>`
         : fish.pattern === "star"
           ? extras
           : `<path d="M18 30c15-22 48-22 67 0-19 22-52 22-67 0z" fill="${body}" stroke="#17202a" stroke-width="4"/>`;
-      const tail = fish.pattern === "star" ? "" : `<path d="M18 30L3 15v30z" fill="${fin}" stroke="#17202a" stroke-width="4"/>`;
-      const finPath = fish.pattern === "star" ? "" : `<path d="M47 44l-12 14h28z" fill="${fin}" stroke="#17202a" stroke-width="3"/>`;
+      const tail = fish.pattern === "star" ? "" : `<path d="M18 30L3 15v30z" fill="${fin}" stroke="#17202a" stroke-width="4"/>${fish.pattern === "endless" ? `<path d="M18 30L3 15v30z" fill="none" stroke="#8af7ff" stroke-width="2" opacity=".8"/>` : ""}`;
+      const finPath = fish.pattern === "star" ? "" : `<path d="M47 44l-12 14h28z" fill="${fin}" stroke="#17202a" stroke-width="3"/>${fish.pattern === "endless" ? `<path d="M47 44l-12 14h28z" fill="none" stroke="#8af7ff" stroke-width="2" opacity=".8"/>` : ""}`;
       const eye = fish.pattern === "star" ? `<circle cx="49" cy="29" r="4" fill="#17202a"/>` : `<circle cx="68" cy="26" r="4" fill="#17202a"/><circle cx="69" cy="24" r="1.5" fill="#fff"/>`;
       return `<svg class="fish-sprite" viewBox="0 0 100 74" width="${size}" height="${Math.round(size * 0.67)}" aria-hidden="true">${tail}${bodyShape}${fish.pattern === "star" ? "" : extras}${finPath}${eye}</svg>`;
     }
@@ -2039,7 +2386,7 @@
       });
       save.ownedRods.forEach(id => {
         const rod = rodById[id];
-        if (rod) items.push({ key: `rod:${id}`, type: "rod", group: "fishing", id, name: rod.name, detail: save.equippedRod === id ? "Equipped rod" : `-${rod.tapReduction} taps`, count: 1, price: rod.sellPrice, visual: `<div class="rod-art"></div>` });
+        if (rod) items.push({ key: `rod:${id}`, type: "rod", group: "fishing", id, name: rod.name, detail: save.equippedRod === id ? "Equipped rod" : `-${rod.tapReduction} taps`, count: 1, price: rod.sellPrice, visual: `<div class="rod-art ${id}"></div>` });
       });
       save.owned.forEach(id => {
         const skin = skins.find(item => item.id === id);
@@ -2109,7 +2456,15 @@
       fishingPlay.classList.remove("hidden");
       fishingShopScreen.classList.add("hidden");
       catchPanel.classList.add("hidden");
+      clearTimeout(fishing.biteTimer);
+      clearInterval(fishing.timer);
+      fishing.phase = "idle";
       fishing.active = false;
+      fishing.target = null;
+      fishing.taps = 0;
+      fishing.timeLeft = 0;
+      fishActionButton.disabled = false;
+      updateFishingCastVisual();
       fishScoreValue.textContent = fishing.score;
       syncLobby();
     }
@@ -2139,16 +2494,55 @@
       return fishCatalog[0];
     }
     function startFishingAttempt() {
-      if (fishing.active) return tapFish();
+      if (fishing.phase === "idle") return castRod();
+      if (fishing.phase === "waiting") return;
+      if (fishing.phase === "bite") return hookFish();
+      if (fishing.phase === "reeling") return tapFish();
+      if (fishing.phase === "result") return castRod();
+    }
+    function castRod() {
+      clearTimeout(fishing.biteTimer);
+      clearInterval(fishing.timer);
       fishing.target = chooseFish();
       fishing.taps = 0;
       fishing.needed = fishTapNeed(fishing.target);
-      fishing.timeLeft = 5;
-      fishing.active = true;
+      fishing.timeLeft = 0;
+      fishing.phase = "waiting";
+      fishing.active = false;
       catchPanel.classList.remove("hidden");
+      targetFishSprite.innerHTML = `<svg class="fish-sprite" viewBox="0 0 100 74" width="112" height="74" aria-hidden="true"><path d="M45 8v40" stroke="#17202a" stroke-width="5" stroke-linecap="round"/><circle cx="45" cy="47" r="19" fill="#ff5f72" stroke="#17202a" stroke-width="5"/><path d="M26 47h38" stroke="#fffdf2" stroke-width="12"/></svg>`;
+      targetFishName.textContent = "Rod Cast";
+      fishTimerValue.textContent = "Waiting...";
+      fishTapValue.textContent = "0";
+      fishTapNeedValue.textContent = fishing.needed;
+      tapMeterFill.style.width = "0%";
+      fishResultText.textContent = "Wait for the bobber to jump...";
+      updateFishingCastVisual();
+      const rod = getRod();
+      const wait = Math.max(800, rand(1700, 3900) - rod.tapReduction * 45);
+      fishing.biteTimer = setTimeout(showFishBite, wait);
+    }
+    function showFishBite() {
+      if (fishing.phase !== "waiting") return;
+      fishing.phase = "bite";
+      fishing.active = true;
       targetFishSprite.innerHTML = fishSvg(fishing.target, 116);
+      targetFishName.textContent = "Fish on!";
+      fishTimerValue.textContent = "Fish on!";
+      fishTapValue.textContent = "0";
+      fishTapNeedValue.textContent = fishing.needed;
+      tapMeterFill.style.width = "12%";
+      fishResultText.textContent = "Click CATCH to hook it!";
+      updateFishingCastVisual();
+    }
+    function hookFish() {
+      if (fishing.phase !== "bite") return;
+      fishing.phase = "reeling";
+      fishing.active = true;
       targetFishName.textContent = `${fishing.target.name} (${fishing.target.rarity})`;
-      fishResultText.textContent = "Tap the FISH button fast!";
+      fishing.taps = 0;
+      fishing.timeLeft = 5;
+      fishResultText.textContent = "Tap fast before the fish escapes!";
       updateFishingPanel();
       clearInterval(fishing.timer);
       fishing.timer = setInterval(() => {
@@ -2156,31 +2550,55 @@
         updateFishingPanel();
         if (fishing.timeLeft <= 0) finishFishing(false);
       }, 100);
+      updateFishingCastVisual();
     }
     function tapFish() {
-      if (!fishing.active) return startFishingAttempt();
+      if (!fishing.active || fishing.phase !== "reeling") return startFishingAttempt();
       fishing.taps += 1;
       if (fishing.taps >= fishing.needed) finishFishing(true);
       else updateFishingPanel();
     }
     function updateFishingPanel() {
-      fishTimerValue.textContent = fishing.timeLeft.toFixed(1);
+      fishTimerValue.textContent = fishing.phase === "reeling" ? `${fishing.timeLeft.toFixed(1)}s` : fishing.phase === "result" ? "Caught!" : fishing.phase === "bite" ? "Fish on!" : "Ready";
       fishTapValue.textContent = fishing.taps;
       fishTapNeedValue.textContent = fishing.needed;
       tapMeterFill.style.width = `${clamp((fishing.taps / fishing.needed) * 100, 0, 100)}%`;
     }
+    function updateFishingCastVisual() {
+      castLine.classList.toggle("active", fishing.phase === "waiting" || fishing.phase === "bite" || fishing.phase === "reeling");
+      castLine.classList.toggle("bite", fishing.phase === "bite");
+      castLine.classList.toggle("reeling", fishing.phase === "reeling");
+      fishActionButton.classList.toggle("waiting", fishing.phase === "waiting");
+      fishActionButton.classList.toggle("bite", fishing.phase === "bite");
+      fishActionButton.classList.toggle("reeling", fishing.phase === "reeling" || fishing.phase === "result");
+      fishActionButton.disabled = fishing.phase === "waiting";
+      if (fishing.phase === "idle") fishActionButton.textContent = "Cast";
+      if (fishing.phase === "waiting") fishActionButton.textContent = "Wait...";
+      if (fishing.phase === "bite") fishActionButton.textContent = "Catch!";
+      if (fishing.phase === "reeling") fishActionButton.textContent = "Tap!";
+      if (fishing.phase === "result") fishActionButton.textContent = "Cast Again";
+    }
     function finishFishing(caught) {
       if (!fishing.active) return;
       clearInterval(fishing.timer);
+      clearTimeout(fishing.biteTimer);
       fishing.active = false;
+      fishing.phase = "result";
       if (caught) {
         addFish(fishing.target.id, 1);
         fishing.score += fishing.target.price;
         fishScoreValue.textContent = fishing.score;
+        fishTimerValue.textContent = "Caught!";
+        fishTapValue.textContent = fishing.needed;
+        fishTapNeedValue.textContent = fishing.needed;
+        tapMeterFill.style.width = "100%";
         fishResultText.textContent = `Caught ${fishing.target.name}! It went to inventory.`;
       } else {
+        fishTimerValue.textContent = "Escaped";
+        tapMeterFill.style.width = `${clamp((fishing.taps / fishing.needed) * 100, 0, 100)}%`;
         fishResultText.textContent = `${fishing.target.name} escaped!`;
       }
+      updateFishingCastVisual();
     }
     function renderRods() {
       if (!rodGrid) return;
@@ -2191,7 +2609,7 @@
         return `
           <div class="rod-card">
             <h3>${rod.name}</h3>
-            <div class="rod-art"></div>
+            <div class="rod-art ${rod.id}"></div>
             <p>${rod.tapReduction ? `${rod.tapReduction} fewer taps` : "Normal fishing"}</p>
             <p>${rareText}</p>
             <button data-rod="${rod.id}">${owned ? (equipped ? "Equipped" : "Equip") : `${rod.price} coins`}</button>
@@ -2279,7 +2697,7 @@
         const fish = item.type === "fish" ? fishById[item.id] : null;
         const skin = item.type === "skin" ? skins.find(s => s.id === item.id) : null;
         const ability = item.type === "ability" ? abilities.find(a => a.id === item.id) : null;
-        const visual = fish ? fishSvg(fish) : item.type === "rod" ? `<div class="rod-art"></div>` : item.type === "skin" ? `<div class="skin-preview" style="background:${skin?.color || "#35e4ff"};color:${skin?.color || "#35e4ff"}"></div>` : `<div class="skin-preview" style="display:grid;place-items:center;background:#123966;color:#dff8ff;border-radius:8px">${ability?.icon || "!"}</div>`;
+        const visual = fish ? fishSvg(fish) : item.type === "rod" ? `<div class="rod-art ${item.id}"></div>` : item.type === "skin" ? `<div class="skin-preview" style="background:${skin?.color || "#35e4ff"};color:${skin?.color || "#35e4ff"}"></div>` : `<div class="skin-preview" style="display:grid;place-items:center;background:#123966;color:#dff8ff;border-radius:8px">${ability?.icon || "!"}</div>`;
         return `
           <div class="market-card">
             ${visual}
