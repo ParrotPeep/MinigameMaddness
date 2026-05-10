@@ -1545,6 +1545,25 @@
       gap: 18px;
       z-index: 3;
     }
+    .rod-grid {
+      max-height: 48vh;
+      overflow: auto;
+      padding: 0 8px 8px;
+      align-items: start;
+    }
+    .shop-section-title {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 9px 16px;
+      border: 5px solid #17120f;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fffdf2, #ffe76d);
+      color: #102033;
+      font-size: 22px;
+      font-weight: 1000;
+      text-align: center;
+      box-shadow: 0 6px 0 rgba(23,18,15,0.18);
+    }
     .rod-card, .market-card {
       min-height: 190px;
       padding: 14px;
@@ -1561,8 +1580,63 @@
     .rod-card:nth-child(2) { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #dff8ff, #64c8ff); }
     .rod-card:nth-child(3) { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #e5dcff, #8e62ff); }
     .rod-card:nth-child(4) { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), linear-gradient(180deg, #fff0a8, #ff9b35); }
+    .rod-card.starter { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #fff7d8, #ffd978); }
+    .rod-card.better { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #dff8ff, #64c8ff); }
+    .rod-card.pro { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #e5dcff, #8e62ff); }
+    .rod-card.golden { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), linear-gradient(180deg, #fff0a8, #ff9b35); }
     .rod-card h3,
     .rod-card p { margin: 0; color: #102033; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
+    .bait-card {
+      min-height: 172px;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(255,255,255,0.7) 0 16px, transparent 17px),
+        linear-gradient(180deg, var(--bait-top, #fff7d8), var(--bait-bottom, #ffca68));
+    }
+    .bait-card.active {
+      outline: 6px solid #35e4ff;
+      box-shadow: 0 8px 0 rgba(23,18,15,0.2), 0 0 24px rgba(53,228,255,0.68);
+    }
+    .bait-art {
+      height: 74px;
+      position: relative;
+      border: 4px solid #17120f;
+      border-radius: 14px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.16) 36%, transparent 37%),
+        linear-gradient(180deg, var(--bait-top, #fff7d8), var(--bait-bottom, #ffca68));
+    }
+    .bait-art::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 12px;
+      width: 38px;
+      height: 38px;
+      transform: translateX(-50%) rotate(var(--bait-tilt, 0deg));
+      border: 4px solid #17120f;
+      border-radius: var(--bait-radius, 50%);
+      background: var(--bait-core, #ff71a8);
+      box-shadow:
+        -34px 12px 0 -13px var(--bait-dot, #fffdf2),
+        34px 10px 0 -13px var(--bait-dot, #fffdf2),
+        0 31px 0 -13px var(--bait-dot, #fffdf2);
+    }
+    .bait-art::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 11px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(23,18,15,0.28);
+    }
+    .bait-art.worm { --bait-top:#ffd7a3; --bait-bottom:#ff8b8b; --bait-core:#ff6578; --bait-dot:#ffe76d; --bait-radius:999px; --bait-tilt:-18deg; }
+    .bait-art.glowy { --bait-top:#b9fff2; --bait-bottom:#35b2ff; --bait-core:#35e4ff; --bait-dot:#fffdf2; }
+    .bait-art.golden { --bait-top:#fff4a2; --bait-bottom:#ff9b35; --bait-core:#ffd45c; --bait-dot:#ff5f72; --bait-radius:13px; --bait-tilt:12deg; }
+    .bait-art.rainbow { --bait-top:#ffe0f7; --bait-bottom:#84e6ff; --bait-core:linear-gradient(135deg,#ff5f72,#ffe76d,#62e68a,#35e4ff,#a849ff); --bait-dot:#fffdf2; }
+    .bait-art.chroma_crumb { --bait-top:#fff7b9; --bait-bottom:#b86cff; --bait-core:conic-gradient(#ff5f72,#ffe76d,#35e4ff,#b86cff,#ff5f72); --bait-dot:#071a2f; --bait-radius:10px; --bait-tilt:8deg; }
     .rod-art {
       height: 86px;
       position: relative;
@@ -1604,6 +1678,37 @@
       width: 86px;
       height: 58px;
       display: inline-block;
+    }
+    .bait-bar {
+      position: absolute;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      width: min(680px, calc(100vw - 36px));
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      z-index: 6;
+      pointer-events: auto;
+    }
+    .bait-pill {
+      min-height: 44px;
+      padding: 7px 12px;
+      border: 4px solid #17120f;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fffdf2, #b9f0ff);
+      color: #102033;
+      font-weight: 1000;
+      box-shadow: 0 4px 0 rgba(23,18,15,0.2);
+    }
+    .bait-pill.active {
+      background: linear-gradient(180deg, #ffe76d, #ff9b35);
+      color: #17120f;
+    }
+    .bait-pill:disabled {
+      opacity: 0.5;
+      cursor: default;
     }
     .inventory-toolbar {
       display: flex;
@@ -1788,6 +1893,7 @@
         <div id="fishResultText">Cast your rod, wait for a bite, then tap fast!</div>
       </div>
       <button id="fishActionButton" class="fish-action">Cast</button>
+      <div id="baitBar" class="bait-bar"></div>
     </section>
 
     <section id="fishingShopScreen" class="fish-shop-view hidden">
@@ -2026,6 +2132,7 @@
     const fishResultText = document.getElementById("fishResultText");
     const castLine = document.getElementById("castLine");
     const rodGrid = document.getElementById("rodGrid");
+    const baitBar = document.getElementById("baitBar");
     const marketShell = document.getElementById("marketShell");
     const marketCoinsValue = document.getElementById("marketCoinsValue");
     const marketGrid = document.getElementById("marketGrid");
@@ -2099,9 +2206,17 @@
       { id: "pro", name: "Pro Rod", price: 500, tapReduction: 15, rareBoost: 0.65, sellPrice: 375 },
       { id: "golden", name: "Golden Rod", price: 1500, tapReduction: 18, rareBoost: 1.35, sellPrice: 1125 }
     ];
+    const baits = [
+      { id: "worm", name: "Worm Bait", price: 25, rareBoost: 0.10, chromaBoost: 0, text: "+10% rare luck" },
+      { id: "glowy", name: "Glowy Bait", price: 75, rareBoost: 0.25, chromaBoost: 0, text: "+25% rare luck" },
+      { id: "golden", name: "Golden Bait", price: 200, rareBoost: 0.60, chromaBoost: 0, text: "+60% rare luck" },
+      { id: "rainbow", name: "Rainbow Bait", price: 600, rareBoost: 1.20, chromaBoost: 0, text: "+120% rare luck" },
+      { id: "chroma_crumb", name: "Chroma Crumb", price: 1500, rareBoost: 0, chromaBoost: 3, text: "Chroma luck x4" }
+    ];
     const rarityWeights = { Common: 58, Uncommon: 26, Rare: 11, Epic: 4, Legendary: 1, Mythic: 0.2, Chroma: 0.08 };
     const fishById = Object.fromEntries(fishCatalog.map(fish => [fish.id, fish]));
     const rodById = Object.fromEntries(rods.map(rod => [rod.id, rod]));
+    const baitById = Object.fromEntries(baits.map(bait => [bait.id, bait]));
     const arenaMaps = [
       {
         id: "neon",
@@ -2165,6 +2280,8 @@
       giftCoins: 0,
       ownedRods: ["starter"],
       equippedRod: "starter",
+      baits: {},
+      equippedBait: "none",
       marketListings: []
     };
     const save = loadSave();
@@ -2186,7 +2303,7 @@
     const player = { id: "host", name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
     const bots = [];
     const ball = { x: 0, y: 0, vx: 0, vy: 0, r: 15, speed: 210, target: null, trail: [] };
-    const fishing = { phase: "idle", active: false, target: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null, biteTimer: null };
+    const fishing = { phase: "idle", active: false, target: null, bait: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null, biteTimer: null };
     const shopNet = { peer: null, conn: null, role: "solo", room: "", connected: false, remoteListings: [] };
     let lastTime = 0;
 
@@ -2217,6 +2334,13 @@
     function cleanFishStacks(rawFish = {}) {
       const validIds = fishCatalog.map(fish => fish.id);
       return Object.fromEntries(Object.entries(rawFish || {})
+        .filter(([id]) => validIds.includes(id))
+        .map(([id, count]) => [id, cleanNumber(count, 0)])
+        .filter(([, count]) => count > 0));
+    }
+    function cleanBaitStacks(rawBaits = {}) {
+      const validIds = baits.map(bait => bait.id);
+      return Object.fromEntries(Object.entries(rawBaits || {})
         .filter(([id]) => validIds.includes(id))
         .map(([id, count]) => [id, cleanNumber(count, 0)])
         .filter(([, count]) => count > 0));
@@ -2255,11 +2379,13 @@
         unlockedAbilities: uniqueValidIds(raw.unlockedAbilities, validAbilityIds, "dash"),
         ownedRods: uniqueValidIds(raw.ownedRods, validRodIds, "starter"),
         fish: cleanFishStacks(raw.fish),
+        baits: cleanBaitStacks(raw.baits),
         marketListings: Array.isArray(raw.marketListings) ? raw.marketListings : []
       };
       if (!normalized.owned.includes(raw.equipped)) normalized.equipped = "aqua";
       if (!normalized.unlockedAbilities.includes(raw.ability)) normalized.ability = "dash";
       if (!normalized.ownedRods.includes(raw.equippedRod)) normalized.equippedRod = "starter";
+      if (!baitById[raw.equippedBait] || !normalized.baits[raw.equippedBait]) normalized.equippedBait = "none";
       normalized.marketListings = normalizeListingsForSave(normalized.marketListings, normalized);
       return normalized;
     }
@@ -2305,6 +2431,7 @@
       renderAbilities();
       renderShop();
       renderRods();
+      renderBaitBar();
       renderMarket();
       applyEquippedSkin();
     }
@@ -2411,6 +2538,65 @@
     }
     function fishTapNeed(fish) {
       return Math.max(3, fish.taps - getRod().tapReduction);
+    }
+    function baitArt(id) {
+      return `<div class="bait-art ${id}"></div>`;
+    }
+    function getEquippedBait() {
+      const bait = baitById[save.equippedBait];
+      return bait && cleanNumber(save.baits[bait.id], 0) > 0 ? bait : null;
+    }
+    function buyBait(id) {
+      const bait = baitById[id];
+      if (!bait || save.coins < bait.price) return;
+      save.coins -= bait.price;
+      save.baits[id] = cleanNumber(save.baits[id], 0) + 1;
+      save.equippedBait = id;
+      saveGame();
+    }
+    function equipBait(id) {
+      if (id === "none") {
+        save.equippedBait = "none";
+        saveGame();
+        return;
+      }
+      if (!baitById[id] || cleanNumber(save.baits[id], 0) <= 0) return;
+      save.equippedBait = id;
+      saveGame();
+    }
+    function consumeEquippedBait() {
+      const bait = getEquippedBait();
+      if (!bait) {
+        save.equippedBait = "none";
+        return null;
+      }
+      save.baits[bait.id] -= 1;
+      if (save.baits[bait.id] <= 0) {
+        delete save.baits[bait.id];
+        save.equippedBait = "none";
+      }
+      saveGame();
+      return bait;
+    }
+    function baitBoostForFish(fish, bait) {
+      if (!bait) return 1;
+      if (bait.chromaBoost && fish.rarity === "Chroma") return 1 + bait.chromaBoost;
+      if (bait.rareBoost && fish.rarity !== "Common") return 1 + bait.rareBoost;
+      return 1;
+    }
+    function renderBaitBar() {
+      if (!baitBar) return;
+      const equipped = getEquippedBait();
+      baitBar.innerHTML = `
+        <button class="bait-pill ${!equipped ? "active" : ""}" data-bait-equip="none">No Bait</button>
+        ${baits.map(bait => {
+          const count = cleanNumber(save.baits[bait.id], 0);
+          return `<button class="bait-pill ${equipped?.id === bait.id ? "active" : ""}" data-bait-equip="${bait.id}" ${count > 0 ? "" : "disabled"}>${bait.name} x${count}</button>`;
+        }).join("")}
+      `;
+      baitBar.querySelectorAll("[data-bait-equip]").forEach(button => {
+        button.addEventListener("click", () => equipBait(button.dataset.baitEquip));
+      });
     }
     function addFish(id, count = 1) {
       save.fish[id] = cleanNumber(save.fish[id], 0) + count;
@@ -2588,6 +2774,10 @@
         const rod = rodById[id];
         if (rod) items.push({ key: `rod:${id}`, type: "rod", group: "fishing", id, name: rod.name, detail: save.equippedRod === id ? "Equipped rod" : `-${rod.tapReduction} taps`, count: 1, price: rod.sellPrice, visual: `<div class="rod-art ${id}"></div>` });
       });
+      Object.entries(save.baits || {}).forEach(([id, count]) => {
+        const bait = baitById[id];
+        if (bait) items.push({ key: `bait:${id}`, type: "bait", group: "fishing", id, name: bait.name, detail: `${bait.text} x${count}`, count, price: 0, visual: baitArt(id) });
+      });
       if (save.giftCoins > 0) {
         items.push({ key: "gift:coin_1000", type: "gift", group: "fishing", id: "coin_1000", name: "1000 Coin Gift", detail: `Gift x${save.giftCoins}`, count: save.giftCoins, price: 0, visual: `<div class="gift-coin-art"></div>` });
       }
@@ -2613,6 +2803,7 @@
             <option value="fishing">Fishing</option>
             <option value="fish">Fish</option>
             <option value="rod">Rods</option>
+            <option value="bait">Baits</option>
             <option value="2dball">2D Ball</option>
             <option value="skin">Skins</option>
             <option value="ability">Abilities</option>
@@ -2624,10 +2815,11 @@
             ${item.visual}
             <h3>${item.name}</h3>
             <p>${item.detail}</p>
-            <p>Sell: ${item.price || 0} coins</p>
+            <p>${item.type === "bait" ? "Use while fishing" : `Sell: ${item.price || 0} coins`}</p>
             ${item.type === "skin" ? `<button class="small-button" data-equip-skin="${item.id}">${save.equipped === item.id ? "Equipped" : "Equip"}</button>` : ""}
             ${item.type === "ability" ? `<button class="small-button" data-equip-ability="${item.id}">${save.ability === item.id ? "Equipped" : "Equip"}</button>` : ""}
             ${item.type === "rod" ? `<button class="small-button" data-equip-rod="${item.id}">${save.equippedRod === item.id ? "Equipped" : "Equip"}</button>` : ""}
+            ${item.type === "bait" ? `<button class="small-button" data-equip-inventory-bait="${item.id}">${save.equippedBait === item.id ? "Selected" : "Use Next"}</button>` : ""}
             ${item.type === "fish" ? `<button class="small-button" data-sell-fish="${item.id}">Sell One</button>` : ""}
           </div>
         `).join("") : `<p class="result-text" style="grid-column:1/-1">No items in this filter yet.</p>`}
@@ -2638,6 +2830,7 @@
       target.querySelectorAll("[data-equip-skin]").forEach(button => button.addEventListener("click", () => { save.equipped = button.dataset.equipSkin; saveGame(); renderSharedInventory(filter, target); }));
       target.querySelectorAll("[data-equip-ability]").forEach(button => button.addEventListener("click", () => { save.ability = button.dataset.equipAbility; saveGame(); renderSharedInventory(filter, target); }));
       target.querySelectorAll("[data-equip-rod]").forEach(button => button.addEventListener("click", () => { save.equippedRod = button.dataset.equipRod; saveGame(); renderSharedInventory(filter, target); }));
+      target.querySelectorAll("[data-equip-inventory-bait]").forEach(button => button.addEventListener("click", () => { equipBait(button.dataset.equipInventoryBait); renderSharedInventory(filter, target); }));
       target.querySelectorAll("[data-sell-fish]").forEach(button => button.addEventListener("click", () => { sellItemToNpc(`fish:${button.dataset.sellFish}`, 1); renderSharedInventory(filter, target); }));
     }
     function openSharedInventory(filter = "all") {
@@ -2664,10 +2857,12 @@
       fishing.phase = "idle";
       fishing.active = false;
       fishing.target = null;
+      fishing.bait = null;
       fishing.taps = 0;
       fishing.timeLeft = 0;
       fishActionButton.disabled = false;
       updateFishingCastVisual();
+      renderBaitBar();
       fishScoreValue.textContent = fishing.score;
       syncLobby();
     }
@@ -2680,13 +2875,13 @@
       renderRods();
       syncLobby();
     }
-    function chooseFish() {
+    function chooseFish(bait = null) {
       const rod = getRod();
       const weighted = fishCatalog.map(fish => {
         const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma"].indexOf(fish.rarity);
         const boost = 1 + rod.rareBoost * Math.max(0, rarityIndex);
         const commonNerf = fish.rarity === "Common" ? Math.max(0.35, 1 - rod.rareBoost * 0.25) : 1;
-        return { fish, weight: (rarityWeights[fish.rarity] || 0) * boost * commonNerf };
+        return { fish, weight: (rarityWeights[fish.rarity] || 0) * boost * commonNerf * baitBoostForFish(fish, bait) };
       });
       const total = weighted.reduce((sum, item) => sum + item.weight, 0);
       let roll = Math.random() * total;
@@ -2706,7 +2901,10 @@
     function castRod() {
       clearTimeout(fishing.biteTimer);
       clearInterval(fishing.timer);
-      fishing.target = chooseFish();
+      const bait = getEquippedBait();
+      fishing.target = chooseFish(bait);
+      fishing.bait = bait;
+      if (bait) consumeEquippedBait();
       fishing.taps = 0;
       fishing.needed = fishTapNeed(fishing.target);
       fishing.timeLeft = 0;
@@ -2720,7 +2918,7 @@
       fishTapValue.textContent = "0";
       fishTapNeedValue.textContent = fishing.needed;
       tapMeterFill.style.width = "0%";
-      fishResultText.textContent = "Wait for the bobber to jump...";
+      fishResultText.textContent = bait ? `${bait.name} used. Wait for the bobber to jump...` : "Wait for the bobber to jump...";
       updateFishingCastVisual();
       const rod = getRod();
       const wait = Math.max(800, rand(1700, 3900) - rod.tapReduction * 45);
@@ -2809,12 +3007,12 @@
     }
     function renderRods() {
       if (!rodGrid) return;
-      rodGrid.innerHTML = rods.map(rod => {
+      const rodCards = rods.map(rod => {
         const owned = save.ownedRods.includes(rod.id);
         const equipped = save.equippedRod === rod.id;
         const rareText = rod.rareBoost > 0 ? `+${Math.round(rod.rareBoost * 100)}% rare luck` : "Normal luck";
         return `
-          <div class="rod-card">
+          <div class="rod-card ${rod.id}">
             <h3>${rod.name}</h3>
             <div class="rod-art ${rod.id}"></div>
             <p>${rod.tapReduction ? `${rod.tapReduction} fewer taps` : "Normal fishing"}</p>
@@ -2823,6 +3021,26 @@
           </div>
         `;
       }).join("");
+      const baitCards = baits.map(bait => {
+        const count = cleanNumber(save.baits[bait.id], 0);
+        const equipped = save.equippedBait === bait.id && count > 0;
+        return `
+          <div class="rod-card bait-card ${equipped ? "active" : ""}" style="--bait-top:${bait.id === "worm" ? "#ffd7a3" : bait.id === "glowy" ? "#b9fff2" : bait.id === "golden" ? "#fff4a2" : bait.id === "rainbow" ? "#ffe0f7" : "#fff7b9"};--bait-bottom:${bait.id === "worm" ? "#ff8b8b" : bait.id === "glowy" ? "#35b2ff" : bait.id === "golden" ? "#ff9b35" : bait.id === "rainbow" ? "#84e6ff" : "#b86cff"}">
+            <h3>${bait.name}</h3>
+            ${baitArt(bait.id)}
+            <p>${bait.text}</p>
+            <p>Owned: ${count}</p>
+            <button data-bait="${bait.id}">${save.coins >= bait.price ? `Buy ${bait.price}` : `${bait.price} coins`}</button>
+            ${count > 0 ? `<button class="small-button" data-equip-bait="${bait.id}">${equipped ? "Selected" : "Use Next"}</button>` : ""}
+          </div>
+        `;
+      }).join("");
+      rodGrid.innerHTML = `
+        <h2 class="shop-section-title">Fishing Rods</h2>
+        ${rodCards}
+        <h2 class="shop-section-title">Baits</h2>
+        ${baitCards}
+      `;
       rodGrid.querySelectorAll("[data-rod]").forEach(button => button.addEventListener("click", () => {
         const rod = rodById[button.dataset.rod];
         if (save.ownedRods.includes(rod.id)) {
@@ -2836,6 +3054,8 @@
         save.equippedRod = rod.id;
         saveGame();
       }));
+      rodGrid.querySelectorAll("[data-bait]").forEach(button => button.addEventListener("click", () => buyBait(button.dataset.bait)));
+      rodGrid.querySelectorAll("[data-equip-bait]").forEach(button => button.addEventListener("click", () => equipBait(button.dataset.equipBait)));
     }
     function removeItemByKey(key, qty = 1) {
       const item = parseItemKey(key);
