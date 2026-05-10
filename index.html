@@ -848,7 +848,17 @@
       border-color: #ffe76d;
       box-shadow: 0 5px 0 #06101d, 0 0 22px rgba(255,231,109,0.45);
     }
+    .cheat-fish-card.chroma {
+      background:
+        radial-gradient(circle at 28% 14%, rgba(255,247,185,0.7), transparent 4.8rem),
+        conic-gradient(from 20deg at 50% 42%, #ff5f72, #ffe76d, #35e4ff, #b86cff, #ff5f72);
+      border-color: #fff7b9;
+      color: #071a2f;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+      box-shadow: 0 5px 0 #06101d, 0 0 28px rgba(255,231,109,0.65);
+    }
     .cheat-fish-card small { color: #b9d8ff; font-weight: 900; }
+    .cheat-fish-card.chroma small { color: #071a2f; }
     .gift-coin-art {
       width: 74px;
       height: 74px;
@@ -1410,6 +1420,18 @@
       background: rgba(255,250,240,0.94);
       box-shadow: 0 10px 0 rgba(23,18,15,0.18);
     }
+    .fish-subtitle {
+      margin-top: -7px;
+      padding: 3px 12px 4px;
+      border: 3px solid #17120f;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #fff7b9, #ffb45c);
+      color: #112033;
+      font-size: 18px;
+      font-weight: 1000;
+      line-height: 1;
+      box-shadow: 0 3px 0 rgba(23,18,15,0.18);
+    }
     .tap-meter {
       width: 100%;
       height: 30px;
@@ -1759,6 +1781,7 @@
       <div id="catchPanel" class="catch-panel hidden">
         <div id="targetFishSprite" class="fish-sprite"></div>
         <strong id="targetFishName">Small Fish</strong>
+        <div id="targetFishSubtitle" class="fish-subtitle hidden"></div>
         <div>Time: <span id="fishTimerValue">Ready</span></div>
         <div>Taps: <span id="fishTapValue">0</span>/<span id="fishTapNeedValue">10</span></div>
         <div class="tap-meter"><span id="tapMeterFill"></span></div>
@@ -1995,6 +2018,7 @@
     const catchPanel = document.getElementById("catchPanel");
     const targetFishSprite = document.getElementById("targetFishSprite");
     const targetFishName = document.getElementById("targetFishName");
+    const targetFishSubtitle = document.getElementById("targetFishSubtitle");
     const fishTimerValue = document.getElementById("fishTimerValue");
     const fishTapValue = document.getElementById("fishTapValue");
     const fishTapNeedValue = document.getElementById("fishTapNeedValue");
@@ -2066,7 +2090,8 @@
       { id: "starfish_king", name: "Starfish King", rarity: "Legendary", taps: 92, price: 1250, body: "#ff9e49", fin: "#ffe36e", pattern: "star" },
       { id: "cosmic_leviathan", name: "Cosmic Leviathan", rarity: "Mythic", taps: 110, price: 2500, body: "#24185f", fin: "#71f5ff", pattern: "cosmic" },
       { id: "endless", name: "Endless", rarity: "Mythic", taps: 125, price: 4000, body: "#05070d", fin: "#161c2b", pattern: "endless" },
-      { id: "sssd_fish", name: "SSSD Fish", rarity: "Mythic", taps: 132, price: 4500, body: "#ffd93d", fin: "#f28c22", pattern: "sssd" }
+      { id: "sssd_fish", name: "SSSD Fish", rarity: "Mythic", taps: 132, price: 4500, body: "#ffd93d", fin: "#f28c22", pattern: "sssd" },
+      { id: "airro_fish", name: "Airro Fish", subtitle: "CRACKER", rarity: "Chroma", taps: 150, price: 6000, body: "#f4ce82", fin: "#d49745", pattern: "airro" }
     ];
     const rods = [
       { id: "starter", name: "Starter Rod", price: 0, tapReduction: 0, rareBoost: 0, sellPrice: 0 },
@@ -2074,7 +2099,7 @@
       { id: "pro", name: "Pro Rod", price: 500, tapReduction: 15, rareBoost: 0.65, sellPrice: 375 },
       { id: "golden", name: "Golden Rod", price: 1500, tapReduction: 18, rareBoost: 1.35, sellPrice: 1125 }
     ];
-    const rarityWeights = { Common: 58, Uncommon: 26, Rare: 11, Epic: 4, Legendary: 1, Mythic: 0.2 };
+    const rarityWeights = { Common: 58, Uncommon: 26, Rare: 11, Epic: 4, Legendary: 1, Mythic: 0.2, Chroma: 0.08 };
     const fishById = Object.fromEntries(fishCatalog.map(fish => [fish.id, fish]));
     const rodById = Object.fromEntries(rods.map(rod => [rod.id, rod]));
     const arenaMaps = [
@@ -2322,6 +2347,30 @@
     function fishSvg(fish, size = 86) {
       const body = fish.body;
       const fin = fish.fin;
+      if (fish.pattern === "airro") {
+        return `<svg class="fish-sprite" viewBox="0 0 120 90" width="${size}" height="${Math.round(size * 0.75)}" aria-hidden="true">
+          <defs>
+            <linearGradient id="airroCracker${size}" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#fff1b0"/>
+              <stop offset=".52" stop-color="#f4ce82"/>
+              <stop offset="1" stop-color="#c9853f"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="61" cy="78" rx="41" ry="7" fill="#7d4b20" opacity=".22"/>
+          <path d="M28 45l-17-13 4 24zM92 45l17-13-4 24z" fill="#e2a45c" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/>
+          <rect x="28" y="14" width="64" height="64" rx="10" fill="url(#airroCracker${size})" stroke="#17202a" stroke-width="5"/>
+          <rect x="36" y="22" width="48" height="48" rx="7" fill="none" stroke="#fff4bf" stroke-width="4" opacity=".85"/>
+          <path d="M39 31h42M39 46h42M39 61h42M46 24v44M61 24v44M76 24v44" stroke="#c98b45" stroke-width="2.4" opacity=".42"/>
+          <circle cx="49" cy="35" r="3" fill="#8f5b28"/>
+          <circle cx="68" cy="34" r="3" fill="#8f5b28"/>
+          <circle cx="50" cy="55" r="3" fill="#8f5b28"/>
+          <circle cx="72" cy="56" r="3" fill="#8f5b28"/>
+          <circle cx="75" cy="41" r="4" fill="#17202a"/>
+          <circle cx="76" cy="39" r="1.5" fill="#fff"/>
+          <path d="M43 70c13 7 30 7 43-1" fill="none" stroke="#fff0a6" stroke-width="4" stroke-linecap="round" opacity=".78"/>
+          <path d="M41 17c12 6 28 6 40 0" fill="none" stroke="#fff8d7" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+        </svg>`;
+      }
       const extras = {
         stripe: `<path d="M36 18v24M50 18v24" stroke="#17202a" stroke-width="4" opacity=".45"/>`,
         dot: `<circle cx="38" cy="24" r="4" fill="#17202a" opacity=".45"/><circle cx="53" cy="35" r="4" fill="#17202a" opacity=".35"/>`,
@@ -2390,10 +2439,10 @@
     function renderCheatFishGrid() {
       if (!cheatFishGrid) return;
       cheatFishGrid.innerHTML = fishCatalog.map(fish => `
-        <button class="cheat-fish-card ${fish.id === "endless" ? "endless" : ""} ${fish.id === "sssd_fish" ? "sssd" : ""}" data-cheat-fish="${fish.id}">
+        <button class="cheat-fish-card ${fish.id === "endless" ? "endless" : ""} ${fish.id === "sssd_fish" ? "sssd" : ""} ${fish.rarity === "Chroma" ? "chroma" : ""}" data-cheat-fish="${fish.id}">
           ${fishSvg(fish, 82)}
           <span>${fish.name}</span>
-          <small>${fish.rarity} - ${fish.price} coins</small>
+          <small>${fish.subtitle ? `${fish.subtitle} - ` : ""}${fish.rarity} - ${fish.price} coins</small>
         </button>
       `).join("");
       cheatFishGrid.querySelectorAll("[data-cheat-fish]").forEach(button => {
@@ -2533,7 +2582,7 @@
       const items = [];
       Object.entries(save.fish || {}).forEach(([id, count]) => {
         const fish = fishById[id];
-        if (fish) items.push({ key: `fish:${id}`, type: "fish", group: "fishing", id, name: fish.name, detail: `${fish.rarity} x${count}`, count, price: fish.price, visual: fishSvg(fish) });
+        if (fish) items.push({ key: `fish:${id}`, type: "fish", group: "fishing", id, name: fish.name, detail: `${fish.subtitle ? `${fish.subtitle} - ` : ""}${fish.rarity} x${count}`, count, price: fish.price, visual: fishSvg(fish) });
       });
       save.ownedRods.forEach(id => {
         const rod = rodById[id];
@@ -2634,10 +2683,10 @@
     function chooseFish() {
       const rod = getRod();
       const weighted = fishCatalog.map(fish => {
-        const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"].indexOf(fish.rarity);
+        const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma"].indexOf(fish.rarity);
         const boost = 1 + rod.rareBoost * Math.max(0, rarityIndex);
         const commonNerf = fish.rarity === "Common" ? Math.max(0.35, 1 - rod.rareBoost * 0.25) : 1;
-        return { fish, weight: rarityWeights[fish.rarity] * boost * commonNerf };
+        return { fish, weight: (rarityWeights[fish.rarity] || 0) * boost * commonNerf };
       });
       const total = weighted.reduce((sum, item) => sum + item.weight, 0);
       let roll = Math.random() * total;
@@ -2666,6 +2715,7 @@
       catchPanel.classList.remove("hidden");
       targetFishSprite.innerHTML = `<svg class="fish-sprite" viewBox="0 0 100 74" width="112" height="74" aria-hidden="true"><path d="M45 8v40" stroke="#17202a" stroke-width="5" stroke-linecap="round"/><circle cx="45" cy="47" r="19" fill="#ff5f72" stroke="#17202a" stroke-width="5"/><path d="M26 47h38" stroke="#fffdf2" stroke-width="12"/></svg>`;
       targetFishName.textContent = "Rod Cast";
+      targetFishSubtitle.classList.add("hidden");
       fishTimerValue.textContent = "Waiting...";
       fishTapValue.textContent = "0";
       fishTapNeedValue.textContent = fishing.needed;
@@ -2682,6 +2732,7 @@
       fishing.active = true;
       targetFishSprite.innerHTML = fishSvg(fishing.target, 116);
       targetFishName.textContent = "Fish on!";
+      targetFishSubtitle.classList.add("hidden");
       fishTimerValue.textContent = "Fish on!";
       fishTapValue.textContent = "0";
       fishTapNeedValue.textContent = fishing.needed;
@@ -2694,6 +2745,8 @@
       fishing.phase = "reeling";
       fishing.active = true;
       targetFishName.textContent = `${fishing.target.name} (${fishing.target.rarity})`;
+      targetFishSubtitle.textContent = fishing.target.subtitle || "";
+      targetFishSubtitle.classList.toggle("hidden", !fishing.target.subtitle);
       fishing.taps = 0;
       fishing.timeLeft = 5;
       fishResultText.textContent = "Tap fast before the fish escapes!";
