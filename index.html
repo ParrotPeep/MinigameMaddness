@@ -952,7 +952,7 @@
       font-size: 34px;
       line-height: 1;
     }
-    .cloud, .bird, .wave, .sun, .island, .lighthouse, .dock, .fish-shop-house, .boat, .shop-counter, .shop-shelves {
+    .cloud, .bird, .wave, .sun, .island, .lighthouse, .dock, .fish-shop-house, .boat, .yacht-home, .quest-guy, .shop-counter, .shop-shelves {
       position: absolute;
       pointer-events: none;
     }
@@ -1120,6 +1120,54 @@
         354px 0 0 #70411f,
         472px 0 0 #70411f;
     }
+    .quest-guy {
+      left: 39%;
+      bottom: 38%;
+      width: 86px;
+      height: 122px;
+      cursor: pointer;
+      pointer-events: auto;
+      z-index: 6;
+      filter: drop-shadow(0 7px 0 rgba(23,18,15,0.18));
+    }
+    .cartoon-screen .quest-guy {
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .quest-guy::before {
+      content: "";
+      position: absolute;
+      left: 23px;
+      top: 0;
+      width: 40px;
+      height: 40px;
+      border: 5px solid #17120f;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 34% 38%, #17120f 0 3px, transparent 4px),
+        radial-gradient(circle at 66% 38%, #17120f 0 3px, transparent 4px),
+        linear-gradient(180deg, #ffd7a3, #f2a76e);
+    }
+    .quest-guy::after {
+      content: "!";
+      position: absolute;
+      left: 31px;
+      top: 42px;
+      width: 30px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border: 5px solid #17120f;
+      border-radius: 16px 16px 10px 10px;
+      background: linear-gradient(180deg, #ffe76d, #ff8a2a);
+      color: #17120f;
+      font-size: 34px;
+      font-weight: 1000;
+    }
     .boat {
       right: 22%;
       bottom: 30%;
@@ -1146,6 +1194,37 @@
       filter: drop-shadow(0 8px 0 rgba(17,55,92,0.18));
     }
     .boat-outline { stroke: #17120f; stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; }
+    .yacht-home {
+      right: 2%;
+      bottom: 32%;
+      width: 280px;
+      height: 145px;
+      cursor: pointer;
+      pointer-events: auto;
+      z-index: 4;
+      filter: drop-shadow(0 11px 0 rgba(17,55,92,0.16));
+    }
+    .cartoon-screen .yacht-home {
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .yacht-home.locked {
+      opacity: 0.36;
+      filter: grayscale(0.45) drop-shadow(0 11px 0 rgba(17,55,92,0.16));
+      pointer-events: none;
+    }
+    .yacht-home svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .yacht-home::after { content: none; }
     .tap-note {
       position: absolute;
       right: 27%;
@@ -1157,6 +1236,11 @@
       -webkit-text-stroke: 2px #102033;
       text-shadow: 0 4px 0 rgba(17,55,92,0.2);
       z-index: 5;
+    }
+    .yacht-note {
+      right: 5%;
+      bottom: 49%;
+      font-size: 24px;
     }
     .lighthouse {
       right: 7%;
@@ -1186,6 +1270,28 @@
       background:
         radial-gradient(circle at 12% 18%, rgba(255,255,255,0.48), transparent 15rem),
         linear-gradient(180deg, #63cdfa 0 19%, #ffe39d 20% 61%, #d99453 62% 100%);
+    }
+    .fish-shop-view.yacht-shop {
+      background:
+        radial-gradient(circle at 16% 18%, rgba(255,255,255,0.6), transparent 13rem),
+        radial-gradient(circle at 86% 14%, rgba(255,231,109,0.34), transparent 11rem),
+        linear-gradient(180deg, #9fe8ff 0 20%, #f6fbff 21% 58%, #315d83 59% 100%);
+    }
+    .fish-shop-view.yacht-shop::before {
+      background:
+        repeating-linear-gradient(110deg, rgba(255,255,255,0.16) 0 3px, transparent 4px 92px),
+        repeating-linear-gradient(90deg, #315d83 0 74px, #477da5 75px 84px);
+    }
+    .fish-shop-view.yacht-shop .shop-window {
+      left: 32%;
+      width: 360px;
+      background:
+        radial-gradient(circle at 18% 38%, #ffe76d 0 22px, transparent 23px),
+        linear-gradient(180deg, #9fe8ff 0 52%, #1d8cc8 53% 100%);
+    }
+    .fish-shop-view.yacht-shop .shop-counter {
+      background:
+        linear-gradient(180deg, #fffdf2 0 14%, #dff8ff 15% 36%, #c6d6e5 37% 100%);
     }
     #marketShell {
       background:
@@ -1273,6 +1379,11 @@
       background: #17120f;
     }
     .fish-play-sea { height: 38%; }
+    #fishingPlay.yacht-mode {
+      background:
+        radial-gradient(circle at 10% 24%, #ffe76d 0 42px, rgba(255,231,109,0.28) 43px 82px, transparent 83px),
+        linear-gradient(180deg, #65d5ff 0 48%, #c9f8ff 49% 64%, #139bdc 65% 100%);
+    }
     .play-boat {
       position: absolute;
       left: 50%;
@@ -1281,6 +1392,34 @@
       height: 165px;
       transform: translateX(-50%);
     }
+    .play-boat.yacht-play {
+      width: min(820px, 74vw);
+      height: 260px;
+      bottom: 28%;
+    }
+    .yacht-shop-door {
+      position: absolute;
+      left: 50%;
+      bottom: 35%;
+      width: 58px;
+      height: 82px;
+      transform: translateX(-50%);
+      border: 5px solid #17120f;
+      border-radius: 14px 14px 8px 8px;
+      background:
+        radial-gradient(circle at 72% 50%, #ffe76d 0 5px, #17120f 6px 8px, transparent 9px),
+        linear-gradient(180deg, #fffdf2, #b9d8ff);
+      z-index: 7;
+      box-shadow: 0 7px 0 rgba(23,18,15,0.18);
+    }
+    .cartoon-screen .yacht-shop-door {
+      min-height: 0;
+      padding: 0;
+      background:
+        radial-gradient(circle at 72% 50%, #ffe76d 0 5px, #17120f 6px 8px, transparent 9px),
+        linear-gradient(180deg, #fffdf2, #b9d8ff);
+    }
+    .yacht-shop-door.hidden { display: none; }
     .stick-player {
       position: absolute;
       left: 52%;
@@ -1336,32 +1475,53 @@
     }
     .cast-line {
       position: absolute;
-      left: 51%;
-      top: 49%;
-      width: 34%;
+      left: 54%;
+      top: 52%;
+      width: 24%;
       height: 23%;
       z-index: 3;
       pointer-events: none;
       opacity: 0;
       transform-origin: left top;
     }
+    #fishingPlay.yacht-mode .cast-line {
+      left: 57%;
+      top: 53%;
+      width: 24%;
+      height: 24%;
+    }
     .cast-line.active { opacity: 1; }
+    .cast-line svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .cast-line path {
+      fill: none;
+      stroke: #102033;
+      stroke-width: 4.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 3px 0 rgba(255,255,255,0.24));
+    }
     .cast-line::before {
       content: "";
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      border-right: 5px solid #102033;
-      border-bottom: 5px solid #102033;
-      border-radius: 0 0 95% 0;
-      transform: skewX(-10deg);
+      left: -12px;
+      top: -10px;
+      width: 24px;
+      height: 24px;
+      border: 4px solid #17120f;
+      border-radius: 50%;
+      background: #ffe76d;
+      box-shadow: 0 4px 0 rgba(23,18,15,0.16);
     }
     .bobber {
       position: absolute;
-      right: -18px;
-      bottom: -20px;
+      left: calc(94% - 21px);
+      top: calc(92% - 21px);
       width: 42px;
       height: 42px;
       border: 5px solid #17120f;
@@ -1372,8 +1532,8 @@
     }
     .bite-splash {
       position: absolute;
-      right: -40px;
-      bottom: -36px;
+      left: calc(94% - 45px);
+      top: calc(92% - 22px);
       width: 90px;
       height: 44px;
       border: 5px solid rgba(255,255,255,0.78);
@@ -1387,9 +1547,11 @@
       animation: biteBob 0.16s ease-in-out infinite alternate;
     }
     .cast-line.reeling::before {
-      border-right-width: 7px;
-      border-bottom-width: 7px;
-      border-color: #0b315f;
+      animation: lineTug 0.18s ease-in-out infinite alternate;
+    }
+    .cast-line.reeling path {
+      stroke-width: 6.8;
+      stroke: #0b315f;
       animation: lineTug 0.18s ease-in-out infinite alternate;
     }
     .cast-line.reeling .bobber {
@@ -1405,6 +1567,40 @@
       opacity: 1;
       animation: splashPop 0.42s ease-in-out infinite alternate;
     }
+    .splash-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .splash-burst {
+      position: absolute;
+      left: var(--splash-x, 76%);
+      top: var(--splash-y, 73%);
+      width: 180px;
+      height: 120px;
+      transform: translate(-50%, -50%);
+      animation: splashFade 0.72s ease-out forwards;
+    }
+    .splash-burst.big { width: 250px; height: 170px; animation-duration: 0.95s; }
+    .splash-burst.catch { width: 310px; height: 210px; animation-duration: 1.05s; }
+    .splash-burst span {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--drop-w, 20px);
+      height: var(--drop-h, 46px);
+      border: 4px solid #17120f;
+      border-radius: 999px 999px 60% 60%;
+      background: linear-gradient(180deg, #fffdf2, #82e8ff 48%, #1599df);
+      transform: translate(-50%, -50%) rotate(var(--drop-r, 0deg));
+      animation: splashDrop 0.72s ease-out forwards;
+      animation-delay: var(--drop-delay, 0s);
+      box-shadow: 0 4px 0 rgba(17,55,92,0.16);
+    }
+    .splash-burst.catch span { background: linear-gradient(180deg, #fffdf2, #ffe76d 40%, #35e4ff); }
+    .splash-burst.escape span { background: linear-gradient(180deg, #dff8ff, #8aa8bd); }
     .catch-panel {
       position: absolute;
       left: 50%;
@@ -1457,6 +1653,16 @@
     @keyframes splashPop {
       from { transform: scale(0.65); opacity: 0.4; }
       to { transform: scale(1.08); opacity: 1; }
+    }
+    @keyframes splashFade {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.62); }
+      16% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-50%, -62%) scale(1.08); }
+    }
+    @keyframes splashDrop {
+      0% { transform: translate(-50%, -50%) rotate(var(--drop-r, 0deg)) scale(0.32); }
+      68% { transform: translate(calc(-50% + var(--drop-x, 0px)), calc(-50% + var(--drop-y, 0px))) rotate(var(--drop-r, 0deg)) scale(1); }
+      100% { transform: translate(calc(-50% + var(--drop-x, 0px)), calc(-50% + var(--drop-y-end, 26px))) rotate(var(--drop-r, 0deg)) scale(0.72); }
     }
     @keyframes lineTug {
       from { transform: skewX(-10deg) translateY(-4px); }
@@ -1584,6 +1790,10 @@
     .rod-card.better { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #dff8ff, #64c8ff); }
     .rod-card.pro { background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18) 26%, transparent 27%), linear-gradient(180deg, #e5dcff, #8e62ff); }
     .rod-card.golden { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), linear-gradient(180deg, #fff0a8, #ff9b35); }
+    .rod-card.silver_yacht { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), linear-gradient(180deg, #f6fbff, #8cc9ea); }
+    .rod-card.diamond_yacht { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), linear-gradient(180deg, #e8fbff, #41c9f4); }
+    .rod-card.royal_yacht { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), linear-gradient(180deg, #efe6ff, #9a6cff); }
+    .rod-card.chroma_yacht { background: linear-gradient(180deg, rgba(255,255,255,0.76), rgba(255,255,255,0.2) 26%, transparent 27%), conic-gradient(from 20deg, #ff5f72, #ffe76d, #35e4ff, #b86cff, #ff5f72); }
     .rod-card h3,
     .rod-card p { margin: 0; color: #102033; text-shadow: 0 1px 0 rgba(255,255,255,0.8); }
     .bait-card {
@@ -1637,6 +1847,11 @@
     .bait-art.golden { --bait-top:#fff4a2; --bait-bottom:#ff9b35; --bait-core:#ffd45c; --bait-dot:#ff5f72; --bait-radius:13px; --bait-tilt:12deg; }
     .bait-art.rainbow { --bait-top:#ffe0f7; --bait-bottom:#84e6ff; --bait-core:linear-gradient(135deg,#ff5f72,#ffe76d,#62e68a,#35e4ff,#a849ff); --bait-dot:#fffdf2; }
     .bait-art.chroma_crumb { --bait-top:#fff7b9; --bait-bottom:#b86cff; --bait-core:conic-gradient(#ff5f72,#ffe76d,#35e4ff,#b86cff,#ff5f72); --bait-dot:#071a2f; --bait-radius:10px; --bait-tilt:8deg; }
+    .bait-art.pearl_bait { --bait-top:#fffdf2; --bait-bottom:#9fe8ff; --bait-core:#fffaf0; --bait-dot:#e2b7ff; }
+    .bait-art.diamond_bait { --bait-top:#e8fbff; --bait-bottom:#41c9f4; --bait-core:#85f4ff; --bait-dot:#fffdf2; --bait-radius:10px; --bait-tilt:45deg; }
+    .bait-art.crown_bait { --bait-top:#fff4a2; --bait-bottom:#b86cff; --bait-core:#ffe76d; --bait-dot:#7b42ff; --bait-radius:8px; --bait-tilt:0deg; }
+    .bait-art.galaxy_bait { --bait-top:#25115f; --bait-bottom:#071a2f; --bait-core:#71f5ff; --bait-dot:#ffe76d; }
+    .bait-art.billionaire_bait { --bait-top:#fff7b9; --bait-bottom:#2bc16d; --bait-core:linear-gradient(135deg,#ffe76d,#62e68a); --bait-dot:#fffdf2; --bait-radius:12px; --bait-tilt:12deg; }
     .rod-art {
       height: 86px;
       position: relative;
@@ -1674,6 +1889,10 @@
     .rod-art.better { --rod-main: #177bc7; --rod-handle: #ffd45c; --rod-line: #0f5080; background: radial-gradient(circle at 76% 22%, #fff 0 8px, transparent 9px), linear-gradient(180deg, #b8fff0, #35b2ff); }
     .rod-art.pro { --rod-main: #5a34dd; --rod-handle: #35e4ff; --rod-line: #321079; background: radial-gradient(circle at 74% 23%, #fff 0 8px, transparent 9px), linear-gradient(180deg, #ded5ff, #8b66ff); }
     .rod-art.golden { --rod-main: #ffdf42; --rod-handle: #ff5f72; --rod-line: #7a3f00; background: radial-gradient(circle at 24% 28%, #fff 0 7px, transparent 8px), radial-gradient(circle at 82% 20%, #fff 0 10px, transparent 11px), linear-gradient(180deg, #fff5a8, #ff9b35); }
+    .rod-art.silver_yacht { --rod-main:#dff8ff; --rod-handle:#477da5; --rod-line:#15324d; background: radial-gradient(circle at 78% 24%, #fff 0 10px, transparent 11px), linear-gradient(180deg, #f6fbff, #8cc9ea); }
+    .rod-art.diamond_yacht { --rod-main:#85f4ff; --rod-handle:#2d5de8; --rod-line:#15324d; background: radial-gradient(circle at 24% 24%, #fff 0 10px, transparent 11px), linear-gradient(180deg, #e8fbff, #41c9f4); }
+    .rod-art.royal_yacht { --rod-main:#7b42ff; --rod-handle:#ffe76d; --rod-line:#321079; background: radial-gradient(circle at 76% 24%, #fff 0 10px, transparent 11px), linear-gradient(180deg, #efe6ff, #9a6cff); }
+    .rod-art.chroma_yacht { --rod-main:#fffdf2; --rod-handle:#ff5f72; --rod-line:#071a2f; background: radial-gradient(circle at 20% 24%, #fff 0 10px, transparent 11px), conic-gradient(from 20deg, #ff5f72, #ffe76d, #35e4ff, #b86cff, #ff5f72); }
     .fish-sprite {
       width: 86px;
       height: 58px;
@@ -1709,6 +1928,39 @@
     .bait-pill:disabled {
       opacity: 0.5;
       cursor: default;
+    }
+    .odds-grid,
+    .quest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      max-height: 360px;
+      overflow: auto;
+      margin-top: 12px;
+    }
+    .odds-row,
+    .quest-row {
+      padding: 10px;
+      border: 3px solid #06101d;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #123966, #06162f);
+      color: #dff8ff;
+      font-weight: 900;
+    }
+    .quest-row.done {
+      background: linear-gradient(180deg, #155a37, #08321f);
+      color: #d8ffe1;
+    }
+    .quest-progress {
+      display: inline-grid;
+      place-items: center;
+      min-width: 42px;
+      min-height: 30px;
+      margin-left: 6px;
+      border: 3px solid #06101d;
+      border-radius: 999px;
+      background: #ffe76d;
+      color: #102033;
     }
     .inventory-toolbar {
       display: flex;
@@ -1832,6 +2084,7 @@
       <div class="bird" style="left:44%;top:47%"></div>
       <div class="bird" style="right:20%;top:36%;transform:scale(.72)"></div>
       <div class="dock"></div>
+      <button id="questGuyButton" class="quest-guy" title="Yacht Quest"></button>
       <button id="openFishingShopButton" class="fish-shop-house" title="Fishing Shop"><span class="shop-door"></span></button>
       <button id="startFishingButton" class="boat" title="Start Fishing">
         <svg viewBox="0 0 420 190" aria-hidden="true">
@@ -1848,6 +2101,8 @@
         </svg>
       </button>
       <div class="tap-note">Tap boat<br>to start</div>
+      <button id="startYachtButton" class="yacht-home hidden" title="Yacht Fishing"></button>
+      <div id="yachtNote" class="tap-note yacht-note hidden">Yacht<br>unlocked</div>
       <div class="lighthouse"></div>
       <div class="fish-home-sea"></div>
       <div class="wave" style="left:48%;bottom:12%"></div>
@@ -1859,6 +2114,8 @@
       <div class="cartoon-top">
         <div class="money-badge">Score: <span id="fishScoreValue">0</span></div>
         <div style="display:flex;gap:12px">
+          <button id="fishingOddsButton">Odds</button>
+          <button id="yachtShopButton" class="hidden">Yacht Shop</button>
           <button id="fishingInventoryButton">Inventory</button>
           <button id="exitFishingPlayButton" class="menu-square">=</button>
         </div>
@@ -1869,7 +2126,7 @@
       <div class="bird" style="left:28%;top:37%"></div>
       <div class="bird" style="right:20%;top:43%;transform:scale(.75)"></div>
       <div class="fish-play-sea"></div>
-      <div class="boat play-boat">
+      <div id="playBoatArt" class="boat play-boat">
         <svg viewBox="0 0 420 190" aria-hidden="true">
           <ellipse cx="215" cy="168" rx="170" ry="18" fill="#0b78bf" opacity=".25"></ellipse>
           <path class="boat-outline" d="M45 104h330c-16 47-58 72-126 72H156c-62 0-99-25-111-72z" fill="#fff5c7"></path>
@@ -1881,7 +2138,14 @@
           <path d="M165 132h121" stroke="#17120f" stroke-width="7" stroke-linecap="round"></path>
         </svg>
       </div>
-      <div id="castLine" class="cast-line"><span class="bobber"></span><span class="bite-splash"></span></div>
+      <button id="yachtShopDoorButton" class="yacht-shop-door hidden" title="Yacht Shop"></button>
+      <div id="castLine" class="cast-line">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M2 3 C 25 12 42 70 94 92"></path>
+        </svg>
+        <span class="bobber"></span><span class="bite-splash"></span>
+      </div>
+      <div id="splashLayer" class="splash-layer"></div>
       <div class="stick-player"></div>
       <div id="catchPanel" class="catch-panel hidden">
         <div id="targetFishSprite" class="fish-sprite"></div>
@@ -1902,7 +2166,7 @@
         <div class="money-badge">Coins: <span id="rodCoinsValue">0</span></div>
         <button id="fishingShopMenuButton" class="menu-square">=</button>
       </div>
-      <h1 class="cartoon-title">Fishing Shop</h1>
+      <h1 id="fishingShopTitle" class="cartoon-title">Fishing Shop</h1>
       <div class="shop-rod-rack"></div>
       <div class="shop-window"></div>
       <div class="shop-counter"></div>
@@ -1940,6 +2204,27 @@
       <h2 class="modal-title">Inventory</h2>
       <div id="sharedInventoryGrid" class="modal-grid"></div>
       <div class="close-row"><button id="closeSharedInventoryButton" class="small-button">Close</button></div>
+    </div>
+  </section>
+
+  <section id="yachtQuestModal" class="modal shared-modal hidden">
+    <div class="modal-card">
+      <h2 class="modal-title">Yacht Quest</h2>
+      <p id="yachtQuestText" class="result-text">Bring 1 of every Boat 1 fish to unlock the yacht.</p>
+      <div id="yachtQuestGrid" class="quest-grid"></div>
+      <div class="close-row">
+        <button id="completeYachtQuestButton" class="small-button">Turn In Fish</button>
+        <button id="closeYachtQuestButton" class="small-button">Close</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="fishingOddsModal" class="modal shared-modal hidden">
+    <div class="modal-card">
+      <h2 id="fishingOddsTitle" class="modal-title">Fishing Odds</h2>
+      <p id="fishingOddsText" class="result-text"></p>
+      <div id="fishingOddsGrid" class="odds-grid"></div>
+      <div class="close-row"><button id="closeFishingOddsButton" class="small-button">Close</button></div>
     </div>
   </section>
 
@@ -2131,8 +2416,23 @@
     const tapMeterFill = document.getElementById("tapMeterFill");
     const fishResultText = document.getElementById("fishResultText");
     const castLine = document.getElementById("castLine");
+    const splashLayer = document.getElementById("splashLayer");
     const rodGrid = document.getElementById("rodGrid");
     const baitBar = document.getElementById("baitBar");
+    const playBoatArt = document.getElementById("playBoatArt");
+    const startYachtButton = document.getElementById("startYachtButton");
+    const yachtNote = document.getElementById("yachtNote");
+    const yachtShopButton = document.getElementById("yachtShopButton");
+    const yachtShopDoorButton = document.getElementById("yachtShopDoorButton");
+    const fishingShopTitle = document.getElementById("fishingShopTitle");
+    const yachtQuestModal = document.getElementById("yachtQuestModal");
+    const yachtQuestText = document.getElementById("yachtQuestText");
+    const yachtQuestGrid = document.getElementById("yachtQuestGrid");
+    const completeYachtQuestButton = document.getElementById("completeYachtQuestButton");
+    const fishingOddsModal = document.getElementById("fishingOddsModal");
+    const fishingOddsTitle = document.getElementById("fishingOddsTitle");
+    const fishingOddsText = document.getElementById("fishingOddsText");
+    const fishingOddsGrid = document.getElementById("fishingOddsGrid");
     const marketShell = document.getElementById("marketShell");
     const marketCoinsValue = document.getElementById("marketCoinsValue");
     const marketGrid = document.getElementById("marketGrid");
@@ -2198,20 +2498,48 @@
       { id: "cosmic_leviathan", name: "Cosmic Leviathan", rarity: "Mythic", taps: 110, price: 2500, body: "#24185f", fin: "#71f5ff", pattern: "cosmic" },
       { id: "endless", name: "Endless", rarity: "Mythic", taps: 125, price: 4000, body: "#05070d", fin: "#161c2b", pattern: "endless" },
       { id: "sssd_fish", name: "SSSD Fish", rarity: "Mythic", taps: 132, price: 4500, body: "#ffd93d", fin: "#f28c22", pattern: "sssd" },
-      { id: "airro_fish", name: "Airro Fish", subtitle: "CRACKER", rarity: "Chroma", taps: 150, price: 6000, body: "#f4ce82", fin: "#d49745", pattern: "airro" }
+      { id: "airro_fish", name: "Airro Fish", subtitle: "CRACKER", rarity: "Chroma", taps: 150, price: 6000, body: "#f4ce82", fin: "#d49745", pattern: "airro", weightScale: 0.45 },
+      { id: "fancy_sardine", name: "Fancy Sardine", rarity: "Common", taps: 18, price: 25, body: "#d8eef8", fin: "#4f91b8", pattern: "shine", source: "yacht" },
+      { id: "yacht_snapper", name: "Yacht Snapper", rarity: "Common", taps: 22, price: 35, body: "#ff785d", fin: "#ffd45c", pattern: "stripe", source: "yacht" },
+      { id: "pearl_guppy", name: "Pearl Guppy", rarity: "Common", taps: 24, price: 45, body: "#fff4d8", fin: "#e2b7ff", pattern: "pearl", source: "yacht" },
+      { id: "royal_bass", name: "Royal Bass", rarity: "Uncommon", taps: 32, price: 90, body: "#2bc16d", fin: "#ffe76d", pattern: "crown", source: "yacht" },
+      { id: "glassfin_tuna", name: "Glassfin Tuna", rarity: "Uncommon", taps: 36, price: 120, body: "#9ff5ff", fin: "#dff8ff", pattern: "glass", source: "yacht" },
+      { id: "velvet_eel", name: "Velvet Eel", rarity: "Uncommon", taps: 40, price: 150, body: "#7a35c8", fin: "#ff8bd1", pattern: "velvet", source: "yacht" },
+      { id: "diamond_koi", name: "Diamond Koi", rarity: "Rare", taps: 52, price: 300, body: "#b8f7ff", fin: "#ff6ec7", pattern: "diamond", source: "yacht" },
+      { id: "crown_jelly", name: "Crown Jelly", rarity: "Rare", taps: 58, price: 420, body: "#d797ff", fin: "#ffe76d", pattern: "crown_jelly", source: "yacht" },
+      { id: "sapphire_ray", name: "Sapphire Ray", rarity: "Rare", taps: 64, price: 550, body: "#2369e8", fin: "#9ff5ff", pattern: "ray", source: "yacht" },
+      { id: "goldbar_grouper", name: "Goldbar Grouper", rarity: "Epic", taps: 78, price: 900, body: "#ffd75a", fin: "#8b5a12", pattern: "goldbar", source: "yacht" },
+      { id: "turbo_marlin", name: "Turbo Marlin", rarity: "Epic", taps: 86, price: 1200, body: "#35e4ff", fin: "#ff5f72", pattern: "sword", source: "yacht" },
+      { id: "neon_manta", name: "Neon Manta", rarity: "Epic", taps: 95, price: 1600, body: "#111b55", fin: "#35e4ff", pattern: "neon_ray", source: "yacht" },
+      { id: "treasure_shark", name: "Treasure Shark", rarity: "Legendary", taps: 115, price: 3000, body: "#66798a", fin: "#ffe76d", pattern: "treasure_shark", source: "yacht" },
+      { id: "cloud_whale", name: "Cloud Whale", rarity: "Legendary", taps: 130, price: 4500, body: "#fffdf2", fin: "#9bdfff", pattern: "cloud_whale", source: "yacht" },
+      { id: "royal_leviathan", name: "Royal Leviathan", rarity: "Legendary", taps: 145, price: 6500, body: "#6d3bff", fin: "#ffe76d", pattern: "royal", source: "yacht", weightScale: 0.034 },
+      { id: "galaxy_dolphin", name: "Galaxy Dolphin", rarity: "Mythic", taps: 190, price: 14000, body: "#25115f", fin: "#71f5ff", pattern: "galaxy", source: "yacht", weightScale: 0.08 },
+      { id: "sunken_crown_fish", name: "Sunken Crown Fish", rarity: "Mythic", taps: 215, price: 20000, body: "#0e4a66", fin: "#ffd45c", pattern: "sunken", source: "yacht", weightScale: 0.054 },
+      { id: "prism_yacht_fish", name: "Prism Yacht Fish", rarity: "Chroma", taps: 250, price: 35000, body: "#ff68cf", fin: "#43e4ff", pattern: "prism", source: "yacht", weightScale: 0.076 },
+      { id: "billionaire_blobfish", name: "Billionaire Blobfish", rarity: "Chroma", taps: 300, price: 50000, body: "#ffb6c8", fin: "#ffe76d", pattern: "blob", source: "yacht", weightScale: 0.046 }
     ];
     const rods = [
       { id: "starter", name: "Starter Rod", price: 0, tapReduction: 0, rareBoost: 0, sellPrice: 0 },
       { id: "better", name: "Better Rod", price: 100, tapReduction: 5, rareBoost: 0.25, sellPrice: 75 },
       { id: "pro", name: "Pro Rod", price: 500, tapReduction: 15, rareBoost: 0.65, sellPrice: 375 },
-      { id: "golden", name: "Golden Rod", price: 1500, tapReduction: 18, rareBoost: 1.35, sellPrice: 1125 }
+      { id: "golden", name: "Golden Rod", price: 1500, tapReduction: 18, rareBoost: 1.35, sellPrice: 1125 },
+      { id: "silver_yacht", name: "Silver Yacht Rod", price: 10000, tapReduction: 25, rareBoost: 2, sellPrice: 7500, shop: "yacht" },
+      { id: "diamond_yacht", name: "Diamond Yacht Rod", price: 50000, tapReduction: 45, rareBoost: 3.5, sellPrice: 37500, shop: "yacht" },
+      { id: "royal_yacht", name: "Royal Yacht Rod", price: 150000, tapReduction: 70, rareBoost: 5, sellPrice: 112500, shop: "yacht" },
+      { id: "chroma_yacht", name: "Chroma Yacht Rod", price: 500000, tapReduction: 100, rareBoost: 7, chromaBoost: 1.5, sellPrice: 375000, shop: "yacht" }
     ];
     const baits = [
       { id: "worm", name: "Worm Bait", price: 25, rareBoost: 0.10, chromaBoost: 0, text: "+10% rare luck" },
       { id: "glowy", name: "Glowy Bait", price: 75, rareBoost: 0.25, chromaBoost: 0, text: "+25% rare luck" },
       { id: "golden", name: "Golden Bait", price: 200, rareBoost: 0.60, chromaBoost: 0, text: "+60% rare luck" },
       { id: "rainbow", name: "Rainbow Bait", price: 600, rareBoost: 1.20, chromaBoost: 0, text: "+120% rare luck" },
-      { id: "chroma_crumb", name: "Chroma Crumb", price: 1500, rareBoost: 0, chromaBoost: 3, text: "Chroma luck x4" }
+      { id: "chroma_crumb", name: "Chroma Crumb", price: 1500, rareBoost: 0, chromaBoost: 3, text: "Chroma luck x4" },
+      { id: "pearl_bait", name: "Pearl Bait", price: 2500, rareBoost: 0.5, text: "+50% yacht rare luck", shop: "yacht" },
+      { id: "diamond_bait", name: "Diamond Bait", price: 10000, rareBoost: 1.5, text: "+150% yacht rare luck", shop: "yacht" },
+      { id: "crown_bait", name: "Crown Bait", price: 35000, rarityBoosts: { Legendary: 3, Mythic: 3 }, text: "Legend/Mythic x4", shop: "yacht" },
+      { id: "galaxy_bait", name: "Galaxy Bait", price: 100000, rarityBoosts: { Mythic: 5 }, text: "Mythic x6", shop: "yacht" },
+      { id: "billionaire_bait", name: "Billionaire Bait", price: 250000, chromaBoost: 7, text: "Chroma luck x8", shop: "yacht" }
     ];
     const rarityWeights = { Common: 58, Uncommon: 26, Rare: 11, Epic: 4, Legendary: 1, Mythic: 0.2, Chroma: 0.08 };
     const fishById = Object.fromEntries(fishCatalog.map(fish => [fish.id, fish]));
@@ -2282,6 +2610,7 @@
       equippedRod: "starter",
       baits: {},
       equippedBait: "none",
+      yachtUnlocked: false,
       marketListings: []
     };
     const save = loadSave();
@@ -2303,7 +2632,7 @@
     const player = { id: "host", name: "YOU", x: 0, y: 0, vx: 0, vy: 0, r: 21, speed: 520, alive: true, color: "#35e4ff", accent: "#b6fbff", facing: 0, slashAngle: 0, slashTime: 0, slashHit: false };
     const bots = [];
     const ball = { x: 0, y: 0, vx: 0, vy: 0, r: 15, speed: 210, target: null, trail: [] };
-    const fishing = { phase: "idle", active: false, target: null, bait: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null, biteTimer: null };
+    const fishing = { phase: "idle", spot: "boat1", shopSpot: "boat1", active: false, target: null, bait: null, taps: 0, needed: 0, timeLeft: 0, score: 0, timer: null, biteTimer: null };
     const shopNet = { peer: null, conn: null, role: "solo", room: "", connected: false, remoteListings: [] };
     let lastTime = 0;
 
@@ -2320,6 +2649,79 @@
     function rand(min, max) { return min + Math.random() * (max - min); }
     function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
     function rect(x, y, w, h) { return { x, y, w, h }; }
+    const audioState = { ctx: null, master: null, musicTimer: null, musicStep: 0, started: false };
+    function ensureAudio() {
+      if (!audioState.ctx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return null;
+        audioState.ctx = new AudioContext();
+        audioState.master = audioState.ctx.createGain();
+        audioState.master.gain.value = 0.18;
+        audioState.master.connect(audioState.ctx.destination);
+      }
+      if (audioState.ctx.state === "suspended") audioState.ctx.resume();
+      return audioState.ctx;
+    }
+    function playTone(freq, duration = 0.12, type = "square", volume = 0.12, delay = 0) {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      const now = ctx.currentTime + delay;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(volume, now + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      osc.connect(gain);
+      gain.connect(audioState.master);
+      osc.start(now);
+      osc.stop(now + duration + 0.03);
+    }
+    function playNoise(duration = 0.18, volume = 0.18, delay = 0) {
+      const ctx = ensureAudio();
+      if (!ctx) return;
+      const now = ctx.currentTime + delay;
+      const buffer = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate * duration)), ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+      const src = ctx.createBufferSource();
+      const filter = ctx.createBiquadFilter();
+      const gain = ctx.createGain();
+      src.buffer = buffer;
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(900, now);
+      gain.gain.setValueAtTime(volume, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioState.master);
+      src.start(now);
+    }
+    function playSfx(name) {
+      if (name === "cast") { playNoise(0.12, 0.08); playTone(392, 0.08, "triangle", 0.06); }
+      if (name === "bite") { playNoise(0.28, 0.16); playTone(740, 0.08, "square", 0.08); playTone(988, 0.1, "square", 0.06, 0.08); }
+      if (name === "tap") playTone(520 + Math.random() * 120, 0.045, "square", 0.035);
+      if (name === "catch") { playNoise(0.38, 0.18); [523, 659, 784, 1046].forEach((n, i) => playTone(n, 0.11, "triangle", 0.08, i * 0.07)); }
+      if (name === "escape") { playNoise(0.26, 0.12); [392, 330, 262].forEach((n, i) => playTone(n, 0.12, "sawtooth", 0.055, i * 0.07)); }
+      if (name === "quest") [392, 523, 659, 784].forEach((n, i) => playTone(n, 0.12, "triangle", 0.07, i * 0.08));
+    }
+    function startPirateMusic() {
+      const ctx = ensureAudio();
+      if (!ctx || audioState.musicTimer) return;
+      const melody = [392, 392, 440, 523, 392, 523, 587, 523, 440, 440, 392, 330, 392, 523, 494, 440];
+      const bass = [196, 196, 220, 262, 196, 262, 294, 262];
+      audioState.musicTimer = setInterval(() => {
+        const step = audioState.musicStep++;
+        const beat = step % melody.length;
+        playTone(melody[beat], 0.16, beat % 4 === 0 ? "square" : "triangle", 0.028);
+        if (step % 2 === 0) playTone(bass[(step / 2) % bass.length], 0.22, "sawtooth", 0.022);
+      }, 230);
+    }
+    function stopPirateMusic() {
+      if (audioState.musicTimer) clearInterval(audioState.musicTimer);
+      audioState.musicTimer = null;
+    }
 
     function cleanNumber(value, fallback = 0) {
       const number = Number(value);
@@ -2380,6 +2782,7 @@
         ownedRods: uniqueValidIds(raw.ownedRods, validRodIds, "starter"),
         fish: cleanFishStacks(raw.fish),
         baits: cleanBaitStacks(raw.baits),
+        yachtUnlocked: Boolean(raw.yachtUnlocked),
         marketListings: Array.isArray(raw.marketListings) ? raw.marketListings : []
       };
       if (!normalized.owned.includes(raw.equipped)) normalized.equipped = "aqua";
@@ -2432,10 +2835,12 @@
       renderShop();
       renderRods();
       renderBaitBar();
+      renderFishingHome();
       renderMarket();
       applyEquippedSkin();
     }
     function hideAllScreens() {
+      stopPirateMusic();
       gameSelector.classList.add("hidden");
       gameShell.classList.add("hidden");
       fishingShell.classList.add("hidden");
@@ -2443,6 +2848,8 @@
       bigShop.classList.add("hidden");
       bigInventory.classList.add("hidden");
       sharedInventoryModal.classList.add("hidden");
+      yachtQuestModal.classList.add("hidden");
+      fishingOddsModal.classList.add("hidden");
       safeModal.classList.add("hidden");
       infoModal.classList.add("hidden");
       resultScreen.classList.add("hidden");
@@ -2469,6 +2876,133 @@
       const skin = skins.find(item => item.id === save.equipped) || skins[0];
       player.color = skin.color;
       player.accent = skin.accent;
+    }
+    function normalBoatSvg() {
+      return `<svg viewBox="0 0 420 190" aria-hidden="true">
+        <ellipse cx="215" cy="168" rx="170" ry="18" fill="#0b78bf" opacity=".25"></ellipse>
+        <path class="boat-outline" d="M45 104h330c-16 47-58 72-126 72H156c-62 0-99-25-111-72z" fill="#fff5c7"></path>
+        <path d="M58 126h304c-13 23-46 36-103 36H153c-50 0-80-13-95-36z" fill="#ffbe55"></path>
+        <path d="M75 150h258c-20 16-49 24-88 24h-83c-40 0-70-8-87-24z" fill="#e96b43"></path>
+        <circle class="boat-outline" cx="126" cy="123" r="27" fill="#ffe76d"></circle>
+        <path class="boat-outline" d="M174 55h120l-9 78H164z" fill="#fff5c7"></path>
+        <path d="M205 62h48l-9 64h-49z" fill="#83e1ff"></path>
+        <path d="M165 132h121" stroke="#17120f" stroke-width="7" stroke-linecap="round"></path>
+      </svg>`;
+    }
+    function yachtSvg() {
+      return `<svg viewBox="0 0 620 240" aria-hidden="true">
+        <ellipse cx="318" cy="209" rx="245" ry="19" fill="#0b78bf" opacity=".25"></ellipse>
+        <path class="boat-outline" d="M37 151c95 21 404 22 540 0-29 49-79 67-167 67H129c-55 0-84-20-92-67z" fill="#fffdf2"></path>
+        <path d="M87 174c114 15 324 14 432-2-25 22-67 31-127 31H140c-30 0-48-9-53-29z" fill="#9fe8ff"></path>
+        <path class="boat-outline" d="M137 119h347c38 0 65 9 80 29H75c13-20 34-29 62-29z" fill="#fffdf2"></path>
+        <path class="boat-outline" d="M178 87h236c44 0 75 12 94 35H143c7-22 19-35 35-35z" fill="#f4fbff"></path>
+        <path class="boat-outline" d="M246 51h155c31 0 54 12 70 36H210c8-23 20-36 36-36z" fill="#fffdf2"></path>
+        <path d="M245 94h215c16 0 30 5 42 14H216c7-9 16-14 29-14z" fill="#15324d"></path>
+        <path d="M292 59h93c23 0 39 7 49 20H266c6-13 14-20 26-20z" fill="#15324d"></path>
+        <path d="M179 126h63M271 126h64M367 126h74" stroke="#15324d" stroke-width="12" stroke-linecap="round"></path>
+        <circle cx="244" cy="180" r="7" fill="#15324d"></circle>
+        <circle cx="290" cy="181" r="7" fill="#15324d"></circle>
+        <circle cx="336" cy="181" r="7" fill="#15324d"></circle>
+        <circle cx="382" cy="181" r="7" fill="#15324d"></circle>
+        <path d="M314 50V18M342 50V25" stroke="#17120f" stroke-width="7" stroke-linecap="round"></path>
+        <path d="M270 51l-42-42M404 51l42-42" stroke="#17120f" stroke-width="5" opacity=".35"></path>
+        <path d="M73 151c8 11 23 18 45 22" stroke="#ffe76d" stroke-width="6" stroke-linecap="round"></path>
+      </svg>`;
+    }
+    function isYachtFish(fish) {
+      return fish.source === "yacht";
+    }
+    function boatOneFishIds() {
+      return fishCatalog.filter(fish => !isYachtFish(fish)).map(fish => fish.id);
+    }
+    function fishPoolForSpot(spot = fishing.spot) {
+      return fishCatalog.filter(fish => spot === "yacht" ? isYachtFish(fish) : !isYachtFish(fish));
+    }
+    function yachtFishSvg(fish, size = 86) {
+      const id = `${fish.id}${size}`.replace(/[^a-z0-9]/gi, "");
+      const body = fish.body;
+      const fin = fish.fin;
+      const commonDefs = `<defs>
+        <linearGradient id="yg${id}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffffff"/>
+          <stop offset=".38" stop-color="${body}"/>
+          <stop offset="1" stop-color="${fin}"/>
+        </linearGradient>
+        <filter id="glow${id}" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="2.2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>`;
+      const eye = `<circle cx="84" cy="36" r="5" fill="#17202a"/><circle cx="86" cy="34" r="1.8" fill="#fff"/>`;
+      const sparkle = `<path d="M21 14l4 8 8 4-8 4-4 8-4-8-8-4 8-4z" fill="#fffdf2" stroke="#17202a" stroke-width="2"/><circle cx="104" cy="20" r="4" fill="#ffe76d" stroke="#17202a" stroke-width="2"/>`;
+      const fishBody = (extra = "", tail = `<path d="M22 43L5 25v36z" fill="${fin}" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/>`) => `
+        <svg class="fish-sprite" viewBox="0 0 130 92" width="${size}" height="${Math.round(size * 0.72)}" aria-hidden="true">
+          ${commonDefs}
+          <ellipse cx="62" cy="78" rx="43" ry="7" fill="#071a2f" opacity=".18"/>
+          ${tail}
+          <path d="M22 43c18-25 59-26 86 0-27 27-68 27-86 0z" fill="url(#yg${id})" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M45 57l-15 17h37z" fill="${fin}" stroke="#17202a" stroke-width="4" stroke-linejoin="round"/>
+          ${extra}
+          ${eye}
+        </svg>`;
+      if (fish.pattern === "pearl") return fishBody(`<circle cx="43" cy="42" r="10" fill="#fffdf2" stroke="#d4b8ff" stroke-width="3"/><circle cx="61" cy="32" r="6" fill="#fff" opacity=".9"/><path d="M35 55c18 9 38 8 58-3" stroke="#fff" stroke-width="5" fill="none" opacity=".7"/>`);
+      if (fish.pattern === "crown") return fishBody(`<path d="M45 13l8 13 10-16 10 16 8-13v21H45z" fill="#ffe76d" stroke="#17202a" stroke-width="4" stroke-linejoin="round"/><path d="M33 49c22 12 47 11 67-4" stroke="#fff7b9" stroke-width="5" fill="none"/>`);
+      if (fish.pattern === "glass") return fishBody(`<path d="M31 34h58M32 48h55" stroke="#fff" stroke-width="6" opacity=".62"/><path d="M43 21l33 43" stroke="#fff" stroke-width="4" opacity=".9"/><path d="M21 43c18-25 59-26 86 0-27 27-68 27-86 0z" fill="none" stroke="#9ff5ff" stroke-width="3" opacity=".9"/>`);
+      if (fish.pattern === "velvet") return `<svg class="fish-sprite" viewBox="0 0 130 92" width="${size}" height="${Math.round(size * 0.72)}" aria-hidden="true">${commonDefs}<ellipse cx="63" cy="78" rx="45" ry="7" fill="#071a2f" opacity=".18"/><path d="M12 43c18-22 51-20 68-5 13 12 26 5 37-6-9 28-35 41-65 36C25 64 10 54 12 43z" fill="url(#yg${id})" stroke="#17202a" stroke-width="5"/><path d="M30 44c13-13 26 12 39 0s21 7 32 0" fill="none" stroke="#ff8bd1" stroke-width="6"/><path d="M46 61l-8 18h27z" fill="${fin}" stroke="#17202a" stroke-width="4"/>${eye}</svg>`;
+      if (fish.pattern === "diamond") return fishBody(`<path d="M49 12l18 16-16 21-20-18zM75 30l14 13-12 18-16-15z" fill="#fff" stroke="#17202a" stroke-width="4" opacity=".86"/><path d="M49 12l2 37M31 31l36-3" stroke="#85f4ff" stroke-width="3"/>${sparkle}`);
+      if (fish.pattern === "crown_jelly") return `<svg class="fish-sprite" viewBox="0 0 130 92" width="${size}" height="${Math.round(size * 0.72)}" aria-hidden="true">${commonDefs}<ellipse cx="65" cy="80" rx="42" ry="7" fill="#071a2f" opacity=".18"/><path d="M31 43c2-30 67-30 72 0v17H31z" fill="url(#yg${id})" stroke="#17202a" stroke-width="5"/><path d="M45 7l7 13 10-15 10 15 9-13v24H45z" fill="#ffe76d" stroke="#17202a" stroke-width="4"/><path d="M39 59c-8 25 14 20 6 31M62 59c-5 28 15 24 8 31M84 59c5 25 22 18 10 31" fill="none" stroke="${fin}" stroke-width="7" stroke-linecap="round"/><circle cx="83" cy="39" r="5" fill="#17202a"/><circle cx="85" cy="37" r="2" fill="#fff"/></svg>`;
+      if (fish.pattern === "goldbar") return fishBody(`<rect x="39" y="26" width="48" height="28" rx="6" fill="#ffe76d" stroke="#17202a" stroke-width="4"/><path d="M44 43h38M54 27l-11 26" stroke="#8b5a12" stroke-width="5"/><circle cx="53" cy="18" r="5" fill="#fff"/>`);
+      if (fish.pattern === "neon_ray") return `<svg class="fish-sprite" viewBox="0 0 130 92" width="${size}" height="${Math.round(size * 0.72)}" aria-hidden="true">${commonDefs}<ellipse cx="65" cy="78" rx="49" ry="8" fill="#071a2f" opacity=".18"/><path d="M15 45l48-34 55 34-55 36z" fill="${body}" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/><path d="M25 45h76M55 22l13 47M101 49l24 19" stroke="#35e4ff" stroke-width="6" stroke-linecap="round" filter="url(#glow${id})"/><circle cx="78" cy="39" r="5" fill="#fff"/></svg>`;
+      if (fish.pattern === "treasure_shark") return fishBody(`<path d="M55 7l16 22H37zM76 53l17 17H52z" fill="${fin}" stroke="#17202a" stroke-width="4"/><rect x="36" y="31" width="24" height="18" rx="4" fill="#8b5a12" stroke="#17202a" stroke-width="4"/><path d="M39 31h18M42 40h14" stroke="#ffe76d" stroke-width="4"/>`);
+      if (fish.pattern === "cloud_whale") return `<svg class="fish-sprite" viewBox="0 0 130 92" width="${size}" height="${Math.round(size * 0.72)}" aria-hidden="true">${commonDefs}<ellipse cx="65" cy="78" rx="48" ry="8" fill="#071a2f" opacity=".18"/><path d="M16 39c10-29 54-27 70-6 20-15 42 3 29 24-13 21-67 25-96 7C7 56 8 46 16 39z" fill="#fffdf2" stroke="#17202a" stroke-width="5"/><circle cx="43" cy="38" r="16" fill="#dff8ff"/><circle cx="64" cy="35" r="18" fill="#dff8ff"/><path d="M21 62h84" stroke="#9bdfff" stroke-width="6"/><circle cx="86" cy="40" r="5" fill="#17202a"/><circle cx="88" cy="38" r="2" fill="#fff"/></svg>`;
+      if (fish.pattern === "royal") return fishBody(`<path d="M43 8l8 15 11-18 12 18 9-15v25H43z" fill="#ffe76d" stroke="#17202a" stroke-width="4"/><path d="M28 49c27 15 56 10 76-10" fill="none" stroke="#ffe76d" stroke-width="7"/><path d="M43 60c20 7 38 5 54-7" stroke="#fff" stroke-width="4" fill="none"/>${sparkle}`);
+      if (fish.pattern === "galaxy") return fishBody(`<circle cx="38" cy="28" r="4" fill="#fff"/><circle cx="60" cy="50" r="3" fill="#ffe76d"/><circle cx="78" cy="27" r="4" fill="#71f5ff"/><path d="M26 58c29-28 55 19 85-10" stroke="#ff8bd1" stroke-width="6" fill="none" filter="url(#glow${id})"/><path d="M27 31c20-13 39-12 58 0" stroke="#5a33ff" stroke-width="4" fill="none"/>`);
+      if (fish.pattern === "sunken") return fishBody(`<path d="M42 12l8 14 11-18 11 18 9-14v24H42z" fill="#8b6b2e" stroke="#17202a" stroke-width="4"/><path d="M30 55c23 10 49 9 74-2" stroke="#71f5ff" stroke-width="6" fill="none"/><circle cx="47" cy="38" r="5" fill="#35e4ff"/><path d="M37 22c8-8 21-8 31 0" stroke="#0e4a66" stroke-width="4"/>`);
+      if (fish.pattern === "prism") return fishBody(`<path d="M29 30h68" stroke="#ff5f72" stroke-width="7"/><path d="M28 43h71" stroke="#ffe76d" stroke-width="7"/><path d="M29 56h68" stroke="#35e4ff" stroke-width="7"/><path d="M47 11l11 17 13-17" stroke="#fff" stroke-width="5" fill="none"/><path d="M18 43L4 20v46z" fill="#b86cff" stroke="#17202a" stroke-width="5"/>${sparkle}`);
+      if (fish.pattern === "blob") return `<svg class="fish-sprite" viewBox="0 0 150 105" width="${size}" height="${Math.round(size * 0.72)}" aria-hidden="true">
+        <defs>
+          <radialGradient id="blobBody${id}" cx="44%" cy="35%" r="70%">
+            <stop offset="0" stop-color="#ffe7ef"/>
+            <stop offset=".34" stop-color="#ffb6c8"/>
+            <stop offset=".76" stop-color="#d97892"/>
+            <stop offset="1" stop-color="#9b5066"/>
+          </radialGradient>
+          <linearGradient id="blobGold${id}" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#fff7b9"/>
+            <stop offset=".45" stop-color="#ffe76d"/>
+            <stop offset="1" stop-color="#b97912"/>
+          </linearGradient>
+          <filter id="blobGlow${id}" x="-45%" y="-45%" width="190%" height="190%">
+            <feGaussianBlur stdDeviation="2.5" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <ellipse cx="75" cy="91" rx="54" ry="8" fill="#071a2f" opacity=".22"/>
+        <path d="M21 58c1-23 17-42 45-47 29-5 59 8 69 31 8 18-4 39-30 48-21 7-52 5-70-5-12-7-16-16-14-27z" fill="url(#blobBody${id})" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M24 64c18 13 46 16 70 9 16-5 29-15 35-29" fill="none" stroke="#fff1f6" stroke-width="5" opacity=".42" stroke-linecap="round"/>
+        <path d="M37 33c16-15 47-20 70-5" fill="none" stroke="#fff6fb" stroke-width="5" opacity=".72" stroke-linecap="round"/>
+        <path d="M35 21l10-13 13 16 14-15 14 16 11-13 8 31H30z" fill="url(#blobGold${id})" stroke="#17202a" stroke-width="4" stroke-linejoin="round"/>
+        <circle cx="45" cy="19" r="4" fill="#fffdf2" stroke="#17202a" stroke-width="2"/>
+        <circle cx="72" cy="17" r="5" fill="#62e68a" stroke="#17202a" stroke-width="2"/>
+        <circle cx="98" cy="22" r="4" fill="#35e4ff" stroke="#17202a" stroke-width="2"/>
+        <path d="M55 47c-3-5-9-7-15-4" fill="none" stroke="#17202a" stroke-width="4" stroke-linecap="round"/>
+        <path d="M103 48c-5-5-12-5-18-1" fill="none" stroke="#17202a" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="47" cy="49" r="4.8" fill="#17202a"/>
+        <circle cx="93" cy="50" r="4.8" fill="#17202a"/>
+        <circle cx="49" cy="47" r="1.8" fill="#fff"/>
+        <circle cx="95" cy="48" r="1.8" fill="#fff"/>
+        <path d="M67 47c7-5 18-3 22 5 5 11-8 22-18 17-8-4-9-16-4-22z" fill="#f09aaf" stroke="#17202a" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M72 55c4-3 10-2 13 2" fill="none" stroke="#ffd9e3" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="74" cy="61" r="2.4" fill="#8b5164"/>
+        <circle cx="85" cy="60" r="2.4" fill="#8b5164"/>
+        <path d="M52 73c10 9 38 9 51 0" fill="none" stroke="#7f4056" stroke-width="5" stroke-linecap="round"/>
+        <path d="M58 76c8 4 29 4 39 0" fill="none" stroke="#ffd5df" stroke-width="4" stroke-linecap="round"/>
+        <path d="M118 55l20-13-5 29z" fill="url(#blobGold${id})" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M26 56L8 43l4 28z" fill="#e88ba1" stroke="#17202a" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M20 34l6-13 5 13 13 6-13 5-6 13-5-13-13-5z" fill="#fffdf2" stroke="#17202a" stroke-width="2.5" filter="url(#blobGlow${id})"/>
+        <path d="M124 25l4-8 4 8 8 4-8 4-4 8-4-8-8-4z" fill="#ffe76d" stroke="#17202a" stroke-width="2.5" filter="url(#blobGlow${id})"/>
+      </svg>`;
+      return fishBody();
     }
 
     function fishSvg(fish, size = 86) {
@@ -2498,6 +3032,7 @@
           <path d="M41 17c12 6 28 6 40 0" fill="none" stroke="#fff8d7" stroke-width="4" stroke-linecap="round" opacity=".9"/>
         </svg>`;
       }
+      if (isYachtFish(fish)) return yachtFishSvg(fish, size);
       const extras = {
         stripe: `<path d="M36 18v24M50 18v24" stroke="#17202a" stroke-width="4" opacity=".45"/>`,
         dot: `<circle cx="38" cy="24" r="4" fill="#17202a" opacity=".45"/><circle cx="53" cy="35" r="4" fill="#17202a" opacity=".35"/>`,
@@ -2521,7 +3056,22 @@
         star: `<path d="M48 5l10 23 25 2-19 16 6 24-22-13-22 13 6-24-19-16 25-2z" fill="${body}" stroke="#17202a" stroke-width="4"/>`,
         cosmic: `<circle cx="34" cy="23" r="3" fill="#fff"/><circle cx="52" cy="36" r="2" fill="#ffe36e"/><circle cx="65" cy="21" r="3" fill="#71f5ff"/><path d="M25 45c18 10 39 10 58-4" stroke="#ff8bd1" stroke-width="4" fill="none"/>`,
         endless: `<path d="M28 22c13 15 28 15 42 0M28 40c13-15 28-15 42 0" fill="none" stroke="#8af7ff" stroke-width="4" opacity=".95"/><circle cx="37" cy="31" r="3" fill="#fff"/><circle cx="51" cy="21" r="2" fill="#b88cff"/><circle cx="60" cy="40" r="2.5" fill="#8af7ff"/><path d="M23 31c13-13 29-13 42 0 7 7 14 7 22 0" fill="none" stroke="#5a33ff" stroke-width="3" opacity=".7"/>`,
-        sssd: `<path d="M35 11l16-13 16 13 13 14H22z" fill="#d6a34a" stroke="#17202a" stroke-width="4" stroke-linejoin="round"/><path d="M18 25h66" stroke="#17202a" stroke-width="5" stroke-linecap="round"/><path d="M28 24h46" stroke="#ffe2a0" stroke-width="4" stroke-linecap="round"/><path d="M30 18l39 35M36 13l39 35" stroke="#8b4a2f" stroke-width="4" stroke-linecap="round"/><path d="M34 38c10 7 22 7 33 0" fill="none" stroke="#fff7c7" stroke-width="5" opacity=".8"/><circle cx="40" cy="28" r="4" fill="#fff7c7"/><circle cx="57" cy="42" r="3" fill="#fff7c7"/>`
+        sssd: `<path d="M35 11l16-13 16 13 13 14H22z" fill="#d6a34a" stroke="#17202a" stroke-width="4" stroke-linejoin="round"/><path d="M18 25h66" stroke="#17202a" stroke-width="5" stroke-linecap="round"/><path d="M28 24h46" stroke="#ffe2a0" stroke-width="4" stroke-linecap="round"/><path d="M30 18l39 35M36 13l39 35" stroke="#8b4a2f" stroke-width="4" stroke-linecap="round"/><path d="M34 38c10 7 22 7 33 0" fill="none" stroke="#fff7c7" stroke-width="5" opacity=".8"/><circle cx="40" cy="28" r="4" fill="#fff7c7"/><circle cx="57" cy="42" r="3" fill="#fff7c7"/>`,
+        pearl: `<circle cx="40" cy="30" r="9" fill="#fff" opacity=".8"/><circle cx="57" cy="24" r="5" fill="#e2b7ff"/><path d="M27 41c13 9 29 9 47 0" stroke="#fff" stroke-width="4" fill="none" opacity=".75"/>`,
+        crown: `<path d="M38 7l8 12 9-13 9 13 8-12v19H38z" fill="#ffe76d" stroke="#17202a" stroke-width="3" stroke-linejoin="round"/><path d="M31 42c12 6 27 6 43 0" stroke="#fff" stroke-width="4" fill="none" opacity=".65"/>`,
+        glass: `<path d="M27 25h46M28 37h43" stroke="#fff" stroke-width="5" opacity=".55"/><path d="M35 16l26 28" stroke="#fff" stroke-width="3" opacity=".85"/>`,
+        velvet: `<path d="M27 31c10-11 22 11 32 0s17 8 25 1" fill="none" stroke="#ff8bd1" stroke-width="5"/><circle cx="38" cy="21" r="4" fill="#fff" opacity=".65"/>`,
+        diamond: `<path d="M45 9l16 15-14 18-17-16zM66 27l12 11-11 15-13-13z" fill="#fff" stroke="#17202a" stroke-width="3" opacity=".78"/>`,
+        crown_jelly: `<path d="M35 4l7 11 8-12 8 12 7-11v17H35z" fill="#ffe76d" stroke="#17202a" stroke-width="3"/><path d="M30 42c0 18 10 18 10 0M49 42c0 20 10 20 10 0M68 42c0 18 10 18 10 0" fill="none" stroke="#ffe76d" stroke-width="5"/>`,
+        goldbar: `<rect x="32" y="18" width="38" height="25" rx="5" fill="#ffe76d" stroke="#17202a" stroke-width="3"/><path d="M36 34h30" stroke="#8b5a12" stroke-width="4"/><circle cx="48" cy="14" r="4" fill="#fff"/>`,
+        neon_ray: `<path d="M20 30l28-21 33 21-33 22z" fill="${body}" stroke="#17202a" stroke-width="4"/><path d="M27 30h43M45 16l7 29" stroke="#35e4ff" stroke-width="4"/><path d="M69 34l24 16" stroke="#35e4ff" stroke-width="4"/>`,
+        treasure_shark: `<path d="M45 7l13 18H33zM60 42l12 14H46z" fill="${fin}" stroke="#17202a" stroke-width="3"/><rect x="29" y="25" width="18" height="14" rx="3" fill="#8b5a12" stroke="#17202a" stroke-width="3"/><path d="M32 24h12" stroke="#ffe76d" stroke-width="4"/>`,
+        cloud_whale: `<path d="M20 23c10-17 28-10 33 4 15-13 28 0 19 13" fill="${body}" stroke="#17202a" stroke-width="4"/><circle cx="35" cy="25" r="10" fill="#dff8ff"/><circle cx="49" cy="25" r="13" fill="#dff8ff"/><path d="M20 42h58" stroke="#9bdfff" stroke-width="5" opacity=".8"/>`,
+        royal: `<path d="M35 7l8 13 10-15 10 15 8-13v18H35z" fill="#ffe76d" stroke="#17202a" stroke-width="3"/><path d="M25 40c20 12 42 8 57-8" fill="none" stroke="#ffe76d" stroke-width="5"/><circle cx="42" cy="31" r="4" fill="#fff"/>`,
+        galaxy: `<circle cx="34" cy="22" r="3" fill="#fff"/><circle cx="50" cy="36" r="2" fill="#ffe76d"/><circle cx="64" cy="20" r="3" fill="#71f5ff"/><path d="M23 44c20-16 43 13 61-5" stroke="#ff8bd1" stroke-width="4" fill="none"/>`,
+        sunken: `<path d="M36 8l7 11 9-13 9 13 7-11v18H36z" fill="#8b6b2e" stroke="#17202a" stroke-width="3"/><path d="M28 42c15 8 32 8 50 0" stroke="#71f5ff" stroke-width="4" fill="none"/><circle cx="41" cy="30" r="4" fill="#35e4ff"/>`,
+        prism: `<path d="M26 22h48" stroke="#ff5f72" stroke-width="5"/><path d="M25 31h50" stroke="#ffe76d" stroke-width="5"/><path d="M26 40h48" stroke="#35e4ff" stroke-width="5"/><path d="M45 8l8 13 9-13" stroke="#fff" stroke-width="4" fill="none"/>`,
+        blob: `<path d="M21 34c5-24 47-28 62-7 14 19-10 33-36 31-22-1-31-10-26-24z" fill="${body}" stroke="#17202a" stroke-width="4"/><path d="M38 43c9 5 21 5 31 0" stroke="#8b5164" stroke-width="4" fill="none"/><circle cx="45" cy="27" r="4" fill="#17202a"/><circle cx="65" cy="29" r="4" fill="#17202a"/><path d="M31 17l9-9 10 10" fill="#ffe76d" stroke="#17202a" stroke-width="3"/>`
       }[fish.pattern] || "";
       const bodyShape = fish.pattern === "jelly"
         ? `<path d="M22 36c2-22 51-22 55 0v10H22z" fill="${body}" stroke="#17202a" stroke-width="4"/>`
@@ -2579,17 +3129,60 @@
       return bait;
     }
     function baitBoostForFish(fish, bait) {
-      if (!bait) return 1;
-      if (bait.chromaBoost && fish.rarity === "Chroma") return 1 + bait.chromaBoost;
-      if (bait.rareBoost && fish.rarity !== "Common") return 1 + bait.rareBoost;
+      let boost = 1;
+      if (bait?.rarityBoosts?.[fish.rarity]) boost *= 1 + bait.rarityBoosts[fish.rarity];
+      if (bait?.chromaBoost && fish.rarity === "Chroma") boost *= 1 + bait.chromaBoost;
+      if (bait?.rareBoost && fish.rarity !== "Common") boost *= 1 + bait.rareBoost;
+      return boost;
+    }
+    function rodBoostForFish(fish, rod = getRod()) {
+      if (rod?.chromaBoost && fish.rarity === "Chroma") return 1 + rod.chromaBoost;
       return 1;
+    }
+    function weightForFish(fish, rod = getRod(), bait = null) {
+      const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma"].indexOf(fish.rarity);
+      const boost = 1 + rod.rareBoost * Math.max(0, rarityIndex);
+      const commonNerf = fish.rarity === "Common" ? Math.max(0.35, 1 - rod.rareBoost * 0.25) : 1;
+      return (rarityWeights[fish.rarity] || 0) * boost * commonNerf * baitBoostForFish(fish, bait) * rodBoostForFish(fish, rod) * (fish.weightScale || 1);
+    }
+    function renderFishingHome() {
+      if (!startYachtButton) return;
+      startYachtButton.innerHTML = yachtSvg();
+      startYachtButton.classList.toggle("hidden", !save.yachtUnlocked);
+      startYachtButton.classList.toggle("locked", !save.yachtUnlocked);
+      yachtNote.classList.toggle("hidden", !save.yachtUnlocked);
+    }
+    function createSplash(kind = "big") {
+      if (!splashLayer) return;
+      const splash = document.createElement("div");
+      splash.className = `splash-burst ${kind}`;
+      const x = fishing.spot === "yacht" ? 79 : 76.5;
+      splash.style.setProperty("--splash-x", `${x}%`);
+      splash.style.setProperty("--splash-y", fishing.spot === "yacht" ? "75%" : "73%");
+      const count = kind === "catch" ? 18 : kind === "big" ? 14 : 9;
+      for (let i = 0; i < count; i++) {
+        const drop = document.createElement("span");
+        const angle = (-165 + (330 / Math.max(1, count - 1)) * i) * Math.PI / 180;
+        const distance = rand(kind === "catch" ? 62 : 38, kind === "catch" ? 142 : 98);
+        drop.style.setProperty("--drop-x", `${Math.cos(angle) * distance}px`);
+        drop.style.setProperty("--drop-y", `${Math.sin(angle) * distance - rand(8, 34)}px`);
+        drop.style.setProperty("--drop-y-end", `${Math.sin(angle) * distance + rand(18, 48)}px`);
+        drop.style.setProperty("--drop-r", `${rand(-36, 36)}deg`);
+        drop.style.setProperty("--drop-w", `${rand(12, 24)}px`);
+        drop.style.setProperty("--drop-h", `${rand(28, 56)}px`);
+        drop.style.setProperty("--drop-delay", `${rand(0, 0.08)}s`);
+        splash.appendChild(drop);
+      }
+      splashLayer.appendChild(splash);
+      setTimeout(() => splash.remove(), 1300);
     }
     function renderBaitBar() {
       if (!baitBar) return;
       const equipped = getEquippedBait();
+      const visibleBaits = baits.filter(bait => (bait.shop || "boat1") === fishing.spot || cleanNumber(save.baits[bait.id], 0) > 0);
       baitBar.innerHTML = `
         <button class="bait-pill ${!equipped ? "active" : ""}" data-bait-equip="none">No Bait</button>
-        ${baits.map(bait => {
+        ${visibleBaits.map(bait => {
           const count = cleanNumber(save.baits[bait.id], 0);
           return `<button class="bait-pill ${equipped?.id === bait.id ? "active" : ""}" data-bait-equip="${bait.id}" ${count > 0 ? "" : "disabled"}>${bait.name} x${count}</button>`;
         }).join("")}
@@ -2768,7 +3361,7 @@
       const items = [];
       Object.entries(save.fish || {}).forEach(([id, count]) => {
         const fish = fishById[id];
-        if (fish) items.push({ key: `fish:${id}`, type: "fish", group: "fishing", id, name: fish.name, detail: `${fish.subtitle ? `${fish.subtitle} - ` : ""}${fish.rarity} x${count}`, count, price: fish.price, visual: fishSvg(fish) });
+        if (fish) items.push({ key: `fish:${id}`, type: "fish", group: "fishing", id, name: fish.name, detail: `${fish.source === "yacht" ? "Yacht - " : "Boat 1 - "}${fish.subtitle ? `${fish.subtitle} - ` : ""}${fish.rarity} x${count}`, count, price: fish.price, visual: fishSvg(fish) });
       });
       save.ownedRods.forEach(id => {
         const rod = rodById[id];
@@ -2837,20 +3430,104 @@
       renderSharedInventory(filter, sharedInventoryGrid);
       sharedInventoryModal.classList.remove("hidden");
     }
+    function yachtQuestStatus() {
+      const ids = boatOneFishIds();
+      const owned = ids.filter(id => cleanNumber(save.fish[id], 0) > 0).length;
+      return { ids, owned, total: ids.length, ready: owned === ids.length };
+    }
+    function openYachtQuest() {
+      renderYachtQuest();
+      yachtQuestModal.classList.remove("hidden");
+    }
+    function renderYachtQuest() {
+      const status = yachtQuestStatus();
+      if (save.yachtUnlocked) {
+        yachtQuestText.textContent = "Yacht unlocked. Tap the yacht on the water to fish there.";
+      } else {
+        yachtQuestText.textContent = `Bring 1 of every Boat 1 fish. Progress: ${status.owned}/${status.total}`;
+      }
+      yachtQuestGrid.innerHTML = status.ids.map(id => {
+        const fish = fishById[id];
+        const count = cleanNumber(save.fish[id], 0);
+        return `
+          <div class="quest-row ${count > 0 ? "done" : ""}">
+            ${fishSvg(fish, 54)}
+            <div>${fish.name}</div>
+            <div>${fish.rarity}<span class="quest-progress">${count > 0 ? "1/1" : "0/1"}</span></div>
+          </div>
+        `;
+      }).join("");
+      completeYachtQuestButton.disabled = save.yachtUnlocked || !status.ready;
+      completeYachtQuestButton.textContent = save.yachtUnlocked ? "Unlocked" : status.ready ? "Turn In Fish" : "Need More Fish";
+    }
+    function completeYachtQuest() {
+      const status = yachtQuestStatus();
+      if (save.yachtUnlocked || !status.ready) return;
+      status.ids.forEach(id => {
+        save.fish[id] -= 1;
+        if (save.fish[id] <= 0) delete save.fish[id];
+      });
+      save.yachtUnlocked = true;
+      playSfx("quest");
+      saveGame();
+      renderYachtQuest();
+      renderFishingHome();
+    }
+    function oddsForPool(spot = fishing.spot, bait = getEquippedBait()) {
+      const rod = getRod();
+      const pool = fishPoolForSpot(spot);
+      const weighted = pool.map(fish => ({ fish, weight: weightForFish(fish, rod, bait) }));
+      const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+      const rarityTotals = {};
+      weighted.forEach(item => { rarityTotals[item.fish.rarity] = (rarityTotals[item.fish.rarity] || 0) + item.weight; });
+      return { rod, bait, pool, weighted, total, rarityTotals };
+    }
+    function oddsText(total, weight) {
+      if (!weight || !total) return "Never";
+      return `1 in ${Math.max(1, Math.round(total / weight)).toLocaleString()}`;
+    }
+    function openFishingOdds() {
+      const spot = fishing.spot || "boat1";
+      const odds = oddsForPool(spot);
+      fishingOddsTitle.textContent = `${spot === "yacht" ? "Yacht" : "Boat 1"} Odds`;
+      fishingOddsText.textContent = `${odds.rod.name}${odds.bait ? ` + ${odds.bait.name}` : ""}`;
+      const rarityOrder = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma"];
+      const rarityRows = rarityOrder
+        .filter(rarity => odds.rarityTotals[rarity])
+        .map(rarity => `<div class="odds-row"><strong>${rarity}</strong><br>${oddsText(odds.total, odds.rarityTotals[rarity])}</div>`)
+        .join("");
+      const bigFishRows = odds.weighted
+        .filter(item => item.fish.price >= 6000)
+        .sort((a, b) => b.fish.price - a.fish.price)
+        .map(item => `<div class="odds-row"><strong>${item.fish.name}</strong><br>${item.fish.price.toLocaleString()} coins<br>${oddsText(odds.total, item.weight)}</div>`)
+        .join("");
+      fishingOddsGrid.innerHTML = `${rarityRows}${bigFishRows ? `<div class="shop-section-title">Big Fish</div>${bigFishRows}` : ""}`;
+      fishingOddsModal.classList.remove("hidden");
+    }
     function openFishingHome() {
       hideAllScreens();
+      startPirateMusic();
       fishingShell.classList.remove("hidden");
       fishingHome.classList.remove("hidden");
       fishingPlay.classList.add("hidden");
       fishingShopScreen.classList.add("hidden");
+      renderFishingHome();
       syncLobby();
     }
-    function openFishingPlay() {
+    function openFishingPlay(spot = "boat1") {
+      if (spot === "yacht" && !save.yachtUnlocked) return openYachtQuest();
       hideAllScreens();
+      startPirateMusic();
+      fishing.spot = spot;
       fishingShell.classList.remove("hidden");
       fishingHome.classList.add("hidden");
       fishingPlay.classList.remove("hidden");
       fishingShopScreen.classList.add("hidden");
+      fishingPlay.classList.toggle("yacht-mode", spot === "yacht");
+      playBoatArt.classList.toggle("yacht-play", spot === "yacht");
+      playBoatArt.innerHTML = spot === "yacht" ? yachtSvg() : normalBoatSvg();
+      yachtShopButton.classList.toggle("hidden", spot !== "yacht");
+      yachtShopDoorButton.classList.toggle("hidden", spot !== "yacht");
       catchPanel.classList.add("hidden");
       clearTimeout(fishing.biteTimer);
       clearInterval(fishing.timer);
@@ -2866,32 +3543,33 @@
       fishScoreValue.textContent = fishing.score;
       syncLobby();
     }
-    function openFishingShop() {
+    function openFishingShop(spot = "boat1") {
+      if (spot === "yacht" && !save.yachtUnlocked) return openYachtQuest();
       hideAllScreens();
+      startPirateMusic();
+      fishing.shopSpot = spot;
       fishingShell.classList.remove("hidden");
       fishingHome.classList.add("hidden");
       fishingPlay.classList.add("hidden");
       fishingShopScreen.classList.remove("hidden");
+      fishingShopScreen.classList.toggle("yacht-shop", spot === "yacht");
+      fishingShopTitle.textContent = spot === "yacht" ? "Yacht Fishing Shop" : "Fishing Shop";
       renderRods();
       syncLobby();
     }
     function chooseFish(bait = null) {
       const rod = getRod();
-      const weighted = fishCatalog.map(fish => {
-        const rarityIndex = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic", "Chroma"].indexOf(fish.rarity);
-        const boost = 1 + rod.rareBoost * Math.max(0, rarityIndex);
-        const commonNerf = fish.rarity === "Common" ? Math.max(0.35, 1 - rod.rareBoost * 0.25) : 1;
-        return { fish, weight: (rarityWeights[fish.rarity] || 0) * boost * commonNerf * baitBoostForFish(fish, bait) };
-      });
+      const weighted = fishPoolForSpot().map(fish => ({ fish, weight: weightForFish(fish, rod, bait) }));
       const total = weighted.reduce((sum, item) => sum + item.weight, 0);
       let roll = Math.random() * total;
       for (const item of weighted) {
         roll -= item.weight;
         if (roll <= 0) return item.fish;
       }
-      return fishCatalog[0];
+      return fishPoolForSpot()[0] || fishCatalog[0];
     }
     function startFishingAttempt() {
+      startPirateMusic();
       if (fishing.phase === "idle") return castRod();
       if (fishing.phase === "waiting") return;
       if (fishing.phase === "bite") return hookFish();
@@ -2899,6 +3577,8 @@
       if (fishing.phase === "result") return castRod();
     }
     function castRod() {
+      playSfx("cast");
+      createSplash("big");
       clearTimeout(fishing.biteTimer);
       clearInterval(fishing.timer);
       const bait = getEquippedBait();
@@ -2926,6 +3606,8 @@
     }
     function showFishBite() {
       if (fishing.phase !== "waiting") return;
+      playSfx("bite");
+      createSplash("big");
       fishing.phase = "bite";
       fishing.active = true;
       targetFishSprite.innerHTML = fishSvg(fishing.target, 116);
@@ -2940,6 +3622,8 @@
     }
     function hookFish() {
       if (fishing.phase !== "bite") return;
+      playSfx("bite");
+      createSplash("big");
       fishing.phase = "reeling";
       fishing.active = true;
       targetFishName.textContent = `${fishing.target.name} (${fishing.target.rarity})`;
@@ -2960,6 +3644,7 @@
     function tapFish() {
       if (!fishing.active || fishing.phase !== "reeling") return startFishingAttempt();
       fishing.taps += 1;
+      if (fishing.taps % 3 === 1) playSfx("tap");
       if (fishing.taps >= fishing.needed) finishFishing(true);
       else updateFishingPanel();
     }
@@ -2990,6 +3675,8 @@
       fishing.active = false;
       fishing.phase = "result";
       if (caught) {
+        playSfx("catch");
+        createSplash("catch");
         addFish(fishing.target.id, 1);
         fishing.score += fishing.target.price;
         fishScoreValue.textContent = fishing.score;
@@ -2999,6 +3686,8 @@
         tapMeterFill.style.width = "100%";
         fishResultText.textContent = `Caught ${fishing.target.name}! It went to inventory.`;
       } else {
+        playSfx("escape");
+        createSplash("escape");
         fishTimerValue.textContent = "Escaped";
         tapMeterFill.style.width = `${clamp((fishing.taps / fishing.needed) * 100, 0, 100)}%`;
         fishResultText.textContent = `${fishing.target.name} escaped!`;
@@ -3007,7 +3696,10 @@
     }
     function renderRods() {
       if (!rodGrid) return;
-      const rodCards = rods.map(rod => {
+      const shopSpot = fishing.shopSpot || "boat1";
+      const shopRods = rods.filter(rod => (rod.shop || "boat1") === shopSpot);
+      const shopBaits = baits.filter(bait => (bait.shop || "boat1") === shopSpot);
+      const rodCards = shopRods.map(rod => {
         const owned = save.ownedRods.includes(rod.id);
         const equipped = save.equippedRod === rod.id;
         const rareText = rod.rareBoost > 0 ? `+${Math.round(rod.rareBoost * 100)}% rare luck` : "Normal luck";
@@ -3021,7 +3713,7 @@
           </div>
         `;
       }).join("");
-      const baitCards = baits.map(bait => {
+      const baitCards = shopBaits.map(bait => {
         const count = cleanNumber(save.baits[bait.id], 0);
         const equipped = save.equippedBait === bait.id && count > 0;
         return `
@@ -3036,9 +3728,9 @@
         `;
       }).join("");
       rodGrid.innerHTML = `
-        <h2 class="shop-section-title">Fishing Rods</h2>
+        <h2 class="shop-section-title">${shopSpot === "yacht" ? "Yacht Rods" : "Fishing Rods"}</h2>
         ${rodCards}
-        <h2 class="shop-section-title">Baits</h2>
+        <h2 class="shop-section-title">${shopSpot === "yacht" ? "Yacht Baits" : "Baits"}</h2>
         ${baitCards}
       `;
       rodGrid.querySelectorAll("[data-rod]").forEach(button => button.addEventListener("click", () => {
@@ -4342,13 +5034,21 @@
     document.getElementById("closeSharedInventoryButton").addEventListener("click", () => sharedInventoryModal.classList.add("hidden"));
     document.getElementById("fishingBackButton").addEventListener("click", openMinigamesSelector);
     document.getElementById("fishingMenuButton").addEventListener("click", openMinigamesSelector);
-    document.getElementById("openFishingShopButton").addEventListener("click", openFishingShop);
-    document.getElementById("startFishingButton").addEventListener("click", openFishingPlay);
+    document.getElementById("openFishingShopButton").addEventListener("click", () => openFishingShop("boat1"));
+    document.getElementById("questGuyButton").addEventListener("click", openYachtQuest);
+    document.getElementById("startFishingButton").addEventListener("click", () => openFishingPlay("boat1"));
+    document.getElementById("startYachtButton").addEventListener("click", () => openFishingPlay("yacht"));
+    document.getElementById("fishingOddsButton").addEventListener("click", openFishingOdds);
+    document.getElementById("yachtShopButton").addEventListener("click", () => openFishingShop("yacht"));
+    document.getElementById("yachtShopDoorButton").addEventListener("click", () => openFishingShop("yacht"));
     document.getElementById("exitFishingPlayButton").addEventListener("click", openFishingHome);
     document.getElementById("fishingInventoryButton").addEventListener("click", () => openSharedInventory("fishing"));
     document.getElementById("fishActionButton").addEventListener("click", startFishingAttempt);
-    document.getElementById("fishingShopBackButton").addEventListener("click", openFishingHome);
+    document.getElementById("fishingShopBackButton").addEventListener("click", () => fishing.shopSpot === "yacht" ? openFishingPlay("yacht") : openFishingHome());
     document.getElementById("fishingShopMenuButton").addEventListener("click", openMinigamesSelector);
+    document.getElementById("closeYachtQuestButton").addEventListener("click", () => yachtQuestModal.classList.add("hidden"));
+    document.getElementById("completeYachtQuestButton").addEventListener("click", completeYachtQuest);
+    document.getElementById("closeFishingOddsButton").addEventListener("click", () => fishingOddsModal.classList.add("hidden"));
     document.getElementById("marketBackButton").addEventListener("click", openMinigamesSelector);
     document.getElementById("marketInventoryButton").addEventListener("click", () => openSharedInventory("all"));
     document.getElementById("createShopRoomButton").addEventListener("click", createShopRoom);
@@ -4415,8 +5115,10 @@
     if (location.hash === "#shop") setTimeout(() => bigShop.classList.remove("hidden"), 80);
     if (location.hash === "#inventory") setTimeout(() => bigInventory.classList.remove("hidden"), 80);
     if (location.hash === "#fishing") setTimeout(openFishingHome, 80);
-    if (location.hash === "#fishing-shop") setTimeout(openFishingShop, 80);
-    if (location.hash === "#fishing-play") setTimeout(openFishingPlay, 80);
+    if (location.hash === "#fishing-shop") setTimeout(() => openFishingShop("boat1"), 80);
+    if (location.hash === "#fishing-play") setTimeout(() => openFishingPlay("boat1"), 80);
+    if (location.hash === "#yacht-play") setTimeout(() => openFishingPlay("yacht"), 80);
+    if (location.hash === "#yacht-shop") setTimeout(() => openFishingShop("yacht"), 80);
     if (location.hash === "#market") setTimeout(openMarketHome, 80);
     requestAnimationFrame(loop);
   </script>
