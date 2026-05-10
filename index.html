@@ -775,6 +775,73 @@
     .skin-card p { margin: 0; color: #b9d8ff; font-weight: 800; }
     .close-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
     .safe-pad { display: grid; gap: 10px; margin-top: 14px; }
+    .cheat-panel {
+      margin-top: 16px;
+      padding: 14px;
+      border: 4px solid #06101d;
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255, 236, 107, 0.22), transparent 9rem),
+        radial-gradient(circle at 88% 0%, rgba(53, 228, 255, 0.22), transparent 10rem),
+        linear-gradient(180deg, #0d2f64, #06162f);
+      box-shadow: inset 0 0 0 3px rgba(255,255,255,0.1), 0 6px 0 #06101d;
+    }
+    .cheat-tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+    .cheat-tools label {
+      display: grid;
+      gap: 5px;
+      color: #dff8ff;
+      font-weight: 1000;
+      text-shadow: 0 2px 0 #06101d;
+    }
+    .cheat-tools input {
+      width: 100%;
+      min-height: 44px;
+      border: 3px solid #06101d;
+      border-radius: 7px;
+      padding: 0 10px;
+      background: #e8f4ff;
+      color: #06101d;
+      font-weight: 1000;
+    }
+    .cheat-fish-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      max-height: 350px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .cheat-fish-card {
+      min-height: 160px;
+      border: 4px solid #06101d;
+      border-radius: 10px;
+      display: grid;
+      justify-items: center;
+      gap: 5px;
+      padding: 10px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.16), transparent 38%),
+        linear-gradient(180deg, #164b98, #092554);
+      color: white;
+      font-weight: 1000;
+      text-align: center;
+      box-shadow: 0 5px 0 #06101d;
+    }
+    .cheat-fish-card.endless {
+      background:
+        radial-gradient(circle at 50% 20%, rgba(138,247,255,0.25), transparent 5rem),
+        linear-gradient(180deg, #101628, #05070d);
+      border-color: #8af7ff;
+      box-shadow: 0 5px 0 #06101d, 0 0 22px rgba(138,247,255,0.45);
+    }
+    .cheat-fish-card small { color: #b9d8ff; font-weight: 900; }
 
     .cartoon-screen {
       position: fixed;
@@ -1832,6 +1899,19 @@
           <button id="enterSafeCodeButton" class="small-button">Open Safe</button>
           <p id="safeStatus" class="room-status">Locked.</p>
         </div>
+        <div id="cheatPanel" class="cheat-panel hidden">
+          <h3 class="modal-title" style="font-size:34px">Fish Vault</h3>
+          <div class="cheat-tools">
+            <label>Fish Amount
+              <input id="cheatFishAmount" type="number" min="1" max="999" value="1">
+            </label>
+            <label>Gold / Coins
+              <input id="cheatCoinAmount" type="number" min="0" max="9999999" value="1000">
+            </label>
+            <button id="cheatAddCoinsButton" class="small-button">Add Coins</button>
+          </div>
+          <div id="cheatFishGrid" class="cheat-fish-grid"></div>
+        </div>
         <div class="close-row"><button id="closeSafeButton" class="small-button">Close</button></div>
       </div>
     </section>
@@ -1874,6 +1954,10 @@
     const safeModal = document.getElementById("safeModal");
     const safeCode = document.getElementById("safeCode");
     const safeStatus = document.getElementById("safeStatus");
+    const cheatPanel = document.getElementById("cheatPanel");
+    const cheatFishGrid = document.getElementById("cheatFishGrid");
+    const cheatFishAmount = document.getElementById("cheatFishAmount");
+    const cheatCoinAmount = document.getElementById("cheatCoinAmount");
     const infoModal = document.getElementById("infoModal");
     const infoTitle = document.getElementById("infoTitle");
     const infoText = document.getElementById("infoText");
@@ -2254,6 +2338,33 @@
     function addFish(id, count = 1) {
       save.fish[id] = cleanNumber(save.fish[id], 0) + count;
       saveGame();
+    }
+    function grantCheatFish(id) {
+      const fish = fishById[id];
+      if (!fish) return;
+      const amount = clamp(cleanNumber(cheatFishAmount.value, 1), 1, 999);
+      addFish(id, amount);
+      safeStatus.textContent = `Added ${amount} ${fish.name}${amount > 1 ? "s" : ""}.`;
+      renderCheatFishGrid();
+    }
+    function grantCheatCoins() {
+      const amount = clamp(cleanNumber(cheatCoinAmount.value, 0), 0, 9999999);
+      save.coins += amount;
+      saveGame();
+      safeStatus.textContent = `Added ${amount} coins.`;
+    }
+    function renderCheatFishGrid() {
+      if (!cheatFishGrid) return;
+      cheatFishGrid.innerHTML = fishCatalog.map(fish => `
+        <button class="cheat-fish-card ${fish.id === "endless" ? "endless" : ""}" data-cheat-fish="${fish.id}">
+          ${fishSvg(fish, 82)}
+          <span>${fish.name}</span>
+          <small>${fish.rarity} - ${fish.price} coins</small>
+        </button>
+      `).join("");
+      cheatFishGrid.querySelectorAll("[data-cheat-fish]").forEach(button => {
+        button.addEventListener("click", () => grantCheatFish(button.dataset.cheatFish));
+      });
     }
     function removeFish(id, count = 1) {
       if (cleanNumber(save.fish[id], 0) < count) return false;
@@ -3949,9 +4060,17 @@
     document.getElementById("safeButton").addEventListener("click", () => safeModal.classList.remove("hidden"));
     document.getElementById("closeSafeButton").addEventListener("click", () => safeModal.classList.add("hidden"));
     document.getElementById("enterSafeCodeButton").addEventListener("click", submitSafeCode);
+    document.getElementById("cheatAddCoinsButton").addEventListener("click", grantCheatCoins);
     safeCode.addEventListener("keydown", event => { if (event.key === "Enter") submitSafeCode(); });
     function submitSafeCode() {
-      if (safeCode.value.trim().toUpperCase() === "BLADE") {
+      const code = safeCode.value.trim().toUpperCase();
+      if (code === "1444") {
+        cheatPanel.classList.remove("hidden");
+        renderCheatFishGrid();
+        safeStatus.textContent = "Fish Vault opened. Click any fish to add it.";
+        return;
+      }
+      if (code === "BLADE") {
         if (!save.safeOpened) {
           save.safeOpened = true;
           save.coins += 150;
