@@ -841,6 +841,13 @@
       border-color: #8af7ff;
       box-shadow: 0 5px 0 #06101d, 0 0 22px rgba(138,247,255,0.45);
     }
+    .cheat-fish-card.sssd {
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255,231,109,0.34), transparent 5rem),
+        linear-gradient(180deg, #6a430e, #1b1508);
+      border-color: #ffe76d;
+      box-shadow: 0 5px 0 #06101d, 0 0 22px rgba(255,231,109,0.45);
+    }
     .cheat-fish-card small { color: #b9d8ff; font-weight: 900; }
     .gift-coin-art {
       width: 74px;
@@ -2058,7 +2065,8 @@
       { id: "dragonfish", name: "Dragonfish", rarity: "Legendary", taps: 85, price: 1000, body: "#7a45ff", fin: "#ff4f65", pattern: "dragon" },
       { id: "starfish_king", name: "Starfish King", rarity: "Legendary", taps: 92, price: 1250, body: "#ff9e49", fin: "#ffe36e", pattern: "star" },
       { id: "cosmic_leviathan", name: "Cosmic Leviathan", rarity: "Mythic", taps: 110, price: 2500, body: "#24185f", fin: "#71f5ff", pattern: "cosmic" },
-      { id: "endless", name: "Endless", rarity: "Mythic", taps: 125, price: 4000, body: "#05070d", fin: "#161c2b", pattern: "endless" }
+      { id: "endless", name: "Endless", rarity: "Mythic", taps: 125, price: 4000, body: "#05070d", fin: "#161c2b", pattern: "endless" },
+      { id: "sssd_fish", name: "SSSD Fish", rarity: "Mythic", taps: 132, price: 4500, body: "#ffd93d", fin: "#f28c22", pattern: "sssd" }
     ];
     const rods = [
       { id: "starter", name: "Starter Rod", price: 0, tapReduction: 0, rareBoost: 0, sellPrice: 0 },
@@ -2336,7 +2344,8 @@
         dragon: `<path d="M27 11l9 13 10-14 10 14 10-13" fill="none" stroke="#ffe36e" stroke-width="5"/><path d="M73 31l14-11-4 18z" fill="#ff4f65" stroke="#17202a" stroke-width="3"/>`,
         star: `<path d="M48 5l10 23 25 2-19 16 6 24-22-13-22 13 6-24-19-16 25-2z" fill="${body}" stroke="#17202a" stroke-width="4"/>`,
         cosmic: `<circle cx="34" cy="23" r="3" fill="#fff"/><circle cx="52" cy="36" r="2" fill="#ffe36e"/><circle cx="65" cy="21" r="3" fill="#71f5ff"/><path d="M25 45c18 10 39 10 58-4" stroke="#ff8bd1" stroke-width="4" fill="none"/>`,
-        endless: `<path d="M28 22c13 15 28 15 42 0M28 40c13-15 28-15 42 0" fill="none" stroke="#8af7ff" stroke-width="4" opacity=".95"/><circle cx="37" cy="31" r="3" fill="#fff"/><circle cx="51" cy="21" r="2" fill="#b88cff"/><circle cx="60" cy="40" r="2.5" fill="#8af7ff"/><path d="M23 31c13-13 29-13 42 0 7 7 14 7 22 0" fill="none" stroke="#5a33ff" stroke-width="3" opacity=".7"/>`
+        endless: `<path d="M28 22c13 15 28 15 42 0M28 40c13-15 28-15 42 0" fill="none" stroke="#8af7ff" stroke-width="4" opacity=".95"/><circle cx="37" cy="31" r="3" fill="#fff"/><circle cx="51" cy="21" r="2" fill="#b88cff"/><circle cx="60" cy="40" r="2.5" fill="#8af7ff"/><path d="M23 31c13-13 29-13 42 0 7 7 14 7 22 0" fill="none" stroke="#5a33ff" stroke-width="3" opacity=".7"/>`,
+        sssd: `<path d="M35 11l16-13 16 13 13 14H22z" fill="#d6a34a" stroke="#17202a" stroke-width="4" stroke-linejoin="round"/><path d="M18 25h66" stroke="#17202a" stroke-width="5" stroke-linecap="round"/><path d="M28 24h46" stroke="#ffe2a0" stroke-width="4" stroke-linecap="round"/><path d="M30 18l39 35M36 13l39 35" stroke="#8b4a2f" stroke-width="4" stroke-linecap="round"/><path d="M34 38c10 7 22 7 33 0" fill="none" stroke="#fff7c7" stroke-width="5" opacity=".8"/><circle cx="40" cy="28" r="4" fill="#fff7c7"/><circle cx="57" cy="42" r="3" fill="#fff7c7"/>`
       }[fish.pattern] || "";
       const bodyShape = fish.pattern === "jelly"
         ? `<path d="M22 36c2-22 51-22 55 0v10H22z" fill="${body}" stroke="#17202a" stroke-width="4"/>`
@@ -2381,7 +2390,7 @@
     function renderCheatFishGrid() {
       if (!cheatFishGrid) return;
       cheatFishGrid.innerHTML = fishCatalog.map(fish => `
-        <button class="cheat-fish-card ${fish.id === "endless" ? "endless" : ""}" data-cheat-fish="${fish.id}">
+        <button class="cheat-fish-card ${fish.id === "endless" ? "endless" : ""} ${fish.id === "sssd_fish" ? "sssd" : ""}" data-cheat-fish="${fish.id}">
           ${fishSvg(fish, 82)}
           <span>${fish.name}</span>
           <small>${fish.rarity} - ${fish.price} coins</small>
