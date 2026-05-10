@@ -842,6 +842,22 @@
       box-shadow: 0 5px 0 #06101d, 0 0 22px rgba(138,247,255,0.45);
     }
     .cheat-fish-card small { color: #b9d8ff; font-weight: 900; }
+    .gift-coin-art {
+      width: 74px;
+      height: 74px;
+      border: 5px solid #06101d;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 34% 24%, #fff8b3 0 12%, transparent 13%),
+        radial-gradient(circle, #ffe76d 0 42%, #ffb12a 43% 72%, #a85f00 73% 100%);
+      color: #7a3f00;
+      font-size: 28px;
+      font-weight: 1000;
+      box-shadow: 0 0 22px rgba(255,231,109,0.55), inset 0 -8px 0 rgba(122,63,0,0.22);
+    }
+    .gift-coin-art::before { content: "$"; }
 
     .cartoon-screen {
       position: fixed;
@@ -1909,6 +1925,7 @@
               <input id="cheatCoinAmount" type="number" min="0" max="9999999" value="1000">
             </label>
             <button id="cheatAddCoinsButton" class="small-button">Add Coins</button>
+            <button id="cheatAddGiftCoinButton" class="small-button">Make 1000 Coin Gift</button>
           </div>
           <div id="cheatFishGrid" class="cheat-fish-grid"></div>
         </div>
@@ -2112,6 +2129,7 @@
       roundsPlayed: 0,
       wins: 0,
       fish: {},
+      giftCoins: 0,
       ownedRods: ["starter"],
       equippedRod: "starter",
       marketListings: []
@@ -2199,6 +2217,7 @@
         roundsPlayed: cleanNumber(raw.roundsPlayed, DEFAULT_SAVE.roundsPlayed),
         wins: cleanNumber(raw.wins, DEFAULT_SAVE.wins),
         safeOpened: Boolean(raw.safeOpened),
+        giftCoins: cleanNumber(raw.giftCoins, DEFAULT_SAVE.giftCoins),
         owned: uniqueValidIds(raw.owned, validSkinIds, "aqua"),
         unlockedAbilities: uniqueValidIds(raw.unlockedAbilities, validAbilityIds, "dash"),
         ownedRods: uniqueValidIds(raw.ownedRods, validRodIds, "starter"),
@@ -2353,6 +2372,12 @@
       saveGame();
       safeStatus.textContent = `Added ${amount} coins.`;
     }
+    function grantGiftCoin() {
+      save.giftCoins += 1;
+      saveGame();
+      safeStatus.textContent = "Made a 1000 Coin Gift. List it in the Shop for 0 coins.";
+      renderCheatFishGrid();
+    }
     function renderCheatFishGrid() {
       if (!cheatFishGrid) return;
       cheatFishGrid.innerHTML = fishCatalog.map(fish => `
@@ -2375,6 +2400,7 @@
     }
     function itemLabel(item) {
       if (item.type === "fish") return fishById[item.id]?.name || "Fish";
+      if (item.type === "gift") return "1000 Coin Gift";
       if (item.type === "skin") return skins.find(skin => skin.id === item.id)?.name || "Skin";
       if (item.type === "ability") return abilities.find(ability => ability.id === item.id)?.name || "Ability";
       if (item.type === "rod") return rodById[item.id]?.name || "Rod";
@@ -2382,6 +2408,7 @@
     }
     function itemPrice(item) {
       if (item.type === "fish") return fishById[item.id]?.price || 0;
+      if (item.type === "gift") return 0;
       if (item.type === "skin") return Math.floor((skins.find(skin => skin.id === item.id)?.price || 0) * 0.75);
       if (item.type === "ability") return Math.floor((abilities.find(ability => ability.id === item.id)?.price || 0) * 0.75);
       if (item.type === "rod") return rodById[item.id]?.sellPrice || 0;
@@ -2394,6 +2421,7 @@
     function alreadyOwnsTradeItem(key) {
       const item = parseItemKey(key);
       if (item.type === "fish") return false;
+      if (item.type === "gift") return false;
       if (item.type === "skin") return save.owned.includes(item.id);
       if (item.type === "ability") return save.unlockedAbilities.includes(item.id);
       if (item.type === "rod") return save.ownedRods.includes(item.id);
@@ -2404,6 +2432,9 @@
       Object.entries(data.fish || {}).forEach(([id, count]) => {
         if (fishById[id] && count > 0) items.push({ key: `fish:${id}`, type: "fish", id, count, price: fishById[id].price });
       });
+      if (cleanNumber(data.giftCoins, 0) > 0) {
+        items.push({ key: "gift:coin_1000", type: "gift", id: "coin_1000", count: cleanNumber(data.giftCoins, 0), price: 0 });
+      }
       (data.owned || []).forEach(id => {
         const skin = skins.find(item => item.id === id);
         if (skin && skin.price > 0) items.push({ key: `skin:${id}`, type: "skin", id, count: 1, price: Math.floor(skin.price * 0.75) });
@@ -2499,6 +2530,9 @@
         const rod = rodById[id];
         if (rod) items.push({ key: `rod:${id}`, type: "rod", group: "fishing", id, name: rod.name, detail: save.equippedRod === id ? "Equipped rod" : `-${rod.tapReduction} taps`, count: 1, price: rod.sellPrice, visual: `<div class="rod-art ${id}"></div>` });
       });
+      if (save.giftCoins > 0) {
+        items.push({ key: "gift:coin_1000", type: "gift", group: "fishing", id: "coin_1000", name: "1000 Coin Gift", detail: `Gift x${save.giftCoins}`, count: save.giftCoins, price: 0, visual: `<div class="gift-coin-art"></div>` });
+      }
       save.owned.forEach(id => {
         const skin = skins.find(item => item.id === id);
         if (skin) items.push({ key: `skin:${id}`, type: "skin", group: "2dball", id, name: skin.name, detail: save.equipped === id ? "Equipped skin" : "2D Ball skin", count: 1, price: Math.floor(skin.price * 0.75), visual: `<div class="skin-preview" style="background:${skin.color};color:${skin.color}"></div>` });
@@ -2744,6 +2778,12 @@
     function removeItemByKey(key, qty = 1) {
       const item = parseItemKey(key);
       if (item.type === "fish") return removeFish(item.id, qty);
+      if (item.type === "gift") {
+        if (item.id !== "coin_1000" || save.giftCoins < qty) return false;
+        save.giftCoins -= qty;
+        saveGame();
+        return true;
+      }
       if (item.type === "skin") {
         const skin = skins.find(entry => entry.id === item.id);
         if (!skin || skin.price <= 0 || !save.owned.includes(item.id)) return false;
@@ -2773,6 +2813,7 @@
     function addItemByKey(key, qty = 1) {
       const item = parseItemKey(key);
       if (item.type === "fish") addFish(item.id, qty);
+      if (item.type === "gift" && item.id === "coin_1000") { save.coins += 1000 * qty; saveGame(); }
       if (item.type === "skin" && !save.owned.includes(item.id)) { save.owned.push(item.id); saveGame(); }
       if (item.type === "ability" && !save.unlockedAbilities.includes(item.id)) { save.unlockedAbilities.push(item.id); saveGame(); }
       if (item.type === "rod" && !save.ownedRods.includes(item.id)) { save.ownedRods.push(item.id); saveGame(); }
@@ -2808,7 +2849,7 @@
         const fish = item.type === "fish" ? fishById[item.id] : null;
         const skin = item.type === "skin" ? skins.find(s => s.id === item.id) : null;
         const ability = item.type === "ability" ? abilities.find(a => a.id === item.id) : null;
-        const visual = fish ? fishSvg(fish) : item.type === "rod" ? `<div class="rod-art ${item.id}"></div>` : item.type === "skin" ? `<div class="skin-preview" style="background:${skin?.color || "#35e4ff"};color:${skin?.color || "#35e4ff"}"></div>` : `<div class="skin-preview" style="display:grid;place-items:center;background:#123966;color:#dff8ff;border-radius:8px">${ability?.icon || "!"}</div>`;
+        const visual = fish ? fishSvg(fish) : item.type === "gift" ? `<div class="gift-coin-art"></div>` : item.type === "rod" ? `<div class="rod-art ${item.id}"></div>` : item.type === "skin" ? `<div class="skin-preview" style="background:${skin?.color || "#35e4ff"};color:${skin?.color || "#35e4ff"}"></div>` : `<div class="skin-preview" style="display:grid;place-items:center;background:#123966;color:#dff8ff;border-radius:8px">${ability?.icon || "!"}</div>`;
         return `
           <div class="market-card">
             ${visual}
@@ -2927,7 +2968,8 @@
       if (message.type === "saleComplete" && shopNet.role === "guest") {
         save.coins = Math.max(0, save.coins - message.price);
         addItemByKey(message.key, 1);
-        shopRoomStatus.textContent = `Bought ${itemLabel(parseItemKey(message.key))}.`;
+        const bought = parseItemKey(message.key);
+        shopRoomStatus.textContent = bought.type === "gift" ? "Gift claimed. You got 1000 coins." : `Bought ${itemLabel(bought)}.`;
       }
       if (message.type === "saleFailed") shopRoomStatus.textContent = message.reason || "Sale failed.";
     }
@@ -4061,6 +4103,7 @@
     document.getElementById("closeSafeButton").addEventListener("click", () => safeModal.classList.add("hidden"));
     document.getElementById("enterSafeCodeButton").addEventListener("click", submitSafeCode);
     document.getElementById("cheatAddCoinsButton").addEventListener("click", grantCheatCoins);
+    document.getElementById("cheatAddGiftCoinButton").addEventListener("click", grantGiftCoin);
     safeCode.addEventListener("keydown", event => { if (event.key === "Enter") submitSafeCode(); });
     function submitSafeCode() {
       const code = safeCode.value.trim().toUpperCase();
